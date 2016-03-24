@@ -51,7 +51,7 @@ package body utiles is
    -- Poscondiciones: numeroReal = R y R es un float.
    function numeroReal(mensaje: in string) return float is
    begin
-      null; -- IMPLEMENTAR
+      null; -- IMPLEMENTAR algoritmo
    end numeroReal;
 
    -- Que hace: Muestra un mensaje al usuario y devuelve el entero ingresado.
