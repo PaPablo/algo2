@@ -53,7 +53,7 @@ package body fechas is
             To_Unbounded_String("noviembre"),
             To_Unbounded_String("diciembre"));
    begin
-      null; -- IMPLEMENTAR
+      null; -- IMPLEMENTAR Lu:)
    end nombreMes;
 
    -- Que hace: Devuelve el texto correspondiente a una fecha.
