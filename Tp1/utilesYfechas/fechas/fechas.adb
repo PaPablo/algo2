@@ -61,7 +61,7 @@ package body fechas is
    -- Poscondicion: fechaTexto=Str y Str es F en formato texto.
    function fechatexto(fecha: in tfecha) return string is
    begin
-	null; --IMPLEMENTAR
+	null; --IMPLEMENTAR Lu Otra vez :)
    end fechatexto;
 
 end fechas;
