@@ -53,16 +53,22 @@ package body fechas is
             To_Unbounded_String("noviembre"),
             To_Unbounded_String("diciembre"));
    begin
-      null; -- IMPLEMENTAR Lu:) :P
-      
+      return To_String(nombreMeses(mes));
    end nombreMes;
 
    -- Que hace: Devuelve el texto correspondiente a una fecha.
    -- Precondicion: fecha=F
    -- Poscondicion: fechaTexto=Str y Str es F en formato texto.
    function fechatexto(fecha: in tfecha) return string is
+      dia,mes,anio,rta : Unbounded_String;
    begin
-	null; --IMPLEMENTAR
+      dia := To_Unbounded_String(Integer'Image(fecha.dia));
+      mes := To_Unbounded_String(nombreMes(fecha.mes));
+      anio := To_Unbounded_String(Integer'Image(fecha.anio));
+      
+      rta:= dia & " de " & mes & " de" & anio;
+      
+      return To_string(rta);
    end fechatexto;
 
 end fechas;

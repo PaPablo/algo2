@@ -1,26 +1,27 @@
 <?xml version="1.0"?>
 <Locations >
-  <Project>
-    <vfs_file>D:\GitHub\algo2\Tp1\tp1.gpr</vfs_file>
-    <file_marker column=" 1" line=" 1" >
-      <vfs_project>D:\GitHub\algo2\Tp1\tp1.gpr</vfs_project>
-      <vfs_file>D:\GitHub\algo2\Tp1\utilesYfechas\fechas\fechas.adb</vfs_file>
-    </file_marker>
-    <file_marker column=" 1" line=" 1" >
-      <vfs_project>D:\GitHub\algo2\Tp1\tp1.gpr</vfs_project>
-      <vfs_file>D:\GitHub\algo2\Tp1\utilesYfechas\fechas\fechas.ads</vfs_file>
-    </file_marker>
-    <file_marker column=" 1" line=" 13" >
-      <vfs_project>D:\GitHub\algo2\Tp1\tp1.gpr</vfs_project>
-      <vfs_file>D:\GitHub\algo2\Tp1\utilesYfechas\fechas\fechas.adb</vfs_file>
-    </file_marker>
-    <file_marker current="true" column=" 1" line=" 1" >
-      <vfs_project>D:\GitHub\algo2\Tp1\tp1.gpr</vfs_project>
-      <vfs_file>D:\GitHub\algo2\Tp1\utilesYfechas\utiles\utiles.adb</vfs_file>
+  <Project >
+    <vfs_file >D:\GitHub\algo2\Tp1\tp1.gpr</vfs_file>
+    <file_marker current="true" column=" 1" line=" 1">
+      <vfs_project >D:\GitHub\algo2\Tp1\tp1.gpr</vfs_project>
+      <vfs_file >D:\GitHub\algo2\Tp1\utilesYfechas\fechas\fechas.ads</vfs_file>
     </file_marker>
   </Project>
   <Project >
-    <vfs_file  />
+    <file_marker column=" 1" line=" 1" >
+      <vfs_project />
+      <vfs_file>D:\GitHub\algo2\Tp1\utilesYfechas\fechas\fechas.ads</vfs_file>
+    </file_marker>
+    <file_marker column=" 34" line=" 18" >
+      <vfs_project />
+      <vfs_file>D:\GitHub\algo2\Tp1\utilesYfechas\test.adb</vfs_file>
+    </file_marker>
+    <file_marker current="true" column=" 13" line=" 13" >
+      <vfs_project />
+      <vfs_file>D:\GitHub\algo2\Tp1\utilesYfechas\test.adb</vfs_file>
+    </file_marker>
+  </Project>
+  <Project >
     <file_marker column=" 1" line=" 1">
       <vfs_project >D:\GitHub\algo2\Tp1\tp1.gpr</vfs_project>
       <vfs_file >D:\GitHub\algo2\Tp1\utilesYfechas\fechas\fechas.adb</vfs_file>

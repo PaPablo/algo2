@@ -22,7 +22,7 @@ package body utiles is
             resp:=get_line;
             exit when resp="s" or resp="S" or resp="n" or resp="N";
          exception
-            when CONSTRAINT_ERROR=>
+            when Data_Error=>
                put_line("Respuesta no valida.");
          end;
       end loop;
@@ -35,23 +35,62 @@ package body utiles is
    procedure continua(mensaje: in string) is
       resp:unbounded_string;
    begin
-	null; -- IMPLEMENTAR
+      Put_Line(mensaje);
+      Skip_Line;
    end continua;
 
    -- Que hace: Muestra un mensaje al usuario y devuelve el entero ingresado.
    -- Precondiciones: m=M
    -- Poscondiciones: numeroEnt = N y N es entero.
    function numeroEnt(mensaje: in string) return integer is
+      ok:Boolean;
+      nro:integer;
    begin
-	null; -- IMPLEMENTAR
+      ok := False;
+
+      while (not(ok)) loop
+         begin
+            Put_Line(mensaje);
+            get (nro);
+            ok:= True;
+         Exception
+            when Data_Error =>
+               begin
+                  put_line("Entrada inválida. Intente nuevamente");
+                  Skip_Line;
+               end;
+         end;
+      end loop;
+      Skip_Line;
+      return nro;
+
    end numeroEnt;
 
    -- Que hace: Muestra un mensaje al usuario y devuelve el real ingresado.
    -- Precondiciones: m=M
    -- Poscondiciones: numeroReal = R y R es un float.
    function numeroReal(mensaje: in string) return float is
+      ok:Boolean;
+      nro:float;
    begin
-      null; -- IMPLEMENTAR algoritmo
+      ok := False;
+
+
+      while (not(ok)) loop
+         begin
+            Put_Line(mensaje);
+            get (nro);
+            ok:= True;
+         Exception
+            when Data_Error =>
+               begin
+                  put_line("Entrada inválida. Intente nuevamente");
+                  Skip_Line;
+               end;
+         end;
+      end loop;
+
+      return nro;
    end numeroReal;
 
    -- Que hace: Muestra un mensaje al usuario y devuelve el entero ingresado.
@@ -81,15 +120,45 @@ package body utiles is
    function realEnRango(mensaje: in string; rangoInf, rangoSup: in float) return float is
       resp:float;
    begin
-      null; -- IMPLEMENTAR
+       loop
+         begin
+
+            put_line(mensaje & Float'image(rangoinf) & " y " & Float'image(rangosup) & ": ");
+            get(resp);
+            exit when rangoInf <= resp and resp<=rangoSup;
+         exception
+            when Data_Error =>
+               skip_line;
+         end;
+      end loop;
+      skip_line;
+      return resp;
    end realEnRango;
 
    -- Que hace: Muestra un mensaje al usuario y devuelve una cadena ingresada.
    -- Precondiciones: m=M
    -- Poscondiciones: textoNoVacio = S y longitud(S) > 0.
    function textoNoVacio(mensaje: in string) return string is
+      rta:String := "";
    begin
-      null; -- IMPLEMENTAR
+
+      loop
+         begin
+            Put_Line(mensaje);
+            get (rta);
+
+            exit when (rta /= "");
+         exception
+            when Data_Error =>
+               begin
+                  Put_Line ("Entrada Invalida. Intente nuevamente.");
+                  Skip_Line;
+               end;
+         end;
+      end loop;
+      Skip_Line;
+
+      return rta;
    end textoNoVacio;
 
    -- Que hace: Limpia la pantalla.
