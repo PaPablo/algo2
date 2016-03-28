@@ -53,7 +53,20 @@ package body fechas is
             To_Unbounded_String("noviembre"),
             To_Unbounded_String("diciembre"));
    begin
-      null; -- IMPLEMENTAR Lu:)
+      segun mes hacer
+         1= "Enero"
+         2= "Febrero"
+         3= "Marzo"
+         4= "Abril"
+         5= "Mayo"
+         6= "Junio"
+         7= "Julio"
+         8= "Agosto"
+         9= "Septiembre"
+         10= "Octubre"
+         11= "Noviembre"
+         12= "Diciembre"
+      finsegun
    end nombreMes;
 
    -- Que hace: Devuelve el texto correspondiente a una fecha.
@@ -61,7 +74,13 @@ package body fechas is
    -- Poscondicion: fechaTexto=Str y Str es F en formato texto.
    function fechatexto(fecha: in tfecha) return string is
    begin
-	null; --IMPLEMENTAR Lu Otra vez :)
+         mostrar (fecha.dia, "de")
+         mes<-nombreMes (fecha.mes)
+         mostrar (mes)
+         mostrar ("de", fecha.anio)
+
    end fechatexto;
+
+
 
 end fechas;

@@ -34,8 +34,13 @@ package body utiles is
    -- Poscondiciones: no tiene.
    procedure continua(mensaje: in string) is
       resp:unbounded_string;
+      var
+         tecla
    begin
-	null; -- IMPLEMENTAR
+         repetir
+	            mostrar (mensaje)
+               ingresar (tecla)
+         hasta tecla<>
    end continua;
 
    -- Que hace: Muestra un mensaje al usuario y devuelve el entero ingresado.
@@ -43,7 +48,9 @@ package body utiles is
    -- Poscondiciones: numeroEnt = N y N es entero.
    function numeroEnt(mensaje: in string) return integer is
    begin
-	null; -- IMPLEMENTAR
+	     mostrar (mensaje)
+        ingresar (num)
+        funcion<-num //podriamos lanzar una exepcion
    end numeroEnt;
 
    -- Que hace: Muestra un mensaje al usuario y devuelve el real ingresado.
@@ -51,7 +58,9 @@ package body utiles is
    -- Poscondiciones: numeroReal = R y R es un float.
    function numeroReal(mensaje: in string) return float is
    begin
-      null; -- IMPLEMENTAR algoritmo
+        mostrar (mensaje)
+        ingresar (num)
+        funcion<-num //podriamos lanzar una exepcion
    end numeroReal;
 
    -- Que hace: Muestra un mensaje al usuario y devuelve el entero ingresado.
@@ -81,15 +90,21 @@ package body utiles is
    function realEnRango(mensaje: in string; rangoInf, rangoSup: in float) return float is
       resp:float;
    begin
-      null; -- IMPLEMENTAR
+      Repetir
+         mostrar (mensaje)
+         ingresar (num)
+      Hasta num>=rangoInf and num<=rangoSup
    end realEnRango;
 
    -- Que hace: Muestra un mensaje al usuario y devuelve una cadena ingresada.
    -- Precondiciones: m=M
    -- Poscondiciones: textoNoVacio = S y longitud(S) > 0.
    function textoNoVacio(mensaje: in string) return string is
+   var
+      texto:cadena
    begin
-      null; -- IMPLEMENTAR
+      mostrar (mensaje)
+      ingresar (texto)//lanzar una exepcion
    end textoNoVacio;
 
    -- Que hace: Limpia la pantalla.
