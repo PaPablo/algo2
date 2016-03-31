@@ -1,7 +1,0 @@
-project Tp1 is
-
-   for Source_Dirs use ("./**");
-   for Main use ("test.adb");
-
-end Tp1;
-
