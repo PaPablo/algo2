@@ -12,20 +12,6 @@ use Ada.Text_IO,
 package body utiles is
 
 
-   --SUBALGORITMOS PROPIOS - NO PROVISTOS EN CASCARÓN
-   function obtenerEntero(t: in Unbounded_String) return integer is
-
-      v: Boolean;
-   begin
-      v:= true;
-      --Revisa cada caracter de la cadena para constatar si la entrada
-      --completa es un entero
-      for i in 1.. Length(t) loop
-         v  := v and (Element(t,i) in '0'..'9');
-      end loop;
-   end obtenerEntero;
-
-
 
    --SUBALGORITMOS NO PROPIOS - PROVISTOS EN CASCARÓN
 
@@ -40,7 +26,7 @@ package body utiles is
             resp:=get_line;
             exit when resp="s" or resp="S" or resp="n" or resp="N";
          exception
-            when Data_Error=>
+            when Constraint_Error =>
                put_line("Respuesta no valida.");
          end;
       end loop;
