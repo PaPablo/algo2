@@ -47,27 +47,8 @@ package body lista is
    -- Excepciones: claveNoExiste
    procedure suprimir(l: in out tipoLista; k: in tipoClave) is
       procedure free is new unchecked_deallocation (tipoNodo, tipoPunt);
-      p,ant: tipoPunt;
    begin
-      p := l.lista;
-
-      while (p /= null) and (k > p.all.clave) loop
-         ant := p
-         p:= p.all.sig;
-      end loop;
-
-      if (((p /= null) and (k := p.all.clave)) or (p = null)) then
-         raise claveNoExiste;
-      else
-         if (p /= l.lista) then
-            ant.all.sig:= p.all.sig;
-         else
-            l.lista := p.all.sig;
-         end if;
-         free(p);
-         l.long := l.long -1;
-      end if;
-
+      raise operacionNoImplementada;
    end suprimir;
 
    -- Que hace: Obtiene la longitud de la lista
