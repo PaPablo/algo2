@@ -60,13 +60,7 @@ package body lista is
          raise claveNoExiste;
       else
          if (p /= l.lista) then
-            ant.all.sig:= p.all.sig;
-         else
-            l.lista := p.all.sig;
-         end if;
-         free(p);
-         l.long := l.long -1;
-      end if;
+            ant.all.sig:=
 
    end suprimir;
 
