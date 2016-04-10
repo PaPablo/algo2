@@ -1,6 +1,0 @@
-project Tp1 is
-
-   for Source_Dirs use ("./**");
-
-end Tp1;
-
