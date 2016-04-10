@@ -17,8 +17,14 @@ package body pila is
    -- Postcondiciones: p=P1 y P1 es P con el elemento I agregado al tope
    -- Excepciones: pilaLlena
    procedure apilar (p: in out tipoPila; i: in tipoInfo) is
+      aux:tipoPila;
    begin
-     raise operacionNoImplementada;
+      aux := new tipoNodo;
+      aux.info := i;
+      aux.sig := p;
+      p := aux;
+   exception
+         when Storage_Error => raise pilaLlena;
    end apilar;
 
    -- Que hace: elimina un elemento del tope de la pila
@@ -26,8 +32,15 @@ package body pila is
    -- Postcondiciones: p=P1 y P1 es P sin el elemento del tope
    -- Excepciones: pilaVacia
    procedure desapilar (p: in out tipoPila) is
+      aux : tipoPila;
    begin
-      raise operacionNoImplementada;
+      if p /= null then
+         aux := p;
+         p := p.sig;
+         free(aux);
+      else
+         raise pilaVacia;
+      end if;
    end desapilar;
 
    -- Que hace: obtiene el elemento del tope de la pila
@@ -36,7 +49,11 @@ package body pila is
    -- Excepciones: pilaVacia
    procedure tope (p: in tipoPila; i: out tipoInfo) is
    begin
-      raise operacionNoImplementada;
+      if p = null then
+         raise pilaVacia;
+      else
+         i := p.info;
+      end if;
    end tope;
 
    -- Que hace: vacia la pila

@@ -51,21 +51,22 @@ package body lista is
    begin
       p := l.lista;
 
-      while (( p /= null) and then(k = p.all.clave)) or else (p = null) loop
+      while ( p /= null) and then(p.clave < k ) loop
          ant := p;
-         p := p.all.sig;
+         p := p.sig;
       end loop;
 
-      if (((p /= null) and then (k = p.all.clave)) or else (p = null)) then
+      if (((p /= null) and then (k /= p.clave)) or else (p = null)) then
          raise claveNoExiste;
       else
          if (p /= l.lista) then
-            ant.all.sig := p.all.sig;
+            ant.sig := p.sig;
          else
             l.lista := p.sig;
          end if;
-      free(p);
-      l.long := l.long -1;
+         free(p);
+         l.long := l.long - 1;
+
       end if;
 
    end suprimir;
