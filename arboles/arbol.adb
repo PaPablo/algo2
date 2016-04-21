@@ -12,8 +12,23 @@ package body arbol is
 
    procedure insertar (a : in out tipoArbol; k : in tipoClave ; i : in tipoInfo)is
    begin
-      raise operacionNoImplementada;
-
+      if a = null then
+         a := new tipoNodo;
+         a.clave := k;
+         a.info:= i;
+         a.hijoIzq := null;
+         a.hijoDer := null;
+      else
+         if k = a.clave then
+            raise claveExiste;
+         else
+            if k < a.clave then
+               insertar(a.hijoIzq, k, i);
+            else
+               insertar(a.hijoDer, k, i);
+            end if;
+         end if;
+      end if;
    exception
       when STORAGE_ERROR => raise ArbolLleno;
          -- Fe de erratas clase 21/4:
@@ -77,7 +92,19 @@ package body arbol is
 
    procedure buscar (a : in tipoArbol ; k : in tipoClave ; i : out tipoInfo) is
    begin
-      raise operacionNoImplementada;
+      if (a = null) then
+         raise claveNoExiste;
+      else
+         if (k = a.clave) then
+            i := a.info;
+         else
+            if k < a.clave then
+               buscar(a.hijoIzq, k, i);
+            else
+               buscar(a.hijoDer, k, i);
+            end if;
+         end if;
+      end if;
    end buscar;
 
 
@@ -103,7 +130,11 @@ package body arbol is
 
    procedure vaciar (a : in out tipoArbol) is
    begin
-      raise operacionNoImplementada;
+      if (a /= null) then
+         vaciar(a.hijoIzq);
+         vaciar(a.hijoDer);
+         a:= null;
+      end if;
    end vaciar;
 
 
@@ -114,12 +145,24 @@ package body arbol is
 
    procedure preOrder(a:in tipoarbol; q:in out tipoCola)is
    begin
-      raise operacionNoImplementada;
+      if (a/=null)then
+         Encolar(q,a.clave);
+         preOrder(a.hijoIzq, q);
+         preOrder(a.hijoDer, q);
+      end if;
+   exception
+      when colaLlena => raise ErrorEnCola;
    end preOrder;
 
    procedure postOrder(a:in tipoarbol; q:in out tipoCola)is
    begin
-     raise operacionNoImplementada;
+     if (a/=null)then
+         postOrder(a.hijoIzq, q);
+         postOrder(a.hijoDer, q);
+         Encolar(q,a.clave);
+      end if;
+   exception
+      when colaLlena => raise ErrorEnCola;
    end postOrder;
 
    procedure inOrder(a:in tipoarbol; q:in out tipoCola)is
