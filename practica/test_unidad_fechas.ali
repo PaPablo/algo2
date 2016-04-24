@@ -1,0 +1,168 @@
+V "GNAT Lib v2015"
+M P W=b
+A -gnatA
+A -mtune=generic
+A -march=pentiumpro
+P SS ZX
+
+RN
+RV NO_EXCEPTION_HANDLERS
+RV NO_EXCEPTION_PROPAGATION
+RV NO_EXCEPTIONS
+RV NO_IO
+RV NO_IMPLICIT_LOOPS
+RV NO_NESTED_FINALIZATION
+RV NO_SECONDARY_STACK
+RV NO_STANDARD_STORAGE_POOLS
+RV NO_IMPLEMENTATION_PRAGMAS
+RV SPARK_05
+
+U test_unidad_fechas%b	test_unidad_fechas.adb	e4582df3 NE OO SU IL
+W ada%s			ada.ads			ada.ali
+W ada.exceptions%s	a-except.adb		a-except.ali
+W ada.strings%s		a-string.ads		a-string.ali
+W ada.strings.unbounded%s  a-strunb.adb		a-strunb.ali
+W ada.tags%s		a-tags.adb		a-tags.ali
+Z ada.text_io%s		a-textio.adb		a-textio.ali
+Z ada.text_io.integer_aux%s  a-tiinau.adb	a-tiinau.ali
+W ada.text_io.integer_io%s
+W fechas%s		fechas.adb		fechas.ali
+W system%s		system.ads		system.ali
+W system.concat_2%s	s-conca2.adb		s-conca2.ali
+W system.concat_3%s	s-conca3.adb		s-conca3.ali
+W system.concat_4%s	s-conca4.adb		s-conca4.ali
+W system.concat_7%s	s-conca7.adb		s-conca7.ali
+W system.img_int%s	s-imgint.adb		s-imgint.ali
+W system.secondary_stack%s  s-secsta.adb	s-secsta.ali
+W system.soft_links%s	s-soflin.adb		s-soflin.ali
+W system.standard_library%s  s-stalib.adb	s-stalib.ali
+W text_io%s		text_io.ads		text_io.ali
+W utiles%s		utiles.adb		utiles.ali
+
+D ada.ads		20150518132148 3ffc8e18 ada%s
+D a-charac.ads		20150518132148 2d3ec45b ada.characters%s
+D a-chlat1.ads		20150518132148 66457d31 ada.characters.latin_1%s
+D a-except.ads		20150518132148 5250cb69 ada.exceptions%s
+D a-finali.ads		20150518132148 69f99942 ada.finalization%s
+D a-ioexce.ads		20150518132148 e4a01f64 ada.io_exceptions%s
+D a-stream.ads		20150518132148 119b8fb3 ada.streams%s
+D a-string.ads		20150518132148 90ac6797 ada.strings%s
+D a-strmap.ads		20150518132148 e8bb714a ada.strings.maps%s
+D a-strunb.ads		20150518132148 3f91d4c5 ada.strings.unbounded%s
+D a-tags.ads		20150518132148 dc4d0634 ada.tags%s
+D a-textio.ads		20150518132148 386df5d4 ada.text_io%s
+D a-tiinau.ads		20150518132148 8114c8e4 ada.text_io.integer_aux%s
+D a-tiinio.ads		20150518132148 aa04e5d6 ada.text_io.integer_io%s
+D a-tiinio.adb		20150518132148 df9cd7af ada.text_io.integer_io%b
+D a-unccon.ads		20150518132148 f9eb8f06 ada.unchecked_conversion%s
+D fechas.ads		20160328163006 fd4f1862 fechas%s
+D interfac.ads		20150518132148 6033a23f interfaces%s
+D i-cstrea.ads		20150518132148 e53d8b8e interfaces.c_streams%s
+D system.ads		20150518132150 f4ce8c3a system%s
+D s-atocou.ads		20150518132148 cd7c94ca system.atomic_counters%s
+D s-conca2.ads		20150518132148 02a0d7d0 system.concat_2%s
+D s-conca3.ads		20150518132148 0b705ca5 system.concat_3%s
+D s-conca4.ads		20150518132148 7e642b20 system.concat_4%s
+D s-conca7.ads		20150518132148 fcc75b1f system.concat_7%s
+D s-crtl.ads		20150518132148 0ebbdb71 system.crtl%s
+D s-exctab.ads		20150518132148 54135002 system.exception_table%s
+D s-ficobl.ads		20150518132148 078245e4 system.file_control_block%s
+D s-finmas.ads		20150518132148 814daec4 system.finalization_masters%s
+D s-finroo.ads		20150518132148 4ff27390 system.finalization_root%s
+D s-imgint.ads		20150518132150 02dbe0c2 system.img_int%s
+D s-memory.ads		20150518132150 597d6634 system.memory%s
+D s-parame.ads		20150518132150 7e2a0d7f system.parameters%s
+D s-secsta.ads		20150518132150 86a2856d system.secondary_stack%s
+D s-soflin.ads		20150518132150 aa763b52 system.soft_links%s
+D s-stache.ads		20150518132150 a37c21ec system.stack_checking%s
+D s-stalib.ads		20150518132150 fa0a3617 system.standard_library%s
+D s-stalib.adb		20150518132150 f2fe2716 system.standard_library%b
+D s-stoele.ads		20150518132150 2dc34a04 system.storage_elements%s
+D s-stopoo.ads		20150518132150 b16154c2 system.storage_pools%s
+D s-stposu.ads		20150518132150 97a6219c system.storage_pools.subpools%s
+D s-stratt.ads		20150518132150 aedef97e system.stream_attributes%s
+D s-traent.ads		20150518132150 005bf670 system.traceback_entries%s
+D s-unstyp.ads		20150518132150 9d58a4c0 system.unsigned_types%s
+D s-wchcon.ads		20150518132150 1b7d22d2 system.wch_con%s
+D test_unidad_fechas.adb  20160328163006 75a5f9be test_unidad_fechas%b
+D text_io.ads		20150518132150 45d626c9 text_io%s
+D utiles.ads		20160328163006 16f53e23 utiles%s
+X 1 ada.ads
+16K9*Ada 19e8 46|1r30 2r29
+X 8 a-string.ads
+16K13*Strings 35e16 46|1r34 2r33
+X 10 a-strunb.ads
+76K21*Unbounded 489e26 46|1w42 2r41
+79R9*Unbounded_String<5|43R9> 473e14 46|51r41
+94V13*To_Unbounded_String{79R9} 46|57s34 58s34 59s34 60s34
+100V13*To_String{string} 46|63s39 64s71
+X 12 a-textio.ads
+263U14*Put_Line 46|29s13 43s13 64s13 84s13 94s7 99s7
+X 14 a-tiinio.ads
+46k21*Integer_IO 85e27 46|5r37
+X 17 fechas.ads
+1K9*fechas 39e11 46|1w14 2r5
+2I12*tDia{integer}
+3I12*tMes{integer}
+4I12*tAnio{integer}
+6R9*tFecha 10e14 46|8r32 16r38 50r38 71r38
+7i7*dia{2I12} 46|10m13 18m28 19m29 20m29 21m29 22m28 23m29 52m28 53m29 54m29
+. 55m29 73m28 74m29 75m29 76m29 77m28 78m29
+8i7*mes{3I12} 46|11m13 18m35 19m36 20m37 21m36 22m36 23m37 52m35 53m36 54m37
+. 55m36 73m35 74m36 75m37 76m36 77m36 78m37 83r32 84r159
+9i7*anio{4I12} 46|12m13 18m43 19m44 20m44 21m44 22m43 23m44 52m42 53m43 54m44
+. 55m43 73m43 74m44 75m44 76m44 77m43 78m44 83r47 84r174
+15V13*esFechaCorrecta{boolean} 46|28s14
+21V13*diasMes{integer} 46|83s14 84s141
+31V13*esBisiesto{boolean} 46|42s14
+36V13*fechaTexto{string} 46|29s77 63s14 64s112 84s88
+X 20 system.ads
+67M9*Address
+X 32 s-memory.ads
+53V13*Alloc{20|67M9} 103i<c,__gnat_malloc>22
+68U14*Free 104i<c,__gnat_free>22
+76V13*Realloc{20|67M9} 105i<c,__gnat_realloc>22
+X 38 s-stalib.adb
+93U14 Break_Start 94i<c,__gnat_break_start>22
+X 46 test_unidad_fechas.adb
+4U11*test_unidad_fechas 4b11 102t5
+5K12 entero_io[14|46] 6r8
+7I9 miEntero<integer>
+8U14 get 8b14 8=18 13t7
+8r18 fecha{17|6R9} 10m7 11m7 12m7
+15U14 prueba_es_fecha_correcta 15b14 15=40 33l8 33t32 95s7
+15i40 errores{integer} 30m13 30r24
+16A11 tFechas(17|6R9)<integer> 18r15
+17A11 tResultado(boolean)<integer> 25r19
+18a7 fechas{16A11} 27r16 28r30 29r88
+25a7 resultados{17A11} 28r44
+27i11 i{integer} 28r37 28r55 29r95
+35U14 prueba_es_bisiesto 35b14 35=34 47l8 47t26 96s7
+35i34 errores{integer} 44m13 44r24
+36A11 tAnios(integer)<integer> 38r14
+37A11 tResultado(boolean)<integer> 39r19
+38a7 anios{36A11} 41r16 42r25 43r84
+39a7 resultados{37A11} 42r38
+41i11 i{integer} 42r31 42r49 43r90
+49U16 prueba_fecha_texto 49b16 49=36 68l8 68t26 97s7
+49i36 errores{integer} 65m13 65r24
+50A11 tFechas(17|6R9)<integer> 52r15
+51A11 tResultado(10|79R9)<integer> 57r19
+52a7 fechas{50A11} 62r16 63r25 64r123
+57a7 resultados{51A11} 63r49 64r81
+62i11 i{integer} 63r32 63r60 64r92 64r130
+70U18 prueba_dias_mes 70b18 70=35 88l8 88t23 98s7
+70i35 errores{integer} 85m13 85r24
+71A11 tFechas(17|6R9)<integer> 73r15
+72A11 tResultado(integer)<integer> 80r19
+73a7 fechas{71A11} 82r16 83r22 83r37 84r99 84r149 84r164
+80a7 resultados{72A11} 83r56 84r216
+82i11 i{integer} 83r29 83r44 83r67 84r36 84r106 84r156 84r171 84r227
+90i4 errores{integer} 95m33 95r33 96m27 96r27 97m27 97r27 98m24 98r24 99r54
+X 47 text_io.ads
+24K9*Text_IO=24:29 46|1w22 2r13 5r29
+X 48 utiles.ads
+1K9*utiles 46|1w6 2r22 48|43e11
+6V13*confirma{boolean} 46|100s21
+26V13*enteroEnRango{integer} 46|10s20 11s20 12s21
+

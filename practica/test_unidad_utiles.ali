@@ -1,0 +1,60 @@
+V "GNAT Lib v2015"
+M P W=b
+A -gnatA
+A -mtune=generic
+A -march=pentiumpro
+P ZX
+
+RN
+RV NO_FLOATING_POINT
+RV NO_IO
+RV NO_IMPLEMENTATION_PRAGMAS
+RV SPARK_05
+
+U test_unidad_utiles%b	test_unidad_utiles.adb	20d514fc NE OO SU IL
+W text_io%s		text_io.ads		text_io.ali
+W utiles%s		utiles.adb		utiles.ali
+
+D ada.ads		20150518132148 3ffc8e18 ada%s
+D a-except.ads		20150518132148 5250cb69 ada.exceptions%s
+D a-ioexce.ads		20150518132148 e4a01f64 ada.io_exceptions%s
+D a-stream.ads		20150518132148 119b8fb3 ada.streams%s
+D a-tags.ads		20150518132148 dc4d0634 ada.tags%s
+D a-textio.ads		20150518132148 386df5d4 ada.text_io%s
+D a-unccon.ads		20150518132148 f9eb8f06 ada.unchecked_conversion%s
+D interfac.ads		20150518132148 6033a23f interfaces%s
+D i-cstrea.ads		20150518132148 e53d8b8e interfaces.c_streams%s
+D system.ads		20150518132150 f4ce8c3a system%s
+D s-crtl.ads		20150518132148 0ebbdb71 system.crtl%s
+D s-exctab.ads		20150518132148 54135002 system.exception_table%s
+D s-ficobl.ads		20150518132148 078245e4 system.file_control_block%s
+D s-parame.ads		20150518132150 7e2a0d7f system.parameters%s
+D s-soflin.ads		20150518132150 aa763b52 system.soft_links%s
+D s-stache.ads		20150518132150 a37c21ec system.stack_checking%s
+D s-stalib.ads		20150518132150 fa0a3617 system.standard_library%s
+D s-stoele.ads		20150518132150 2dc34a04 system.storage_elements%s
+D s-traent.ads		20150518132150 005bf670 system.traceback_entries%s
+D s-unstyp.ads		20150518132150 9d58a4c0 system.unsigned_types%s
+D s-wchcon.ads		20150518132150 1b7d22d2 system.wch_con%s
+D test_unidad_utiles.adb  20160328163006 73f60c16 test_unidad_utiles%b
+D text_io.ads		20150518132150 45d626c9 text_io%s
+D utiles.ads		20160328163006 16f53e23 utiles%s
+X 6 a-textio.ads
+263U14*Put_Line 22|11s4 13s7 17s7 22s4 25s4 29s4 33s4 37s4 41s4 45s4 50s7
+. 56s7 61s4 65s7 70s7
+X 22 test_unidad_utiles.adb
+4U11*test_unidad_utiles 4b11 74l5 74t23
+6i4 n{integer} 32m4 48m4 49r8 54m4 55r8
+7f4 f{float} 40m4 63m4 64r8 68m4 69r8
+X 23 text_io.ads
+24K9*Text_IO=24:29 22|2w6 2r19
+X 24 utiles.ads
+1K9*utiles 22|1w6 1r18 24|43e11
+6V13*confirma{boolean} 22|12s8 16s12
+11U14*continua 22|9s4 20s4 24s4 27s4 35s4 43s4 59s4
+16V13*numeroEnt{integer} 22|32s8
+21V13*numeroReal{float} 22|40s8
+26V13*enteroEnRango{integer} 22|48s8 54s8
+31V13*realEnRango{float} 22|63s8 68s8
+41U14*CLS 22|10s4 21s4 28s4 36s4 44s4 60s4
+
