@@ -133,7 +133,7 @@ package body arbol is
       if (a /= null) then
          vaciar(a.hijoIzq);
          vaciar(a.hijoDer);
-         a:= null;
+         free(a);
       end if;
    end vaciar;
 
