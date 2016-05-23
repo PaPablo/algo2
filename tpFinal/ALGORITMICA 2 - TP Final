@@ -1,0 +1,119 @@
+ALGORITMICA 2 - TP Final
+
+ESPECIFICACIONES
+
+Agregar, quitar y modificar modelos
+Agregar, quitar y modificar etapas del calendario de mantenimientos
+Agregar, quitar y modificar clientes
+Agregar, quitar y modificar vehículos
+Agregar, quitar y modificar servicios
+Consultar mantenimientos realizados a vehículos de un modelo en particular
+Consultar datos de clientes que no hayan realizado mantenimientos a sus vehículos
+Consultar los mantenimientos solicitados por un cliente
+
+
+NIVEL 0 
+Var
+	model, client, serv: tipoLista
+	opc: entero
+Inicio
+	crear(model)	{ADT LO}
+	crear(client)
+	crear(serv)
+	Repetir
+		mostrarMenu()		{nivel 1}
+		ingresar(opc)		{SC}
+		
+		segun (opc) hacer	{SC}
+			1: ABMModelos(model, serv, client) 	{nivel 1}
+			2: ABMClientes(client, serv, model) {nivel 1}
+			3: ABMServicios(serv,client,model)	{nivel 1}
+			4: consultas(client,model,serv)		{nivel 1}
+		finSegun
+	hasta (que lo desee el usuario)				{SC}
+Excepciones
+	
+Fin
+
+NIVEL 1
+
+procedimiento ABMModelos (E/S model:tipoLista ; E/S serv:tipoLista ; E/S client:tipoLista)
+{Qué Hace: Permite agregar, modificar, o quitar modelos y etapas de sus calendarios de mantenimientos
+PRE: 	model = M ; M puede estar vacío o tener modelos válidos o está vacío
+POST: 	model = M1 ; M1 tiene modelos válidos
+EXCEP:	 }
+Var
+	opc:entero
+Inicio
+	repetir
+		menuModelos()	{nivel 2}
+		ingresar(opc)	{SC}
+		segun (opc)		{SC}
+			1: agregarModelo(model)					{nivel 2}
+			2: modificarModelo(model,serv,client)	{nivel 2}
+			3: quitarModelo(model,serv,client)		{nivel 2}
+		finSegun
+	hasta (que el usuario lo desee) 				{SC}
+Fin
+
+procedimiento ABMClientes(E/S client:tipoLista ; E/S serv:tipoLista ; E/S model:tipoLista)
+{Qué Hace: Permite agregar, modificar, o quitar clientes y sus vehículos
+PRE: 	client = C ; C puede estar vacío o tener clientes válidos
+POST:	client = C1; C1 tiene clientes válidos o está vacío
+EXCEP:	}
+Var
+	opc: 
+Inicio
+	repetir
+		menuClientes() 	{nivel 2}
+		ingresar(opc)	{SC}
+		
+		segun (opc) hacer
+			1: agregarCliente(client) 			{nivel 2}
+			2: modificarCliente(client,model)	{nivel 2}
+			3: quitarCliente(client,model,serv)	{nivel 2}
+		finSegun		
+	hastan(que el usuario lo desee)				{SC}
+Fin
+
+procedimiento ABMServicios(E/S serv:tipoLista ; E/S client:tipoLista ; E/S model:tipoLista)
+{Qué Hace: Permite agregar, modificar, o quitar servicios de mantenimiento realizados
+PRE: 	serv = S ; S puede estar vacío o tener servicios válidos
+POST:	serv = S1; S1 tiene servicios válido o está vacío
+EXCEP:	}
+Var
+	opc:entero
+Inicio
+	repetir
+		menuServicios() {nivel 2}
+		ingresar(opc)	{SC}
+
+		segun opc hacer
+			1: agregarServicio(serv,client,model)	{nivel 2}
+			2: modificarServicio(serv,client,model)	{nivel 2}
+			3: quitarServicio(serv,client,model)	{nivel 2}
+		finSegun
+	hasta (que el usuario lo desee)					{SC}
+Fin
+
+procedimiento consultas(E serv:tipoLista ; E model:tipoLista ; E client:tipoLista)
+{Qué Hace: Permite realizar distintas consultas especificadas
+PRE:	serv = S ; S tiene servicios válidos ; model = M ; M tiene modelos válidos
+		client = C ; C tiene clientes válidos
+POST:	
+EXCEP:	}
+Var
+	opc:entero
+Inicio
+
+	repetir
+		menuConsultas()	{nivel 2}
+		ingresar(opc)	{SC}
+
+		segun opc hacer
+			1: mantenPorCliente(client,serv) 	{nivel 2}
+			2: mantPorModelo(model,serv)		{nivel 2}
+			3: datosClientesSinMant(client)		{nivel 2}
+		finSegun
+	hasta (que el usuario lo desee)				{SC}
+Fin 
