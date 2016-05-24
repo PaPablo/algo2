@@ -262,6 +262,10 @@ Inicio
 	menuModifClient()	{nivel 3}
 	ingresar(opc)		{SC}				
 	segun opc hacer
+		1:modifNombre(k)		{nivel 3}
+		2:modifTelefono(k)		{nivel 3}
+		3:modifEmail(k)			{nivel 3}
+		4:ABMVehiculos(k,model)	{nivel 3}
 	finSegun
 Fin
 
