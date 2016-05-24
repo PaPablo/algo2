@@ -202,7 +202,7 @@ Inicio
 	insertar(model, k, i)					{ADT LO}
 
 Excepciones
-	listaLLena => mostrar("No hay espacio para un nuevo modelo, intente nuevamente meás tarde.")
+	listaLLena => mostrar("No hay espacio para un nuevo modelo, intente nuevamente más tarde.")
 Fin
 
 procedimiento agregarCliente (E/S client:tipoLista)
@@ -277,7 +277,7 @@ EXCEP: -	}
 Var
 	k:tipoClaveM
 Inicio
-	obtenerModelo(k)	{nivel 3}
+	obtenerModelo(k,model1)	{nivel 3}
 	menuModifModelo()	{nivel 3}
 	ingresar(opc)		{SC}
 	segun (opc) hacer
@@ -287,3 +287,23 @@ Inicio
 	actualizarVM(k,client)	{nivel 3}
 	actualizarSM(k,serv)	{nivel 3}
 Final	
+
+procedimiento quitarCliente(E/S client:tipoLista ; E/S serv:tipoLista)
+{Qué Hace: quita un cliente y actualiza su relación con respecto a los servicios a su nombre
+PRE: client = C ; C tiene que tener al menos un cliente válido ; serv = S 
+POST: client = C1 ; C1 tiene un cliente menos ; serv = S1 ; S1 tiene uno o más servicios menos si el cliente eliminado tenía algún servicio a su nombre
+EXCEP:	}
+Var
+	k:tipoClaveC
+Inicio
+	obtenerCliente(k,client)	{nivel 3}
+	suprimir(client, k)			{nivel 3}
+	actualizarSC(k, serv)		{nivel 3}
+Fin
+
+procedimiento quitarModelo(E/S model:tipoLista ; E/S serv:tipoLista ; E/S client:tipoLista)
+{Qué Hace: quita un modelo y actualiza su relacion con los clientes y los servicios
+PRE:	model = M ; M tiene al menos un modelo ; serv = S ; client = C
+POST:	model = M1 ; M1 tiene un cliente menos ; serv = S1 ; client = C1 ; C1 y S1 tienen clientes o servicios menos si el modelo eliminado tenia servicios
+		relacionados o un cliente tenía un vehiculo de ese modelo en particular
+EXCEP: }
