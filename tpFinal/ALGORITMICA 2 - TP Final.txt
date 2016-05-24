@@ -124,7 +124,7 @@ Inicio
 		segun (opc) hacer
 			1: agregarCliente(client) 			{nivel 2}
 			2: modificarCliente(client,model)	{nivel 2}
-			3: quitarCliente(client,model,serv)	{nivel 2}
+			3: quitarCliente(client,serv)	{nivel 2}
 		finSegun		
 	hastan(que el usuario lo desee)				{SC}
 Fin
@@ -248,3 +248,38 @@ Inicio
 	mostrar("4 - Salir")																{SC}
 
 Fin
+
+procedimiento modificarCliente(E/S client:tipoLista ; E model:tipoLista)
+{Qué Hace: permite modificar los datos pertenecientes a un cliente en particular
+PRE: client = C ; C contiene al menos un cliente válido ; model = M ; M contiene al menos un modelo valido
+POST: client = C1 ; C1 contiene un cliente con los datos modificados o no
+EXCEP: - }
+Var
+	k:tipoClaveC
+	opc:entero
+Inicio
+	obtenerCliente(k)	{nivel 3}
+	menuModifClient()	{nivel 3}
+	ingresar(opc)		{SC}				
+	segun opc hacer
+	finSegun
+Fin
+
+procedimiento modificarModelo(E/S model:tipoLista ; E/S serv:tipoLista ; E/S client:tipoLista)
+{Qué Hace: Permite modificar los datos correpondientes a un modelo en particular y actualiza las relaciones de dicho modelos con los clientes y los servicios realizados
+PRE: model = M ; M contiene al menos un modelo ; serv = S ; client = C
+POST: model = M1 ; M1 tiene un modelo con datos distintos
+EXCEP: -	}
+Var
+	k:tipoClaveM
+Inicio
+	obtenerModelo(k)	{nivel 3}
+	menuModifModelo()	{nivel 3}
+	ingresar(opc)		{SC}
+	segun (opc) hacer
+		1: modificarNombre(k)	{nivel 3}
+		2: ABMCalendario()		{nivel 3}
+	finSegun
+	actualizarVM(k,client)	{nivel 3}
+	actualizarSM(k,serv)	{nivel 3}
+Final	
