@@ -47,8 +47,28 @@ package body lista is
    -- Excepciones: claveNoExiste
    procedure suprimir(l: in out tipoLista; k: in tipoClave) is
       procedure free is new unchecked_deallocation (tipoNodo, tipoPunt);
+      ant, p: tipoPunt;
    begin
-      raise operacionNoImplementada;
+      p := l.lista;
+
+      while ( p /= null) and then(p.clave < k ) loop
+         ant := p;
+         p := p.sig;
+      end loop;
+
+      if (((p /= null) and then (k /= p.clave)) or else (p = null)) then
+         raise claveNoExiste;
+      else
+         if (p /= l.lista) then
+            ant.sig := p.sig;
+         else
+            l.lista := p.sig;
+         end if;
+         free(p);
+         l.long := l.long - 1;
+
+      end if;
+
    end suprimir;
 
    -- Que hace: Obtiene la longitud de la lista
@@ -64,8 +84,19 @@ package body lista is
    -- Poscondiciones: i=I y clave(I) = k
    -- Excepciones: claveNoExiste
    procedure recuClave(l: in tipoLista; k: in tipoClave; i: out tipoInfo) is
+      p :tipoPunt;
    begin
-      raise operacionNoImplementada;
+      p := l.lista;
+
+      while (( p /= null) and then(p.all.clave < k)) loop
+         p := p.all.sig;
+      end loop;
+
+      if ((p /= null) and then (k = p.all.clave)) then
+         i := p.all.info;
+      else
+         raise claveNoExiste;
+      end if;
    end recuClave;
 
    -- Que hace: Obtiene la clave del elemento anterior a la clave dada.
@@ -73,9 +104,25 @@ package body lista is
    -- Poscondiciones: ant=K1 y K1 es la clave anterior a K
    -- Excepciones: claveNoExiste, claveEsPrimera
    procedure recuAnt(l: in tipoLista; k: in tipoClave; ant: out tipoClave) is
-
+      aux, p: tipoPunt;
    begin
-      raise operacionNoImplementada;
+      p := l.lista;
+
+      while((p /= null) and then (p.all.clave < k)) loop
+         aux := p;
+         p := p.all.sig;
+      end loop;
+
+      if ((p /= null) and then (k = p.all.clave)) then
+         if (l.lista = p) then
+            raise claveEsPrimera;
+         else
+            ant := aux.all.clave;
+         end if;
+      else
+         raise claveNoExiste;
+      end if;
+
    end recuAnt;
 
    -- Que hace: Obtiene la clave del elemento siguiente a la clave dada.
@@ -119,7 +166,15 @@ package body lista is
    procedure recuUlt(l: in tipoLista; ult: out tipoClave) is
       p: tipoPunt:=l.lista;
    begin
-      raise operacionNoImplementada;
+      if (p /= null) then
+         while(p.all.sig /= null) loop
+            p := p.all.sig;
+         end loop;
+
+         ult := p.all.clave;
+      else
+         raise listaVacia;
+      end if;
    end recuUlt;
 
    -- Que hace: Vacia la lista.

@@ -38,18 +38,9 @@ package body utiles is
    -- Poscondiciones: no tiene.
    procedure continua(mensaje: in string) is
       resp:unbounded_string;
-      var
-         tecla
    begin
-<<<<<<< HEAD
-         repetir
-	            mostrar (mensaje)
-               ingresar (tecla)
-         hasta tecla<>
-=======
       Put_Line(mensaje);
       Skip_Line;
->>>>>>> refs/remotes/origin/master
    end continua;
 
    -- Que hace: Muestra un mensaje al usuario y devuelve el entero ingresado.
@@ -59,11 +50,6 @@ package body utiles is
       ok:Boolean;
       nro:integer;
    begin
-<<<<<<< HEAD
-	     mostrar (mensaje)
-        ingresar (num)
-        funcion<-num //podriamos lanzar una exepcion
-=======
       ok := False;
 
       while (not(ok)) loop
@@ -82,7 +68,6 @@ package body utiles is
       Skip_Line;
       return nro;
 
->>>>>>> refs/remotes/origin/master
    end numeroEnt;
 
    -- Que hace: Muestra un mensaje al usuario y devuelve el real ingresado.
@@ -92,11 +77,6 @@ package body utiles is
       ok:Boolean;
       nro:float;
    begin
-<<<<<<< HEAD
-        mostrar (mensaje)
-        ingresar (num)
-        funcion<-num //podriamos lanzar una exepcion
-=======
       ok := False;
 
 
@@ -115,7 +95,6 @@ package body utiles is
       end loop;
 
       return nro;
->>>>>>> refs/remotes/origin/master
    end numeroReal;
 
    -- Que hace: Muestra un mensaje al usuario y devuelve el entero ingresado.
@@ -145,12 +124,6 @@ package body utiles is
    function realEnRango(mensaje: in string; rangoInf, rangoSup: in float) return float is
       resp:float;
    begin
-<<<<<<< HEAD
-      Repetir
-         mostrar (mensaje)
-         ingresar (num)
-      Hasta num>=rangoInf and num<=rangoSup
-=======
        loop
          begin
 
@@ -164,20 +137,12 @@ package body utiles is
       end loop;
       skip_line;
       return resp;
->>>>>>> refs/remotes/origin/master
    end realEnRango;
 
    -- Que hace: Muestra un mensaje al usuario y devuelve una cadena ingresada.
    -- Precondiciones: m=M
    -- Poscondiciones: textoNoVacio = S y longitud(S) > 0.
    function textoNoVacio(mensaje: in string) return string is
-<<<<<<< HEAD
-   var
-      texto:cadena
-   begin
-      mostrar (mensaje)
-      ingresar (texto)//lanzar una exepcion
-=======
       rta:String := "";
    begin
 
@@ -198,7 +163,6 @@ package body utiles is
       Skip_Line;
 
       return rta;
->>>>>>> refs/remotes/origin/master
    end textoNoVacio;
 
    -- Que hace: Limpia la pantalla.
