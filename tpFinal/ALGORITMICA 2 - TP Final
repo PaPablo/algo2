@@ -69,8 +69,8 @@ Var
 	opc: entero
 Inicio
 	crear(model)	{ADT LO}
-	crear(client)
-	crear(serv)
+	crear(client)	{ADT LO}
+	crear(serv)		{ADT LO}
 	Repetir
 		mostrarMenu()		{nivel 1}
 		ingresar(opc)		{SC}
@@ -231,4 +231,20 @@ Inicio
 	insertar(client, k, i)				{ADT LO}
 Excepciones
 	listaLLena => mostrar("No se puede agregar un cliente, intente nuevamente más tarde")
+Fin
+
+
+procedimiento menuModelos()
+{Qué Hace: muestra el menu con las opciones correspondientes al ABM de modelos
+PRE: -
+POST:-
+EXCEP: -}
+Inicio
+
+	mostrar("Seleccione una Opcion")													{SC}
+	mostrar("1 - Agregar Modelo")														{SC}
+	mostrar("2 - Modificar Modelo (Nombre o Etapas de su calendario de Mantenimiento)")	{SC}
+	mostrar("3 - Quitar Modelo")														{SC}
+	mostrar("4 - Salir")																{SC}
+
 Fin
