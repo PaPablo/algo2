@@ -11,6 +11,57 @@ Consultar mantenimientos realizados a vehículos de un modelo en particular
 Consultar datos de clientes que no hayan realizado mantenimientos a sus vehículos
 Consultar los mantenimientos solicitados por un cliente
 
+----------------------------------------------------------------------------------------------------
+ESTRUCTURAS
+
+model - tipoLista	{estructura para guardar los distintos modelos}
+tipoClaveM = entero {autonumerada 1,2,3,....}
+tipoInfoM =	reg
+				nombre:cadena
+				calendario:tipoLista
+			finReg
+
+
+calendario - tipoLista
+tipoClaveCal = entero {cantidad de km correspondiente a la etapa - 10000, 20000, ....}
+tipoInfoCal = logico {siempre en V}
+
+
+serv - tipoLista	{estructura para guardar los servicios}
+tipoClaveS = entero {autonumerado 1,2,3,...}
+tipoInfoS =	reg
+				dniCliente : tipoClaveC
+				dominio : tipoClaveV
+				etapa : tipoClaveCal
+				precioFinal : entero
+				kmReal : entero
+				fecha : tipoFecha
+			finReg
+
+
+client - tipoLista
+tipoClaveC = entero {DNI del cliente}
+tipoInfoC =	reg
+				nombre : cadena
+				telefono : entero
+				email : cadena
+				vehiculos : tipoLista
+			finReg
+
+
+vehiculos - tipoLista
+tipoClaveV = cadena {patente}
+tipoInfoV =	reg
+				modelo : tipoClaveM
+				añoFabric : entero {año}
+				manten : tipoLista
+			finReg
+
+
+manten - tipoLista
+tipoClaveMant = tipoClaveS
+tipoInfoMant = logico (siempre en V)
+----------------------------------------------------------------------------------------------------
 
 NIVEL 0 
 Var
@@ -34,6 +85,8 @@ Inicio
 Excepciones
 	
 Fin
+
+----------------------------------------------------------------------------------------------------
 
 NIVEL 1
 
@@ -117,3 +170,65 @@ Inicio
 		finSegun
 	hasta (que el usuario lo desee)				{SC}
 Fin 
+
+----------------------------------------------------------------------------------------------------
+
+NIVEL 2 
+
+procedimiento agregarModelo (E/S model:tipoLista)
+{Qué Hace: crea un nuevo modelo
+PRE:	model = Mo ; Mo puede estar vacío o tener modelos válidos
+POST:	model = Mo1; Mo1 tiene un modelo válido más que Mo
+EXCEP:	}
+Var
+	i:tipoInfoM
+	k:tipoClaveM
+Inicio
+
+	si (longitud(model) = 0) entonces	{ADT LO}
+		k <- 1
+	siNo
+		recuUlt(model, k)				{ADT LO}
+		k <- k+1
+			//generamos la clave autonumerada
+	finSi
+
+	mostrar("Ingrese el nombre del modelo")	{SC}
+
+	ingresar(i.nombre)						{SC}
+
+	crear(i.calendario)						{ADT LO}
+
+	insertar(model, k, i)					{ADT LO}
+
+Excepciones
+	listaLLena => mostrar("No hay espacio para un nuevo modelo, intente nuevamente meás tarde.")
+Fin
+
+procedimiento agregarCliente (E/S client:tipoLista)
+{Qué Hace: agrega un nuevo cliente
+PRE: client = C ; C puede estar vacío o tener clientes válidos
+POST: client = C1 ; C1 tiene un cliente nuevo agregado
+EXCEP:	}
+Var
+	i:tipoInfoC
+	k:tipoClaveC
+Inicio
+	mostrar("DNI")						{SC}
+	
+	enteroEnRango(1000000, 40000000, k)	{SC}
+
+	mostrar("Telefono")					{SC}
+
+	ingresar(i.telefono)				{SC}
+
+	mostrar("E-Mail")					{SC}
+
+	ingresar(i.email)					{SC}
+
+	crear(i.vehiculos)					{ADT LO}
+
+	insertar(client, k, i)				{ADT LO}
+Excepciones
+	listaLLena => mostrar("No se puede agregar un cliente, intente nuevamente más tarde")
+Fin
