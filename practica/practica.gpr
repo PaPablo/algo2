@@ -1,0 +1,7 @@
+project Practica is
+
+   for Source_Dirs use ("./**");
+   for Main use ("test_unidad_fechas.adb", "test_unidad_utiles.adb");
+
+end Practica;
+
