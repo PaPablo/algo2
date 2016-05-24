@@ -13,30 +13,60 @@ package body cola is
 
 
    procedure encolar (q: in out tipoCola; i: in tipoInfo) is
+      aux:tipoPunt;
    begin
-      raise operacionNoImplementada;
+      aux := new tipoNodo;
+      aux.info := i;
+      aux.sig := null;
+      if (q.final /= null) then
+         q.final.sig := aux;
+      else
+         q.frente := aux;
+      end if;
+      q.final := aux;
    exception
       when STORAGE_ERROR => raise colaLlena;
    end encolar;
 
 
    procedure desencolar (q: in out tipoCola) is
-
+      aux:tipoPunt;
    begin
-	raise operacionNoImplementada;
+      if (q.frente = null) then
+         raise colaVacia;
+      else
+         aux := q.frente;
+         q.frente := q.frente.sig;
+         free(aux);
+         if (q.frente = null) then
+            q.final := null;
+         end if;
+      end if;
+
    end desencolar;
 
 
    procedure frente(q: in tipoCola; i: out tipoInfo) is
+
    begin
-      raise operacionNoImplementada;
+      if (q.frente = null) then
+         raise colaVacia;
+      else
+         i := q.frente.info;
+      end if;
+
    end frente;
 
 
    procedure vaciar(q:in out tipoCola) is
-
+      aux:tipoPunt;
    begin
-      raise operacionNoImplementada;
+      while (q.frente /= null) loop
+         aux := q.frente;
+         q.frente := q.frente.sig;
+         free(aux);
+      end loop;
+      q.final := null;
    end vaciar;
 
    function esVacia(q:in tipoCola) return boolean is
