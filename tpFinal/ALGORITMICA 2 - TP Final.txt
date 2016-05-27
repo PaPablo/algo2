@@ -1,0 +1,308 @@
+ALGORITMICA 2 - TP Final
+
+ESPECIFICACIONES
+
+Agregar, quitar y modificar modelos
+Agregar, quitar y modificar etapas del calendario de mantenimientos
+Agregar, quitar y modificar clientes
+Agregar, quitar y modificar vehículos
+Agregar, quitar y modificar servicios
+Consultar mantenimientos realizados a vehículos de un modelo en particular
+Consultar datos de clientes que no hayan realizado mantenimientos a sus vehículos
+Consultar los mantenimientos solicitados por un cliente
+
+----------------------------------------------------------------------------------------------------
+ESTRUCTURAS
+
+model - tipoLista	{estructura para guardar los distintos modelos}
+tipoClaveM = entero {autonumerada 1,2,3,....}
+tipoInfoM =	reg
+				nombre:cadena
+				calendario:tipoLista
+			finReg
+
+
+calendario - tipoLista
+tipoClaveCal = entero {cantidad de km correspondiente a la etapa - 10000, 20000, ....}
+tipoInfoCal = logico {siempre en V}
+
+
+serv - tipoLista	{estructura para guardar los servicios}
+tipoClaveS = entero {autonumerado 1,2,3,...}
+tipoInfoS =	reg
+				dniCliente : tipoClaveC
+				dominio : tipoClaveV
+				etapa : tipoClaveCal
+				precioFinal : entero
+				kmReal : entero
+				fecha : tipoFecha
+			finReg
+
+
+client - tipoLista
+tipoClaveC = entero {DNI del cliente}
+tipoInfoC =	reg
+				nombre : cadena
+				telefono : entero
+				email : cadena
+				vehiculos : tipoLista
+			finReg
+
+
+vehiculos - tipoLista
+tipoClaveV = cadena {patente}
+tipoInfoV =	reg
+				modelo : tipoClaveM
+				añoFabric : entero {año}
+				manten : tipoLista
+			finReg
+
+
+manten - tipoLista
+tipoClaveMant = tipoClaveS
+tipoInfoMant = logico (siempre en V)
+----------------------------------------------------------------------------------------------------
+
+NIVEL 0 
+Var
+	model, client, serv: tipoLista
+	opc: entero
+Inicio
+	crear(model)	{ADT LO}
+	crear(client)	{ADT LO}
+	crear(serv)		{ADT LO}
+	Repetir
+		mostrarMenuGeneral()		{nivel 1}
+		ingresar(opc)		{SC}
+		
+		segun (opc) hacer	{SC}
+			1: ABMModelos(model, serv, client) 	{nivel 1}
+			2: ABMClientes(client, serv, model) {nivel 1}
+			3: ABMServicios(serv,client,model)	{nivel 1}
+			4: consultas(client,model,serv)		{nivel 1}
+		finSegun
+	hasta (que lo desee el usuario)				{SC}
+Excepciones
+	
+Fin
+
+----------------------------------------------------------------------------------------------------
+
+NIVEL 1
+
+procedimiento ABMModelos (E/S model:tipoLista ; E/S serv:tipoLista ; E/S client:tipoLista)
+{Qué Hace: Permite agregar, modificar, o quitar modelos y etapas de sus calendarios de mantenimientos
+PRE: 	model = M ; M puede estar vacío o tener modelos válidos o está vacío
+POST: 	model = M1 ; M1 tiene modelos válidos
+EXCEP:	 }
+Var
+	opc:entero
+Inicio
+	repetir
+		menuModelos()	{nivel 2}
+		ingresar(opc)	{SC}
+		segun (opc)		{SC}
+			1: agregarModelo(model)					{nivel 2}
+			2: modificarModelo(model,serv,client)	{nivel 2}
+			3: quitarModelo(model,serv,client)		{nivel 2}
+		finSegun
+	hasta (que el usuario lo desee) 				{SC}
+Fin
+
+procedimiento ABMClientes(E/S client:tipoLista ; E/S serv:tipoLista ; E/S model:tipoLista)
+{Qué Hace: Permite agregar, modificar, o quitar clientes y sus vehículos
+PRE: 	client = C ; C puede estar vacío o tener clientes válidos
+POST:	client = C1; C1 tiene clientes válidos o está vacío
+EXCEP:	}
+Var
+	opc: 
+Inicio
+	repetir
+		menuClientes() 	{nivel 2}
+		ingresar(opc)	{SC}
+		
+		segun (opc) hacer
+			1: agregarCliente(client) 			{nivel 2}
+			2: modificarCliente(client,model)	{nivel 2}
+			3: quitarCliente(client,model,serv)	{nivel 2}
+		finSegun		
+	hastan(que el usuario lo desee)				{SC}
+Fin
+
+procedimiento ABMServicios(E/S serv:tipoLista ; E/S client:tipoLista ; E/S model:tipoLista)
+{Qué Hace: Permite agregar, modificar, o quitar servicios de mantenimiento realizados
+PRE: 	serv = S ; S puede estar vacío o tener servicios válidos
+POST:	serv = S1; S1 tiene servicios válido o está vacío
+EXCEP:	}
+Var
+	opc:entero
+Inicio
+	repetir
+		menuServicios() {nivel 2}
+		ingresar(opc)	{SC}
+
+		segun opc hacer
+			1: agregarServicio(serv,client,model)	{nivel 2}
+			2: modificarServicio(serv,client,model)	{nivel 2}
+			3: quitarServicio(serv,client,model)	{nivel 2}
+		finSegun
+	hasta (que el usuario lo desee)					{SC}
+Fin
+
+procedimiento consultas(E serv:tipoLista ; E model:tipoLista ; E client:tipoLista)
+{Qué Hace: Permite realizar distintas consultas especificadas
+PRE:	serv = S ; S tiene servicios válidos ; model = M ; M tiene modelos válidos
+		client = C ; C tiene clientes válidos
+POST:	
+EXCEP:	}
+Var
+	opc:entero
+Inicio
+
+	repetir
+		menuConsultas()	{nivel 2}
+		ingresar(opc)	{SC}
+
+		segun opc hacer
+			1: mantenPorCliente(client,serv) 	{nivel 2}
+			2: mantPorModelo(model,serv)		{nivel 2}
+			3: datosClientesSinMant(client)		{nivel 2}
+		finSegun
+	hasta (que el usuario lo desee)				{SC}
+Fin 
+
+----------------------------------------------------------------------------------------------------
+
+NIVEL 2 
+
+procedimiento agregarModelo (E/S model:tipoLista)
+{Qué Hace: crea un nuevo modelo
+PRE:	model = Mo ; Mo puede estar vacío o tener modelos válidos
+POST:	model = Mo1; Mo1 tiene un modelo válido más que Mo
+EXCEP:	}
+Var
+	i:tipoInfoM
+	k:tipoClaveM
+Inicio
+
+	si (longitud(model) = 0) entonces	{ADT LO}
+		k <- 1
+	siNo
+		recuUlt(model, k)				{ADT LO}
+		k <- k+1
+			//generamos la clave autonumerada
+	finSi
+
+	mostrar("Ingrese el nombre del modelo")	{SC}
+
+	ingresar(i.nombre)						{SC}
+
+	crear(i.calendario)						{ADT LO}
+
+	insertar(model, k, i)					{ADT LO}
+
+Excepciones
+	listaLLena => mostrar("No hay espacio para un nuevo modelo, intente nuevamente meás tarde.")
+Fin
+
+procedimiento agregarCliente (E/S client:tipoLista)
+{Qué Hace: agrega un nuevo cliente
+PRE: client = C ; C puede estar vacío o tener clientes válidos
+POST: client = C1 ; C1 tiene un cliente nuevo agregado
+EXCEP:	}
+Var
+	i:tipoInfoC
+	k:tipoClaveC
+Inicio
+	mostrar("DNI")						{SC}
+	
+	enteroEnRango(1000000, 40000000, k)	{SC}
+
+	mostrar("Telefono")					{SC}
+
+	ingresar(i.telefono)				{SC}
+
+	mostrar("E-Mail")					{SC}
+
+	ingresar(i.email)					{SC}
+
+	crear(i.vehiculos)					{ADT LO}
+
+	insertar(client, k, i)				{ADT LO}
+Excepciones
+	listaLLena => mostrar("No se puede agregar un cliente, intente nuevamente más tarde")
+Fin
+
+procedimiento mostrarMenuGeneral ()
+{Qué Hace: muestra el menu con las opciones correspondientes a las tareas a realizar
+PRE: -
+POST:-
+EXCEP: -}
+Inicio
+	mostrar("Consecionaria"){SC}
+	mostrar("Seleccione una opcion"){SC}
+	mostrar("1- Modelos"){SC}
+	mostrar("2- Clientes"){SC}
+	mostrar("3- Servicios"){SC}
+	mostrar("4- Consultar"){SC}
+	mostrar("5- Salir"){SC}
+Fin
+
+procedimiento menuModelos()
+{Qué Hace: muestra el menu con las opciones correspondientes al ABM de modelos
+PRE: -
+POST:-
+EXCEP: -}
+Inicio
+
+	mostrar("Seleccione una Opcion")													{SC}
+	mostrar("1 - Agregar Modelo")														{SC}
+	mostrar("2 - Modificar Modelo (Nombre o Etapas de su calendario de Mantenimiento)")	{SC}
+	mostrar("3 - Quitar Modelo")														{SC}
+	mostrar("4 - Salir")																{SC}
+
+Fin
+
+procedimiento menuClientes()
+{Qué Hace: muestra el menu con las opciones correspondientes al ABM de clientes
+PRE: -
+POST:-
+EXCEP: -}
+
+Inicio
+	mostrar("Seleccione una Opcion")	{SC}
+	mostrar("1 - Agregar Cliente")		{SC}
+	mostrar("2 - Modificar Cliente (ABM vehiculos, modificar datos)")	{SC}
+	mostrar("3 - Quitar Cliente")		{SC}
+	mostrar("4 - Salir") {SD}
+
+procedimiento menuServicios()
+{Qué Hace: muestra el menu con las opciones correspondientes al ABM de clientes
+PRE: -
+POST:-
+EXCEP: -}
+
+Inicio
+	mostrar("Seleccione una Opcion")	{SC}
+	mostrar("1 - Agregar Servicios")	{SC}
+	mostrar("2 - Modificar Servicios")	{SC}
+	mostrar("3 - Quitar Servicios")		{SC}
+	mostrar("4 - Salir") {SD}
+Fin 
+
+procedimiento menuConsultas()
+{Qué Hace: muestra el menu con las opciones correspondientes al ABM de clientes
+PRE: -
+POST:-
+EXCEP: -}
+
+Inicio
+	mostrar("Seleccione una Opcion")	{SC}
+	mostrar("1 - Consultar mantenimientos por modelos")	{SC}
+	mostrar("2 - Consultar mantenimientos por cliente")	{SC}
+	mostrar("3 - Consultar datos de clientes sin mantenimientos")		{SC}
+	mostrar("4 - Salir") {SD}
+Fin 
+
+
+
