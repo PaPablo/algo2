@@ -118,9 +118,21 @@ POST: client = C1 ; C1 tiene diferencias con respecto a C según lo haya deseado
 EXCEP: }
 Var
 	opc:entero
+	k:tipoClaveClientes
 Inicio
+	obtenerCliente(k, client)	{nivel 2}
+			//excepcion para salir y no ingresar nada
 	repetir
-		menuVehiculos()
+		menuVehiculos()	{nivel 2}
+		ingresar(opc)	{SC}
+		segun opc hacer
+			1: agregarVehiculo(client, k, model)		{nivel 2}
+			2: modificarVehiculo(client, k, model)		{nivel 2}
+			3: quitarVehiculo(client, k, model)			{nivel 2}
+		finSegun
+	hasta (opc = 4)
+Excepciones
+	cancelarIngreso => nada	
 Fin
 
 
@@ -276,7 +288,7 @@ Var
 	opc:entero
 Inicio
 
-	obtenerCliente(k, client)	{nivel 3} //opcion para cancela modif a traves de excep
+	obtenerCliente(k, client)	{nivel 2} //opcion para cancela modif a traves de excep
 	menuModifClient()	{nivel 3}
 	ingresar(opc)		{SC}				
 	segun opc hacer
@@ -284,7 +296,8 @@ Inicio
 		2:modifTelefono(k)		{nivel 3}
 		3:modifEmail(k)			{nivel 3}
 	finSegun
-
+Excepciones
+	cancelarIngreso => nada
 Fin
 
 procedimiento modificarModelo(E/S model:tipoLista ; E/S serv:tipoLista ; E/S client:tipoLista)
@@ -295,6 +308,7 @@ EXCEP: -	}
 Var
 	k:tipoClaveM
 Inicio
+
 	obtenerModelo(k,model)	{nivel 3}	//opcion para cancela modif a traves excep
 	menuModifModelo()	{nivel 3}
 	ingresar(opc)		{SC}
@@ -304,6 +318,9 @@ Inicio
 	finSegun
 	actualizarVM(k,client)	{nivel 3}
 	actualizarSM(k,serv)	{nivel 3}
+
+Excepciones
+	cancelarIngreso => nada
 Fin
 
 procedimiento quitarCliente(E/S client:tipoLista ; E/S serv:tipoLista)
@@ -314,12 +331,17 @@ EXCEP:	}
 Var
 	k:tipoClaveC
 Inicio
-	obtenerCliente(k,client)	{nivel 3}	//opcion para cancela modif a traves excep
+
+	obtenerCliente(k,client)	{nivel 2}	//opcion para cancela modif a traves excep
 	
 	si (confirma("Esta seguro que desea eliminar este cliente?")) ent
-		suprimir(client, k)			{nivel 3}
+		limpiarNodo(client, k)		{nivel 3}
+		suprimir(client, k)			{ADT LO}
 		actualizarSC(k, serv)		{nivel 3}
 	finSi
+
+Excepciones
+	cancelarIngreso => nada
 Fin
 
 procedimiento quitarModelo(E/S model:tipoLista ; E/S serv:tipoLista ; E/S client:tipoLista)
@@ -331,13 +353,17 @@ EXCEP: }
 Var
 	k:tipoClaveM
 Inicio
+
 	obtenerModelo(k, model)	{nivel 3}	//opcion para cancela modif a traves excep
 
 	si (confirma("Está seguro que desea eliminar este modelo?")) ent
-		suprimir(model, k)
-		actualizarSM(k, serv)
-		actualizarVM(k, client)
+		limpiarNodo(model, k) 	{nivel 3}
+		suprimir(model, k)		{nivel 3}
+		actualizarSM(k, serv)	{nivel 3}
+		actualizarVM(k, client)	{nivel 3}
 	finSi
 
+Excepciones
+	cancelarIngreso => nada
 Fin
 

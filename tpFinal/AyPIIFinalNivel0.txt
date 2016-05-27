@@ -1,0 +1,26 @@
+ALGORITMICA 2 - TP Final
+
+NIVEL 0 
+Var
+	model, client, serv: tipoLista
+	opc: entero
+Inicio
+	crear(model)	{ADT LO}
+	crear(client)	{ADT LO}
+	crear(serv)		{ADT LO}
+	Repetir
+		mostrarMenu()		{nivel 1}
+		ingresar(opc)		{SC}
+		
+		segun (opc) hacer	{SC}
+			1: ABMModelos(model, serv, client) 	{nivel 1}
+			2: ABMClientes(client, serv, model) {nivel 1}
+			3: ABMServicios(serv,client,model)	{nivel 1}
+			4: ABMVehiculos(client,model)		{nivel 1}
+			5: consultas(client,model,serv)		{nivel 1}
+
+		finSegun
+	hasta (opc = 6)				{SC}
+Excepciones
+	
+Fin

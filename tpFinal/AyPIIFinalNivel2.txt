@@ -1,0 +1,168 @@
+ALGORITMICA 2 - TP Final
+
+NIVEL 2 
+
+procedimiento agregarModelo (E/S model:tipoLista)
+{Qué Hace: crea un nuevo modelo
+PRE:	model = Mo ; Mo puede estar vacío o tener modelos válidos
+POST:	model = Mo1; Mo1 tiene un modelo válido más que Mo
+EXCEP:	}
+Var
+	i:tipoInfoM
+	k:tipoClaveM
+Inicio
+
+	si (longitud(model) = 0) entonces	{ADT LO}
+		k <- 1
+	siNo
+		recuUlt(model, k)				{ADT LO}
+		k <- k+1
+			//generamos la clave autonumerada
+	finSi
+
+	mostrar("Ingrese el nombre del modelo")	{SC}
+
+	ingresar(i.nombre)						{SC}
+
+	crear(i.calendario)						{ADT LO}
+
+	insertar(model, k, i)					{ADT LO}
+
+Excepciones
+	listaLLena => mostrar("No hay espacio para un nuevo modelo, intente nuevamente más tarde.")
+Fin
+
+procedimiento agregarCliente (E/S client:tipoLista)
+{Qué Hace: agrega un nuevo cliente
+PRE: client = C ; C puede estar vacío o tener clientes válidos
+POST: client = C1 ; C1 tiene un cliente nuevo agregado
+EXCEP:	}
+Var
+	i:tipoInfoC
+	k:tipoClaveC
+Inicio
+	mostrar("DNI")						{SC}
+	
+	enteroEnRango(1000000, 40000000, k)	{SC}
+
+	mostrar("Telefono")					{SC}
+
+	ingresar(i.telefono)				{SC}
+
+	mostrar("E-Mail")					{SC}
+
+	ingresar(i.email)					{SC}
+
+	crear(i.vehiculos)					{ADT LO}
+
+	insertar(client, k, i)				{ADT LO}
+Excepciones
+	listaLLena => mostrar("No se puede agregar un cliente, intente nuevamente más tarde")
+Fin
+
+
+procedimiento menuModelos()
+{Qué Hace: muestra el menu con las opciones correspondientes al ABM de modelos
+PRE: -
+POST:-
+EXCEP: -}
+Inicio
+
+	mostrar("Seleccione una Opcion")													{SC}
+	mostrar("1 - Agregar Modelo")														{SC}
+	mostrar("2 - Modificar Modelo (Nombre o Etapas de su calendario de Mantenimiento)")	{SC}
+	mostrar("3 - Quitar Modelo")														{SC}
+	mostrar("4 - Salir")																{SC}
+
+Fin
+
+procedimiento modificarCliente(E/S client:tipoLista ; E model:tipoLista)
+{Qué Hace: permite modificar los datos pertenecientes a un cliente en particular
+PRE: client = C ; C contiene al menos un cliente válido ; model = M ; M contiene al menos un modelo valido
+POST: client = C1 ; C1 contiene un cliente con los datos modificados o no
+EXCEP: - }
+Var
+	k:tipoClaveC
+	opc:entero
+Inicio
+
+	obtenerCliente(k, client)	{nivel 2} //opcion para cancela modif a traves de excep
+	menuModifClient()	{nivel 3}
+	ingresar(opc)		{SC}				
+	segun opc hacer
+		1:modifNombre(k)		{nivel 3}
+		2:modifTelefono(k)		{nivel 3}
+		3:modifEmail(k)			{nivel 3}
+	finSegun
+Excepciones
+	cancelarIngreso => nada
+Fin
+
+procedimiento modificarModelo(E/S model:tipoLista ; E/S serv:tipoLista ; E/S client:tipoLista)
+{Qué Hace: Permite modificar los datos correpondientes a un modelo en particular y actualiza las relaciones de dicho modelos con los clientes y los servicios realizados
+PRE: model = M ; M contiene al menos un modelo ; serv = S ; client = C
+POST: model = M1 ; M1 tiene un modelo con datos distintos
+EXCEP: -	}
+Var
+	k:tipoClaveM
+Inicio
+
+	obtenerModelo(k,model)	{nivel 3}	//opcion para cancela modif a traves excep
+	menuModifModelo()	{nivel 3}
+	ingresar(opc)		{SC}
+	segun (opc) hacer
+		1: modificarNombre(k)	{nivel 3}
+		2: ABMCalendario()		{nivel 3}
+	finSegun
+	actualizarVM(k,client)	{nivel 3}
+	actualizarSM(k,serv)	{nivel 3}
+
+Excepciones
+	cancelarIngreso => nada
+Fin
+
+procedimiento quitarCliente(E/S client:tipoLista ; E/S serv:tipoLista)
+{Qué Hace: quita un cliente y actualiza su relación con respecto a los servicios a su nombre
+PRE: client = C ; C tiene que tener al menos un cliente válido ; serv = S 
+POST: client = C1 ; C1 tiene un cliente menos ; serv = S1 ; S1 tiene uno o más servicios menos si el cliente eliminado tenía algún servicio a su nombre
+EXCEP:	}
+Var
+	k:tipoClaveC
+Inicio
+
+	obtenerCliente(k,client)	{nivel 2}	//opcion para cancela modif a traves excep
+	
+	si (confirma("Esta seguro que desea eliminar este cliente?")) ent
+		limpiarNodo(client, k)		{nivel 3}
+		suprimir(client, k)			{ADT LO}
+		actualizarSC(k, serv)		{nivel 3}
+	finSi
+
+Excepciones
+	cancelarIngreso => nada
+Fin
+
+procedimiento quitarModelo(E/S model:tipoLista ; E/S serv:tipoLista ; E/S client:tipoLista)
+{Qué Hace: quita un modelo y actualiza su relacion con los clientes y los servicios
+PRE:	model = M ; M tiene al menos un modelo ; serv = S ; client = C
+POST:	model = M1 ; M1 tiene un cliente menos ; serv = S1 ; client = C1 ; C1 y S1 tienen clientes o servicios menos si el modelo eliminado tenia servicios
+		relacionados o un cliente tenía un vehiculo de ese modelo en particular
+EXCEP: }
+Var
+	k:tipoClaveM
+Inicio
+
+	obtenerModelo(k, model)	{nivel 3}	//opcion para cancela modif a traves excep
+
+	si (confirma("Está seguro que desea eliminar este modelo?")) ent
+		limpiarNodo(model, k) 	{nivel 3}
+		suprimir(model, k)		{nivel 3}
+		actualizarSM(k, serv)	{nivel 3}
+		actualizarVM(k, client)	{nivel 3}
+	finSi
+
+Excepciones
+	cancelarIngreso => nada
+Fin
+
+procedimiento agregarVehiculo

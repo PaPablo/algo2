@@ -1,0 +1,64 @@
+ALGORITMICA 2 - TP Final
+
+ESPECIFICACIONES
+
+Agregar, quitar y modificar modelos
+Agregar, quitar y modificar etapas del calendario de mantenimientos
+Agregar, quitar y modificar clientes
+Agregar, quitar y modificar vehículos
+Agregar, quitar y modificar servicios
+Consultar mantenimientos realizados a vehículos de un modelo en particular
+Consultar datos de clientes que no hayan realizado mantenimientos a sus vehículos
+Consultar los mantenimientos solicitados por un cliente
+
+----------------------------------------------------------------------------------------------------
+ESTRUCTURAS
+
+LISTA ORDENADA DE MODELOS
+tipoClaveModelos = entero {autonumerada 1,2,3,....}
+tipoInfoModelos =	reg
+				nombre:cadena
+				calendario:tipoLista
+			finReg
+
+
+LISTA ORDENADA CALENDARIO DE MANTENIMIENTOS
+tipoClaveCalendario = entero {cantidad de km correspondiente a la etapa - 10000, 20000, ....}
+tipoInfoCalendario = logico {siempre en V}
+
+
+LISTA ORDENADA SERVICIOS REALIZADAS
+tipoClaveServicios = entero {autonumerado 1,2,3,...}
+tipoInfoServicios =	reg
+				dniCliente : tipoClaveC
+				dominio : tipoClaveV
+				etapa : tipoClaveCal
+				precioFinal : entero
+				kmReal : entero
+				fecha : tipoFecha
+			finReg
+
+
+ABB CLIENTES
+tipoClaveClientes = entero {DNI del cliente}
+tipoInfoClientes =	reg
+				nombre : cadena
+				telefono : entero
+				email : cadena
+				vehiculos : tipoLista
+			finReg
+
+
+LISTA ORDENADA VEHICULOS
+tipoClaveVehiculos = cadena {patente}
+tipoInfoVehiculos =	reg
+				modelo : tipoClaveM
+				añoFabric : entero {año}
+				manten : tipoLista
+			finReg
+
+
+LISTA ORDENADA MANTENIMIENTOS
+tipoClaveMantenimientos = tipoClaveServicios
+tipoInfoMantenimientos = logico (siempre en V)
+----------------------------------------------------------------------------------------------------
