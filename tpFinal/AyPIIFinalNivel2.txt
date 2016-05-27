@@ -169,4 +169,85 @@ procedmiento agregarVehiculo(E/S client:tipoArbolClientes; E k:tipoClaveClientes
 {Que Hace: agrega un vehiculo para un cliente determinado
 PRE: 	client = C ; C tiene al menos un cliente valido ; k = K ; K es un numero de DNI perteneciente a un cliente
 		model = M ; M contiene al menos un modelo valido
-POST:	}
+POST:	client = C1; C1 tiene un nuevo vehiculo agregado a un cliente segun lo que haya decidido el usuario
+EXCEP: }
+Var
+	c:tipoInfoClientes
+	vehiculo:tipoInfoVehiculos
+	patente:tipoClaveVehiculos
+Inicio
+	
+	obtenerPatente(patente) {nivel 3}
+
+	obtenerModelo(vehiculo.modelo,model)	{nivel 3}	//opcion para cancela modif a traves excep
+
+	enteroMayorACero(vehiculo.añoFabric, "Ingrese año de fabricacion")		{SC}
+
+	crear(vehiculo.manten)						{ADT LO}
+	
+	buscar(client, k, c)						{ADT ABB}
+
+	insertar(c.vehiculos, patente, vehiculo)	{ADT LO}	
+
+	modificar(client, k, c)						{ADT ABB}
+
+Excepciones
+	cancelarIngreso => nada
+
+Fin
+
+procedimiento modificarVehiculo(E/S client:tipoArbolCLientes ; E k:tipoClaveClientes ; E model:tipoListaModelos)
+{Que Hace: modifica los vehiculos pertenecientes a un cliente en particular
+PRE: client = C ; k = K y K pertence a C; model = M ; M contiene al menos un modelo valido
+POST: client = C1 ; C1 tiene cambios segun lo haya decidido el usuario
+EXCEP:}
+Var
+	c:tipoInfoClientes
+	vehiculo:tipoInfoVehiculos
+	patente:tipoClaveVehiculos
+	opc:entero
+Inicio
+	buscar(client, k, c)						{ADT ABB}
+	obtenerVehiculo(c.vehiculos, patente)		{nivel 3}
+	recuClave(c.vehiculos, patente, vehiculo)	{ADT LO}
+	
+	repetir
+		menuModifVehiculo()						{nivel 3}
+		ingresar(opc)							{SC}
+
+		segun (opc) hacer
+			1: cambiarModelo(vehiculo.modelo, model)									{nivel 3}
+			2: enteroMayorACero(vehiculo.añoFabric, "Ingrese nuevo año de fabricacion")	{SC}
+		finSegun
+	hasta (opc = 3)
+
+	suprimir(c.vehiculos, patente)				{ADT LO}
+	insertar(c.vehiculos, patente, vehiculo)	{ADT LO}
+
+Excepciones
+	cancelarIngreso => nada
+Fin
+
+procedimiento quitarVehiculo(E/S client:tipoArbolClientes ; E k:tipoClaveClientes ; E/S serv:tipoListaServicios)
+{Que Hace: elimina un vehiculo de un cliente
+PRE: client = C ; k = K ; K pertenece a C ; serv = S
+POST:	client = C1 ; C1 tiene un vehiculo menos segun haya deseado el usuario
+EXCEP:}
+Var
+	vehiculo:tipoInfoVehiculos
+	patente:tipoClaveVehiculos
+	c:tipoInfoClientes
+Inicio
+	obtenerPatente(patente) 					{nivel 3}
+	buscar(client, k, c)						{ADT ABB}
+	recuClave(c.vehiculos, patente, vehiculo)	{ADT LO}
+	vaciar(vehiculo.manten)						{ADT LO}
+		
+	suprimir(c.vehiculos, patente)				{ADT LO}
+	insertar(c.vehiculos, patente,vehiculo)		{ADT LO}
+	suprimir(c.vehiculos, patente)				{ADT LO}
+
+	modificar(client, k, c)						{ADT ABB}
+
+	actualizarSV(patente, serv)					{nivel 3}
+Fin

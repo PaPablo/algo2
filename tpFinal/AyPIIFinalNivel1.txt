@@ -21,7 +21,7 @@ Inicio
 	hasta (opc = 4) 				{SC}
 Fin
 
-procedimiento ABMVehiculos (E/S client:tipoListaClientes ; S model:tipoListaModelos)
+procedimiento ABMVehiculos (E/S client:tipoListaClientes ; E/S model:tipoListaModelos, E/S serv:tipoListaServicios)
 {Qué Hace: Permite agregar, modificar o quitar vehiculos de los clientes, según el usuario lo desee
 PRE: client = C ; C contiene al menos un cliente válido; model = M ; M contiene al menos un modelos valido
 POST: client = C1 ; C1 tiene diferencias con respecto a C según lo haya deseado el usuario
@@ -38,7 +38,7 @@ Inicio
 		segun opc hacer
 			1: agregarVehiculo(client, k, model)		{nivel 2}
 			2: modificarVehiculo(client, k, model)		{nivel 2}
-			3: quitarVehiculo(client, k, model)			{nivel 2}
+			3: quitarVehiculo(client, k, serv)	[nivel 2}
 		finSegun
 	hasta (opc = 4)
 Excepciones
