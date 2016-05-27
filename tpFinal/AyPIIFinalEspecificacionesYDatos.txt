@@ -18,7 +18,7 @@ LISTA ORDENADA DE MODELOS
 tipoClaveModelos = entero {autonumerada 1,2,3,....}
 tipoInfoModelos =	reg
 				nombre:cadena
-				calendario:tipoLista
+				calendario:tipoListaCalendario
 			finReg
 
 
@@ -30,9 +30,9 @@ tipoInfoCalendario = logico {siempre en V}
 LISTA ORDENADA SERVICIOS REALIZADAS
 tipoClaveServicios = entero {autonumerado 1,2,3,...}
 tipoInfoServicios =	reg
-				dniCliente : tipoClaveC
-				dominio : tipoClaveV
-				etapa : tipoClaveCal
+				dniCliente : tipoClaveClientes
+				dominio : tipoClaveVehiculos
+				etapa : tipoClaveCalendario
 				precioFinal : entero
 				kmReal : entero
 				fecha : tipoFecha
@@ -45,16 +45,16 @@ tipoInfoClientes =	reg
 				nombre : cadena
 				telefono : entero
 				email : cadena
-				vehiculos : tipoLista
+				vehiculos : tipoListaVehiculos
 			finReg
 
 
 LISTA ORDENADA VEHICULOS
 tipoClaveVehiculos = cadena {patente}
 tipoInfoVehiculos =	reg
-				modelo : tipoClaveM
+				modelo : tipoClaveModelos
 				añoFabric : entero {año}
-				manten : tipoLista
+				manten : tipoListaMantenimientos
 			finReg
 
 

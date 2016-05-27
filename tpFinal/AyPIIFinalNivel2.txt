@@ -169,3 +169,4 @@ procedmiento agregarVehiculo(E/S client:tipoArbolClientes; E k:tipoClaveClientes
 {Que Hace: agrega un vehiculo para un cliente determinado
 PRE: 	client = C ; C tiene al menos un cliente valido ; k = K ; K es un numero de DNI perteneciente a un cliente
 		model = M ; M contiene al menos un modelo valido
+POST:	}
