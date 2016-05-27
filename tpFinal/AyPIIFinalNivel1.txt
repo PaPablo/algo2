@@ -2,7 +2,7 @@ ALGORITMICA 2 - TP Final
 
 NIVEL 1
 
-procedimiento ABMModelos (E/S model:tipoLista ; E/S serv:tipoLista ; E/S client:tipoLista)
+procedimiento ABMModelos (E/S model:tipoListaModelos ; E/S serv:tipoListaServicios ; E/S client:tipoArbolServicios)
 {Qué Hace: Permite agregar, modificar, o quitar modelos y etapas de sus calendarios de mantenimientos
 PRE: 	model = M ; M puede estar vacío o tener modelos válidos o está vacío
 POST: 	model = M1 ; M1 tiene modelos válidos
@@ -47,7 +47,7 @@ Fin
 
 
 
-procedimiento ABMClientes(E/S client:tipoLista ; E/S serv:tipoLista ; E/S model:tipoLista)
+procedimiento ABMClientes(E/S client:tipoListaClientes ; E/S serv:tipoListaServicios ; E/S model:tipoListaModelos)
 {Qué Hace: Permite agregar, modificar, o quitar clientes y sus vehículos
 PRE: 	client = C ; C puede estar vacío o tener clientes válidos
 POST:	client = C1; C1 tiene clientes válidos o está vacío
@@ -67,7 +67,7 @@ Inicio
 	hastan(opc = 4)				{SC}
 Fin
 
-procedimiento ABMServicios(E/S serv:tipoLista ; E/S client:tipoLista ; E/S model:tipoLista)
+procedimiento ABMServicios(E/S serv:tipoListaServicios ; E/S client:tipoListaClientes ; E/S model:tipoListaModelos)
 {Qué Hace: Permite agregar, modificar, o quitar servicios de mantenimiento realizados
 PRE: 	serv = S ; S puede estar vacío o tener servicios válidos
 POST:	serv = S1; S1 tiene servicios válido o está vacío
@@ -88,7 +88,7 @@ Inicio
 Fin
 
 AB
-procedimiento consultas(E serv:tipoLista ; E model:tipoLista ; E client:tipoLista)
+procedimiento consultas(E serv:tipoListaServicios ; E model:tipoListaModelos ; E client:tipoListaClientes)
 {Qué Hace: Permite realizar distintas consultas especificadas
 PRE:	serv = S ; S tiene servicios válidos ; model = M ; M tiene modelos válidos
 		client = C ; C tiene clientes válidos

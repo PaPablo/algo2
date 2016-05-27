@@ -2,14 +2,14 @@ ALGORITMICA 2 - TP Final
 
 NIVEL 2 
 
-procedimiento agregarModelo (E/S model:tipoLista)
+procedimiento agregarModelo (E/S model:tipoListaModelos)
 {Qué Hace: crea un nuevo modelo
 PRE:	model = Mo ; Mo puede estar vacío o tener modelos válidos
 POST:	model = Mo1; Mo1 tiene un modelo válido más que Mo
 EXCEP:	}
 Var
-	i:tipoInfoM
-	k:tipoClaveM
+	i:tipoInfoModelos
+	k:tipoClaveModelos
 Inicio
 
 	si (longitud(model) = 0) entonces	{ADT LO}
@@ -32,14 +32,14 @@ Excepciones
 	listaLLena => mostrar("No hay espacio para un nuevo modelo, intente nuevamente más tarde.")
 Fin
 
-procedimiento agregarCliente (E/S client:tipoLista)
+procedimiento agregarCliente (E/S client:tipoArbolClientes)
 {Qué Hace: agrega un nuevo cliente
 PRE: client = C ; C puede estar vacío o tener clientes válidos
 POST: client = C1 ; C1 tiene un cliente nuevo agregado
 EXCEP:	}
 Var
-	i:tipoInfoC
-	k:tipoClaveC
+	i:tipoInfoClientes
+	k:tipoClaveClientes
 Inicio
 	mostrar("DNI")						{SC}
 	
@@ -76,13 +76,13 @@ Inicio
 
 Fin
 
-procedimiento modificarCliente(E/S client:tipoLista ; E model:tipoLista)
+procedimiento modificarCliente(E/S client:tipoArbolClientes ; E model:tipoListaModelos)
 {Qué Hace: permite modificar los datos pertenecientes a un cliente en particular
 PRE: client = C ; C contiene al menos un cliente válido ; model = M ; M contiene al menos un modelo valido
 POST: client = C1 ; C1 contiene un cliente con los datos modificados o no
 EXCEP: - }
 Var
-	k:tipoClaveC
+	k:tipoClaveClientes
 	opc:entero
 Inicio
 
@@ -98,13 +98,13 @@ Excepciones
 	cancelarIngreso => nada
 Fin
 
-procedimiento modificarModelo(E/S model:tipoLista ; E/S serv:tipoLista ; E/S client:tipoLista)
+procedimiento modificarModelo(E/S model:tipoListaModelos ; E/S serv:tipoListaServicios ; E/S client:tipoArbolClientes)
 {Qué Hace: Permite modificar los datos correpondientes a un modelo en particular y actualiza las relaciones de dicho modelos con los clientes y los servicios realizados
 PRE: model = M ; M contiene al menos un modelo ; serv = S ; client = C
 POST: model = M1 ; M1 tiene un modelo con datos distintos
 EXCEP: -	}
 Var
-	k:tipoClaveM
+	k:tipoClaveModelos
 Inicio
 
 	obtenerModelo(k,model)	{nivel 3}	//opcion para cancela modif a traves excep
@@ -121,13 +121,13 @@ Excepciones
 	cancelarIngreso => nada
 Fin
 
-procedimiento quitarCliente(E/S client:tipoLista ; E/S serv:tipoLista)
+procedimiento quitarCliente(E/S client:tipoArbolClientes ; E/S serv:tipoListaServicios)
 {Qué Hace: quita un cliente y actualiza su relación con respecto a los servicios a su nombre
 PRE: client = C ; C tiene que tener al menos un cliente válido ; serv = S 
 POST: client = C1 ; C1 tiene un cliente menos ; serv = S1 ; S1 tiene uno o más servicios menos si el cliente eliminado tenía algún servicio a su nombre
 EXCEP:	}
 Var
-	k:tipoClaveC
+	k:tipoClaveClientes
 Inicio
 
 	obtenerCliente(k,client)	{nivel 2}	//opcion para cancela modif a traves excep
@@ -142,14 +142,14 @@ Excepciones
 	cancelarIngreso => nada
 Fin
 
-procedimiento quitarModelo(E/S model:tipoLista ; E/S serv:tipoLista ; E/S client:tipoLista)
+procedimiento quitarModelo(E/S model:tipoListaModelos ; E/S serv:tipoListaServicios ; E/S client:tipoArbolClientes)
 {Qué Hace: quita un modelo y actualiza su relacion con los clientes y los servicios
 PRE:	model = M ; M tiene al menos un modelo ; serv = S ; client = C
 POST:	model = M1 ; M1 tiene un cliente menos ; serv = S1 ; client = C1 ; C1 y S1 tienen clientes o servicios menos si el modelo eliminado tenia servicios
 		relacionados o un cliente tenía un vehiculo de ese modelo en particular
 EXCEP: }
 Var
-	k:tipoClaveM
+	k:tipoClaveModelos
 Inicio
 
 	obtenerModelo(k, model)	{nivel 3}	//opcion para cancela modif a traves excep
@@ -165,4 +165,7 @@ Excepciones
 	cancelarIngreso => nada
 Fin
 
-procedimiento agregarVehiculo
+procedmiento agregarVehiculo(E/S client:tipoArbolClientes; E k:tipoClaveClientes ; E model:tipoListaModelosModelos)
+{Que Hace: agrega un vehiculo para un cliente determinado
+PRE: 	client = C ; C tiene al menos un cliente valido ; k = K ; K es un numero de DNI perteneciente a un cliente
+		model = M ; M contiene al menos un modelo valido
