@@ -14,22 +14,22 @@ Consultar los mantenimientos solicitados por un cliente
 ----------------------------------------------------------------------------------------------------
 ESTRUCTURAS
 
-model - tipoLista	{estructura para guardar los distintos modelos}
-tipoClaveM = entero {autonumerada 1,2,3,....}
-tipoInfoM =	reg
+LISTA ORDENADA DE MODELOS
+tipoClaveModelos = entero {autonumerada 1,2,3,....}
+tipoInfoModelos =	reg
 				nombre:cadena
 				calendario:tipoLista
 			finReg
 
 
-calendario - tipoLista
-tipoClaveCal = entero {cantidad de km correspondiente a la etapa - 10000, 20000, ....}
-tipoInfoCal = logico {siempre en V}
+LISTA ORDENADA CALENDARIO DE MANTENIMIENTOS
+tipoClaveCalendario = entero {cantidad de km correspondiente a la etapa - 10000, 20000, ....}
+tipoInfoCalendario = logico {siempre en V}
 
 
-serv - tipoLista	{estructura para guardar los servicios}
-tipoClaveS = entero {autonumerado 1,2,3,...}
-tipoInfoS =	reg
+LISTA ORDENADA SERVICIOS REALIZADAS
+tipoClaveServicios = entero {autonumerado 1,2,3,...}
+tipoInfoServicios =	reg
 				dniCliente : tipoClaveC
 				dominio : tipoClaveV
 				etapa : tipoClaveCal
@@ -39,9 +39,9 @@ tipoInfoS =	reg
 			finReg
 
 
-client - tipoLista
-tipoClaveC = entero {DNI del cliente}
-tipoInfoC =	reg
+ABB CLIENTES
+tipoClaveClientes = entero {DNI del cliente}
+tipoInfoClientes =	reg
 				nombre : cadena
 				telefono : entero
 				email : cadena
@@ -49,18 +49,18 @@ tipoInfoC =	reg
 			finReg
 
 
-vehiculos - tipoLista
-tipoClaveV = cadena {patente}
-tipoInfoV =	reg
+LISTA ORDENADA VEHICULOS
+tipoClaveVehiculos = cadena {patente}
+tipoInfoVehiculos =	reg
 				modelo : tipoClaveM
 				añoFabric : entero {año}
 				manten : tipoLista
 			finReg
 
 
-manten - tipoLista
-tipoClaveMant = tipoClaveS
-tipoInfoMant = logico (siempre en V)
+LISTA ORDENADA MANTENIMIENTOS
+tipoClaveMantenimientos = tipoClaveServicios
+tipoInfoMantenimientos = logico (siempre en V)
 ----------------------------------------------------------------------------------------------------
 
 NIVEL 0 
@@ -79,9 +79,11 @@ Inicio
 			1: ABMModelos(model, serv, client) 	{nivel 1}
 			2: ABMClientes(client, serv, model) {nivel 1}
 			3: ABMServicios(serv,client,model)	{nivel 1}
-			4: consultas(client,model,serv)		{nivel 1}
+			4: ABMVehiculos(client,model)		{nivel 1}
+			5: consultas(client,model,serv)		{nivel 1}
+
 		finSegun
-	hasta (que lo desee el usuario)				{SC}
+	hasta (opc = 6)				{SC}
 Excepciones
 	
 Fin
@@ -106,8 +108,22 @@ Inicio
 			2: modificarModelo(model,serv,client)	{nivel 2}
 			3: quitarModelo(model,serv,client)		{nivel 2}
 		finSegun
-	hasta (que el usuario lo desee) 				{SC}
+	hasta (opc = 4) 				{SC}
 Fin
+
+procedimiento ABMVehiculos (E/S client:tipoListaClientes ; S model:tipoListaModelos)
+{Qué Hace: Permite agregar, modificar o quitar vehiculos de los clientes, según el usuario lo desee
+PRE: client = C ; C contiene al menos un cliente válido; model = M ; M contiene al menos un modelos valido
+POST: client = C1 ; C1 tiene diferencias con respecto a C según lo haya deseado el usuario
+EXCEP: }
+Var
+	opc:entero
+Inicio
+	repetir
+		menuVehiculos()
+Fin
+
+
 
 procedimiento ABMClientes(E/S client:tipoLista ; E/S serv:tipoLista ; E/S model:tipoLista)
 {Qué Hace: Permite agregar, modificar, o quitar clientes y sus vehículos
@@ -126,7 +142,7 @@ Inicio
 			2: modificarCliente(client,model)	{nivel 2}
 			3: quitarCliente(client,serv)	{nivel 2}
 		finSegun		
-	hastan(que el usuario lo desee)				{SC}
+	hastan(opc = 4)				{SC}
 Fin
 
 procedimiento ABMServicios(E/S serv:tipoLista ; E/S client:tipoLista ; E/S model:tipoLista)
@@ -146,9 +162,10 @@ Inicio
 			2: modificarServicio(serv,client,model)	{nivel 2}
 			3: quitarServicio(serv,client,model)	{nivel 2}
 		finSegun
-	hasta (que el usuario lo desee)					{SC}
+	hasta (opc = 4)					{SC}
 Fin
 
+AB
 procedimiento consultas(E serv:tipoLista ; E model:tipoLista ; E client:tipoLista)
 {Qué Hace: Permite realizar distintas consultas especificadas
 PRE:	serv = S ; S tiene servicios válidos ; model = M ; M tiene modelos válidos
@@ -258,15 +275,16 @@ Var
 	k:tipoClaveC
 	opc:entero
 Inicio
-	obtenerCliente(k)	{nivel 3}
+
+	obtenerCliente(k, client)	{nivel 3} //opcion para cancela modif a traves de excep
 	menuModifClient()	{nivel 3}
 	ingresar(opc)		{SC}				
 	segun opc hacer
 		1:modifNombre(k)		{nivel 3}
 		2:modifTelefono(k)		{nivel 3}
 		3:modifEmail(k)			{nivel 3}
-		4:ABMVehiculos(k,model)	{nivel 3}
 	finSegun
+
 Fin
 
 procedimiento modificarModelo(E/S model:tipoLista ; E/S serv:tipoLista ; E/S client:tipoLista)
@@ -277,7 +295,7 @@ EXCEP: -	}
 Var
 	k:tipoClaveM
 Inicio
-	obtenerModelo(k,model1)	{nivel 3}
+	obtenerModelo(k,model)	{nivel 3}	//opcion para cancela modif a traves excep
 	menuModifModelo()	{nivel 3}
 	ingresar(opc)		{SC}
 	segun (opc) hacer
@@ -286,7 +304,7 @@ Inicio
 	finSegun
 	actualizarVM(k,client)	{nivel 3}
 	actualizarSM(k,serv)	{nivel 3}
-Final	
+Fin
 
 procedimiento quitarCliente(E/S client:tipoLista ; E/S serv:tipoLista)
 {Qué Hace: quita un cliente y actualiza su relación con respecto a los servicios a su nombre
@@ -296,9 +314,12 @@ EXCEP:	}
 Var
 	k:tipoClaveC
 Inicio
-	obtenerCliente(k,client)	{nivel 3}
-	suprimir(client, k)			{nivel 3}
-	actualizarSC(k, serv)		{nivel 3}
+	obtenerCliente(k,client)	{nivel 3}	//opcion para cancela modif a traves excep
+	
+	si (confirma("Esta seguro que desea eliminar este cliente?")) ent
+		suprimir(client, k)			{nivel 3}
+		actualizarSC(k, serv)		{nivel 3}
+	finSi
 Fin
 
 procedimiento quitarModelo(E/S model:tipoLista ; E/S serv:tipoLista ; E/S client:tipoLista)
@@ -307,3 +328,16 @@ PRE:	model = M ; M tiene al menos un modelo ; serv = S ; client = C
 POST:	model = M1 ; M1 tiene un cliente menos ; serv = S1 ; client = C1 ; C1 y S1 tienen clientes o servicios menos si el modelo eliminado tenia servicios
 		relacionados o un cliente tenía un vehiculo de ese modelo en particular
 EXCEP: }
+Var
+	k:tipoClaveM
+Inicio
+	obtenerModelo(k, model)	{nivel 3}	//opcion para cancela modif a traves excep
+
+	si (confirma("Está seguro que desea eliminar este modelo?")) ent
+		suprimir(model, k)
+		actualizarSM(k, serv)
+		actualizarVM(k, client)
+	finSi
+
+Fin
+
