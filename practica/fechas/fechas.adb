@@ -53,24 +53,7 @@ package body fechas is
             To_Unbounded_String("noviembre"),
             To_Unbounded_String("diciembre"));
    begin
-<<<<<<< HEAD
-      segun mes hacer
-         1= "Enero"
-         2= "Febrero"
-         3= "Marzo"
-         4= "Abril"
-         5= "Mayo"
-         6= "Junio"
-         7= "Julio"
-         8= "Agosto"
-         9= "Septiembre"
-         10= "Octubre"
-         11= "Noviembre"
-         12= "Diciembre"
-      finsegun
-=======
       return To_String(nombreMeses(mes));
->>>>>>> refs/remotes/origin/master
    end nombreMes;
 
    -- Que hace: Devuelve el texto correspondiente a una fecha.
@@ -79,13 +62,6 @@ package body fechas is
    function fechatexto(fecha: in tfecha) return string is
       dia,mes,anio,rta : Unbounded_String;
    begin
-<<<<<<< HEAD
-   
-         mostrar (fecha.dia, "de")
-         mes<-nombreMes (fecha.mes)
-         mostrar (mes)
-         mostrar ("de", fecha.anio)
-=======
       dia := To_Unbounded_String(Integer'Image(fecha.dia));
       mes := To_Unbounded_String(nombreMes(fecha.mes));
       anio := To_Unbounded_String(Integer'Image(fecha.anio));
@@ -93,9 +69,6 @@ package body fechas is
       rta:= dia & " de " & mes & " de" & anio;
       
       return To_string(rta);
->>>>>>> refs/remotes/origin/master
    end fechatexto;
-
-
 
 end fechas;
