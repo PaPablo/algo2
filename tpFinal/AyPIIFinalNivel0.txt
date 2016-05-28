@@ -13,7 +13,7 @@ Inicio
 	crear(client)	{ADT LO}
 	crear(serv)		{ADT LO}
 	Repetir
-		mostrarMenu()		{nivel 1}
+		menuGeneral()		{nivel 1}
 		ingresar(opc)		{SC}
 		
 		segun (opc) hacer	{SC}

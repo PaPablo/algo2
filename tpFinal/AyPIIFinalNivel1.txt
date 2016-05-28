@@ -62,9 +62,9 @@ Inicio
 		segun (opc) hacer
 			1: agregarCliente(client) 			{nivel 2}
 			2: modificarCliente(client,model)	{nivel 2}
-			3: quitarCliente(client,serv)	{nivel 2}
+			3: quitarCliente(client,serv)		nivel 2}
 		finSegun		
-	hastan(opc = 4)				{SC}
+	hastan(opc = 4)								{SC}
 Fin
 
 procedimiento ABMServicios(E/S serv:tipoListaServicios ; E/S client:tipoArbolClientes ; E/S model:tipoListaModelos)
@@ -108,4 +108,76 @@ Inicio
 			3: datosClientesSinMant(client)		{nivel 2}
 		finSegun
 	hasta (que el usuario lo desee)				{SC}
+Fin 
+
+
+procedimiento menuGeneral ()
+{Qué Hace: muestra el menu con las opciones correspondientes a las tareas a realizar
+PRE: -
+POST:-
+EXCEP: -}
+Inicio
+	mostrar("Consecionaria")			{SC}
+	mostrar("Seleccione una opcion")	{SC}
+	mostrar("1- Modelos")				{SC}
+	mostrar("2- Clientes")				{SC}
+	mostrar("3- Servicios")				{SC}
+	mostrar("4- Consultar")				{SC}
+	mostrar("5- Salir")					{SC}
+Fin
+
+procedimiento menuModelos()
+{Qué Hace: muestra el menu con las opciones correspondientes al ABM de modelos
+PRE: -
+POST:-
+EXCEP: -}
+Inicio
+
+	mostrar("Seleccione una Opcion")													{SC}
+	mostrar("1 - Agregar Modelo")														{SC}
+	mostrar("2 - Modificar Modelo (Nombre o Etapas de su calendario de Mantenimiento)")	{SC}
+	mostrar("3 - Quitar Modelo")														{SC}
+	mostrar("4 - Salir")																{SC}
+
+Fin
+
+procedimiento menuClientes()
+{Qué Hace: muestra el menu con las opciones correspondientes al ABM de clientes
+PRE: -
+POST:-
+EXCEP: -}
+
+Inicio
+	mostrar("Seleccione una Opcion")	{SC}
+	mostrar("1 - Agregar Cliente")		{SC}
+	mostrar("2 - Modificar Cliente")	{SC}
+	mostrar("3 - Quitar Cliente")		{SC}
+	mostrar("4 - Salir") {SD}
+
+procedimiento menuServicios()
+{Qué Hace: muestra el menu con las opciones correspondientes al ABM de clientes
+PRE: -
+POST:-
+EXCEP: -}
+
+Inicio
+	mostrar("Seleccione una Opcion")	{SC}
+	mostrar("1 - Agregar Servicios")	{SC}
+	mostrar("2 - Modificar Servicios")	{SC}
+	mostrar("3 - Quitar Servicios")		{SC}
+	mostrar("4 - Salir") {SD}
+Fin 
+
+procedimiento menuConsultas()
+{Qué Hace: muestra el menu con las opciones correspondientes al ABM de clientes
+PRE: -
+POST:-
+EXCEP: -}
+
+Inicio
+	mostrar("Seleccione una Opcion")									{SC}
+	mostrar("1 - Consultar mantenimientos por modelos")					{SC}
+	mostrar("2 - Consultar mantenimientos por cliente")					{SC}
+	mostrar("3 - Consultar datos de clientes sin mantenimientos")		{SC}
+	mostrar("4 - Salir") 												{SC}
 Fin 
