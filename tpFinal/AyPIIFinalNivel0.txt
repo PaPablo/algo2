@@ -1,9 +1,11 @@
 ALGORITMICA 2 - TP Final
 
 NIVEL 0 
+algoritmo agenciaAutos
+
 Var
 	model:tipoListaModelos
-	client:tipoListaClientes
+	client:tipoArbolClientes
 	serv:tipoListaServicios
 	opc: entero
 Inicio
