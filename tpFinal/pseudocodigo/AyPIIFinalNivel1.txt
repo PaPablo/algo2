@@ -19,6 +19,8 @@ Inicio
 			3: quitarModelo(model,serv,client)		{nivel 2}
 		finSegun
 	hasta (opc = 4) 				{SC}
+Excepciones
+	errorEnModificarModelo => mostrar("Ha habido un error al modificar un modelo. Intente nuevamente más tarde")
 Fin
 
 procedimiento ABMVehiculos (E/S client:tipoArbolClientes ; E/S model:tipoListaModelos, E/S serv:tipoListaServicios)
@@ -30,7 +32,7 @@ Var
 	opc:entero
 	k:tipoClaveClientes
 Inicio
-	obtenerCliente(k, client)	{nivel 2}
+	obtenerCliente(client, k)	{nivel 2}
 			//excepcion para salir y no ingresar nada
 	repetir
 		menuVehiculos()	{nivel 2}
@@ -42,6 +44,8 @@ Inicio
 		finSegun
 	hasta (opc = 4)
 Excepciones
+	errorEnModificarVehiculo => mostrar("Ha habido un error al modificar un vehiculo. Intente nuevamente más tarde")
+	errorEnQuitarVehiculo => mostrar("Ha habido un error al quitar un vehiculo. Intente nuevamente más tarde")
 	arbolVacio => mostrar("No hay clientes agregados. Agregue un cliente e intente nuevamente")
 	cancelarIngreso => nada	
 Fin
@@ -83,9 +87,11 @@ Inicio
 		segun opc hacer
 			1: agregarServicio(serv,client,model)	{nivel 2}
 			2: modificarServicio(serv,client,model)	{nivel 2}
-			3: quitarServicio(serv,client,model)	{nivel 2}
+			3: quitarServicio(serv,client)			{nivel 2}
 		finSegun
 	hasta (opc = 4)					{SC}
+Excepciones
+	errorEnModificarServicio => mostrar("Ha habido un error al modificar un servicio. Intente nuevamente más tarde")
 Fin
 
 AB

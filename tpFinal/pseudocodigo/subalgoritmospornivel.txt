@@ -9,8 +9,8 @@ quitarVehiculo(client, k, serv)	[nivel 2}	-
 agregarCliente(client) 						-
 modificarCliente(client,model)				-
 quitarCliente(client,serv)					-
-agregarServicio(serv,client,model)
-modificarServicio(serv,client,model)
+agregarServicio(serv,client,model)			-
+modificarServicio(serv,client,model)		-
 quitarServicio(serv,client,model)
 mantenPorCliente(client,serv)
 mantPorModelo(model,serv)
@@ -30,4 +30,4 @@ obtenerVehiculo(c.vehiculos, patente)
 actualizarVM(codigoModelo,client)	
 actualizarSM(codigoModelo,serv)	
 actualizarSV(patente, serv)					
-actualizarSC(dni, serv)											
+										
