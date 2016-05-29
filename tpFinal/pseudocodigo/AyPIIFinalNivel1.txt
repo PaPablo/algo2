@@ -32,7 +32,7 @@ Var
 	opc:entero
 	k:tipoClaveClientes
 Inicio
-	obtenerCliente(client, k)	{nivel 2}
+	k <- obtenerCliente(client)	{nivel 2}
 			//excepcion para salir y no ingresar nada
 	repetir
 		menuVehiculos()	{nivel 2}
