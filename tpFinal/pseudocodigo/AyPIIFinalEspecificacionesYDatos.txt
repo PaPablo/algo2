@@ -24,7 +24,7 @@ tipoInfoModelos =	reg
 
 LISTA ORDENADA CALENDARIO DE MANTENIMIENTOS
 tipoClaveCalendario = entero {cantidad de km correspondiente a la etapa - 10000, 20000, ....}
-tipoInfoCalendario = logico {siempre en V}
+tipoInfoCalendario = entero {precio del mantenimiento}
 
 
 LISTA ORDENADA SERVICIOS REALIZADAS

@@ -1,0 +1,33 @@
+nivel 2
+
+agregarModelo(model)						-	
+modificarModelo(model,serv,client)			-
+quitarModelo(model,serv,client)				-
+agregarVehiculo(client, k, model)			-
+modificarVehiculo(client, k, model)			-
+quitarVehiculo(client, k, serv)	[nivel 2}	-
+agregarCliente(client) 						-
+modificarCliente(client,model)				-
+quitarCliente(client,serv)					-
+agregarServicio(serv,client,model)
+modificarServicio(serv,client,model)
+quitarServicio(serv,client,model)
+mantenPorCliente(client,serv)
+mantPorModelo(model,serv)
+datosClientesSinMant(client)
+
+
+nivel 3
+
+ABMCalendario()
+limpiarCliente(client, dni)										
+limpiarModelo(model, codigoModelo) 	
+obtenerEmail(cliente.email)
+obtenerPatente(patente) 					
+obtenerPatente(patente) 
+obtenerModelo(vehiculo.modelo,model)
+obtenerVehiculo(c.vehiculos, patente)		
+actualizarVM(codigoModelo,client)	
+actualizarSM(codigoModelo,serv)	
+actualizarSV(patente, serv)					
+actualizarSC(dni, serv)											

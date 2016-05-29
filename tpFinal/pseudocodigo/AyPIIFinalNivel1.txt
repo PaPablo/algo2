@@ -42,6 +42,7 @@ Inicio
 		finSegun
 	hasta (opc = 4)
 Excepciones
+	arbolVacio => mostrar("No hay clientes agregados. Agregue un cliente e intente nuevamente")
 	cancelarIngreso => nada	
 Fin
 
@@ -126,58 +127,3 @@ Inicio
 	mostrar("5- Salir")					{SC}
 Fin
 
-procedimiento menuModelos()
-{Qué Hace: muestra el menu con las opciones correspondientes al ABM de modelos
-PRE: -
-POST:-
-EXCEP: -}
-Inicio
-
-	mostrar("Seleccione una Opcion")													{SC}
-	mostrar("1 - Agregar Modelo")														{SC}
-	mostrar("2 - Modificar Modelo (Nombre o Etapas de su calendario de Mantenimiento)")	{SC}
-	mostrar("3 - Quitar Modelo")														{SC}
-	mostrar("4 - Salir")																{SC}
-
-Fin
-
-procedimiento menuClientes()
-{Qué Hace: muestra el menu con las opciones correspondientes al ABM de clientes
-PRE: -
-POST:-
-EXCEP: -}
-
-Inicio
-	mostrar("Seleccione una Opcion")	{SC}
-	mostrar("1 - Agregar Cliente")		{SC}
-	mostrar("2 - Modificar Cliente")	{SC}
-	mostrar("3 - Quitar Cliente")		{SC}
-	mostrar("4 - Salir") {SD}
-
-procedimiento menuServicios()
-{Qué Hace: muestra el menu con las opciones correspondientes al ABM de clientes
-PRE: -
-POST:-
-EXCEP: -}
-
-Inicio
-	mostrar("Seleccione una Opcion")	{SC}
-	mostrar("1 - Agregar Servicios")	{SC}
-	mostrar("2 - Modificar Servicios")	{SC}
-	mostrar("3 - Quitar Servicios")		{SC}
-	mostrar("4 - Salir") {SD}
-Fin 
-
-procedimiento menuConsultas()
-{Qué Hace: muestra el menu con las opciones correspondientes al ABM de clientes
-PRE: -
-POST:-
-EXCEP: -}
-
-Inicio
-	mostrar("Seleccione una Opcion")									{SC}
-	mostrar("1 - Consultar mantenimientos por modelos")					{SC}
-	mostrar("2 - Consultar mantenimientos por cliente")					{SC}
-	mostrar("3 - Consultar datos de clientes sin mantenimientos")		{SC}
-	mostrar("4 - Salir") 												{SC}
-Fin 
