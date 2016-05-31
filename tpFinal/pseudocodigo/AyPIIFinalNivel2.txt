@@ -9,22 +9,29 @@ PRE: client = C ; C puede estar vacío o tener clientes válidos
 POST: client = C1 ; C1 tiene un cliente nuevo agregado
 EXCEP:	}
 Var
-	cliente:tipoInfoClientes
+	datosCliente:tipoInfoClientes
 	dni:tipoClaveClientes
 Inicio
 	
 	dni <- enteroMayorACero("Ingrese DNI de cliente")	{SC}
 
-	cliente.nombre <- textoNoVacio("Ingrese Nombre")	{SC}
+	Inicio
+		buscar(client, dni, datosCliente)
+		mostrar("Cliente ya existe")
+	Excepciones
+		ClaveNoExiste => 
+			Inicio
+				datosCliente.nombre <- textoNoVacio("Ingrese Nombre")	{SC}
 
-	cliente.telefono <- EnteroMayorACero("Telefono")	{SC}
+				datosCliente.telefono <- EnteroMayorACero("Telefono")	{SC}
 
-	cliente.email <- obtenerEmail()						{nivel 3}
+				datosCliente.email <- obtenerEmail()						{nivel 3}
 
-	crear(cliente.vehiculos)							{ADT LO}
+				crear(cliente.vehiculos)							{ADT LO}
 
-	insertar(client, dni, cliente)						{ADT LO}
-
+				insertar(client, dni, cliente)						{ADT LO}
+			Fin
+	Fin
 Excepciones
 	arbolLleno => mostrar("No se puede agregar un cliente, intente nuevamente más tarde")
 Fin
@@ -179,18 +186,27 @@ Var
 Inicio
 	
 	patente <- obtenerPatente() {nivel 3}
+	Inicio
+		buscar(client, dni, datosCliente)										{ADT ABB}
 
-	vehiculo.modelo <- obtenerModelo(model)									{nivel 3}
+		recuClave(datosCliente.vehiculos, patente, vehiculo)					{ADT LO}
 
-	vehiculo.añoFabric <- enteroMayorACero("Ingrese año de fabricacion")	{SC}
+		mostrar("Vehiculo ya existe")
+	Excepciones
+		claveNoExiste => 
+			Inicio
+				vehiculo.modelo <- obtenerModelo(model)									{nivel 3}
 
-	crear(vehiculo.manten)													{ADT LO}
+				vehiculo.añoFabric <- enteroMayorACero("Ingrese año de fabricacion")	{SC}
+
+				crear(vehiculo.manten)													{ADT LO}
+
+				modificar(client, dni, datosCliente)									{ADT ABB}
+			Fin
+	Fin			
+Fin
+
 	
-	buscar(client, dni, datosCliente)										{ADT ABB}
-
-	insertar(datosCliente.vehiculos, patente, vehiculo)						{ADT LO}	
-
-	modificar(client, dni, datosCliente)									{ADT ABB}
 
 Excepciones
 	listaLlena => mostrar("No se puede agregar un vehículo en este momento. Intente nuevamente más tarde")
@@ -423,7 +439,7 @@ Incio
 		Inicio
 			recuClave(serv, codigoServicio, datosServicio)	{ADT LO}
 			si (datosServicio.dniCliente = dni)				
-				mostrarDatosServicio(datosServicio)			{nivel 3}
+				mostrarDatosServicio(datosServicio)			{nivel 3]
 				total <- total +1 							{SC}
 			finSi
 			recuSig(serv, codigoServicio, codigoServicio)	{ADT LO}
@@ -436,10 +452,61 @@ Incio
 
 Excepciones
 	cancelarIngreso => nada
-	arbolVacio => mostrar("No existen clientes. Agregue por lo menos uno para poder realizar esta consulta")
+	noHayClientes => mostrar("No existen clientes. Agregue por lo menos uno para poder realizar esta consulta")
 	listaVacia => mostrar("No existen servicios realizados. Agregue por lo menos uno para poder realizar esta consulta")
 Fin
 
+
+procedimiento mantPorModelo(E model:tipoListaModelos,serv:tipoListaServicios, client:tipoArbolClientes)
+{Qué Hace: muestra por pantalla los mantenimientos realizados para un mantenimiento en particular
+PRE: model = M ; serv: S ; client = C
+POST: -
+EXCEP: - }
+Var
+	total:entero
+	sigo:logico
+	codigoModelo:tipoClaveModelos
+	codigoServicio:tipoClaveServicios
+	datosServicio:tipoInfoServicios
+	datosCliente:tipoInfoClientes
+	datosVehiculo:tipoInfoVehiculos
+Inicio
+	codigoModelo <- obtenerModelo(model)	{nivel 3}
+
+	recuPrim(serv, codigoServicio)			{ADT LO}
+
+	sigo <- V
+	total <- 0
+
+	mostrarEncabezadoMantModelo()			{nivel 3}
+	mientras sigo hacer
+		Inicio
+			//recupero los datos del servicio
+			recuClave(serv, codigoServicio, datosServicio)								{ADT LO}
+
+			//recupero los datos del cliente que lo solicitó
+			buscar(client, datosServicio.dniCliente, datosCliente)						{ADT ABB}
+
+			//busco en su lista de vehiculos al vehiculo que recibió el mantenimiento
+			recuClave(datosCliente.vehiculos, datosServicio.dominio, datosVehiculo)		{ADT LO}
+			
+			//si el modelo coincide, muestro y contabilizo
+			si (datosVehiculo.modelo = codigoModelo) entonces
+				mostrarDatosServicio(datosServicio)										{nivel 3}
+				total <- total + 1														{SC}
+			finSI
+
+			recuSig(serv, codigoServicio, codigoServ)									{ADT LO}
+		Excepciones
+			claveEsUltima => sigo <- F 													{SC}
+		Fin
+	finMientras
+
+	mostrar("TOTAL: ", total)															{SC}
+Excepciones
+	noHayModelos => mostrar("No existen Modelos. Agregue por lo menos uno e intente nuevamente")
+	listaVacia => mostrar("No existen servicios. Agregue por lo menos uno e intente nuevamente")
+Fin
 
 procedimiento menuVehiculos()
 {Qué Hace: muestra el menu con las opciones correspondientes al ABM de vehiculos

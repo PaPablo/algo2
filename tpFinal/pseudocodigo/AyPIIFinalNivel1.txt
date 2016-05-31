@@ -104,9 +104,9 @@ Inicio
 		ingresar(opc)	{SC}
 
 		segun opc hacer
-			1: mantenPorCliente(client,serv) 	{nivel 2}
-			2: mantPorModelo(model,serv)		{nivel 2}
-			3: datosClientesSinMant(client)		{nivel 2}
+			1: mantenPorCliente(client,serv) 		{nivel 2}
+			2: mantPorModelo(model,serv,client)		{nivel 2}
+			3: datosClientesSinMant(client)			{nivel 2}
 		finSegun
 	hasta (que el usuario lo desee)				{SC}
 Fin 
