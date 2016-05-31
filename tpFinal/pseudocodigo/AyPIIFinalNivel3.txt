@@ -1,0 +1,57 @@
+NIVEL 3 
+
+funcion obtenerEmail(E cad:cadena)
+{Que Hace: devuelve una direccion de email valida
+PRE: cad = C 
+POST: obtenerEmail = M ; M es un email valido
+EXCEP: }
+Var
+	ok:logico
+	email:cadena
+	i:entero
+Inicio
+	ok <- V
+
+	repetir 
+		ingresar(cad)
+		desde i <- 1 hasta long(cad) hacer
+			ok <- ok y (cad[i] = @) //esto podria ser mejor 
+		finDesde
+	hasta ok
+
+Fin
+
+procedimiento actualizarSC(E/S serv:tipoLista, E viejoDni, dni:tipoClaveClientes)
+{Que Hace: actualiza el dni de un cliente en el listado de servicio
+PRE: serv = S ; viejoDni = T ; dni = R
+POST: serv = S1; S1 podria tener en los servicios con dniCliente = R en lugar de dniCliente = T
+EXCEP: }
+Var
+	datosServicio:tipoInfoServicios
+	codigoServicio:tipoClaveServicios
+	sigo:logico
+Inicio
+	si (no(esVacia(serv))) entonces
+		sigo <- V
+		recuPrim(serv, codigoServicio)
+
+		mientras sigo hacer
+			Inicio
+				recuClave(serv, codigoServicio, datosServicio)
+				
+				si (datosServicio.dniCliente = viejoDni) entonces
+					datosServicio.dniCliente <- dni
+				finSi
+
+				suprimir(serv, codigoServicio)
+				insertar(serv, codigoServicio, datosServicio)
+
+				recuSig(serv, codigoServicio, codigoServicio)
+			Excepciones
+				claveEsUltima => sigo <- F
+			Fin
+		finMientras
+	finSi
+Excepciones
+	listaLlena => lanzar errorEnModificarCliente
+Fin
