@@ -33,7 +33,7 @@ procedimiento modificarCliente(E/S client:tipoArbolClientes ; E/S serv:tipoLista
 {Qué Hace: permite modificar los datos pertenecientes a un cliente en particular
 PRE: client = C ; C contiene al menos un cliente válido ; model = M ; M contiene al menos un modelo valido
 POST: client = C1 ; C1 contiene un cliente con los datos modificados o no
-EXCEP: errorEnModificarCliente }
+EXCEP: - }
 Var
 	dni:tipoClaveClientes
 	viejoDni:tipoClientes
@@ -118,7 +118,7 @@ procedimiento modificarModelo(E/S model:tipoListaModelos ; E/S serv:tipoListaSer
 {Qué Hace: Permite modificar los datos correpondientes a un modelo en particular y actualiza las relaciones de dicho modelos con los clientes y los servicios realizados
 PRE: model = M ; M contiene al menos un modelo ; serv = S ; client = C
 POST: model = M1 ; serv = S1 ; client = C1 ; M1, S1, C1 tiene cambios con respecto a M, S y C (respectivamente), segun lo haya querido el usuario
-EXCEP: errorEnModificarModelo}
+EXCEP: }
 Var
 	codigoModelo:tipoClaveModeloSs
 	datosModelo:tipoInfoModelos
@@ -135,12 +135,10 @@ Inicio
 		finSegun
 	hasta (opc = 3)
 
-	suprimir(model, codigoModelo)
-	insertar(model, codigoModelo, datosModelo)								{ABB LO}
+	modificar(model, codigoModelo, datosModelo)								{ABB LO}
 	actualizarSM(serv, client, codigoModelo)								{nivel 3}
 
 Excepciones
-	listaLlena => lanzar errorEnModificarModelo
 	noHayModelos => mostrar("No existen modelos. Agregue uno e intente nuevamente")
 	cancelarIngreso => nada
 Fin
@@ -205,7 +203,7 @@ procedimiento modificarVehiculo(E/S client:tipoArbolCLientes ; E dni:tipoClaveCl
 {Que Hace: modifica los vehiculos pertenecientes a un cliente en particular
 PRE: client = C ; dni = K y K pertence a C; model = M ; M contiene al menos un modelo valido
 POST: client = C1 ; C1 tiene cambios segun lo haya decidido el usuario
-EXCEP: errorEnModificarVehiculo}
+EXCEP: - }
 Var
 	datosCliente:tipoInfoClientes
 	vehiculo:tipoInfoVehiculos
@@ -226,12 +224,10 @@ Inicio
 		finSegun
 	hasta (opc = 3)
 
-	suprimir(datosCliente.vehiculos, patente)				{ADT LO}
-	insertar(datosCliente.vehiculos, patente, vehiculo)		{ADT LO}
+	modificar(datosCliente.vehiculos, patente, vehiculo)	{ADT LO}
 	modificar(client, dni, datosCliente)					{ADT ABB}
 
 Excepciones
-	listaLlena => lanzar errorEnModificarVehiculo
 	noHayVehiculos => mostrar("No existen vehiculos. Agregue uno e intente nuevamente")
 	cancelarIngreso => nada
 Fin
@@ -240,7 +236,7 @@ procedimiento quitarVehiculo(E/S client:tipoArbolClientes ; E dni:tipoClaveClien
 {Que Hace: elimina un vehiculo de un cliente
 PRE: client = C ; dni = K ; K pertenece a C ; serv = S
 POST:	client = C1 ; C1 tiene un vehiculo menos segun haya deseado el usuario
-EXCEP: ErrorEnQuitarVehiculo}
+EXCEP: - }
 Var
 	vehiculo:tipoInfoVehiculos
 	patente:tipoClaveVehiculos
@@ -251,14 +247,7 @@ Inicio
 	
 	//recuperamos el vehiculo
 	patente <- obtenerVehiculo(datosCliente.vehiculos)		{nivel 3}
-	recuClave(datosCliente.vehiculos, patente, vehiculo)	{ADT LO}
-
-	//vaciamos lista de mantenimiento
-	vaciar(vehiculo.manten)									{ADT LO}
-
-	//actualizamos vehiculo en la lista de vehiculos del client
-	suprimir(datosCliente.vehiculos, patente)				{ADT LO}
-	insertar(datosCliente.vehiculos, patente,vehiculo)		{ADT LO}
+	limpiarVehiculo(datosCliente.vehiculos, patente)		{nivel 3}
 	
 	//eliminamos dicho vehiculo
 	suprimir(datosCliente.vehiculos, patente)				{ADT LO}
@@ -270,7 +259,6 @@ Inicio
 	bajaSV(serv, patente)									{nivel 3}
 
 Excepciones
-	listaLLena => lanzar ErrorEnQuitarVehiculo
 	cancelarIngreso => nada
 Fin
 
@@ -290,10 +278,10 @@ Inicio
 	codigoServicio <- generarCodigoServicio(serv)	{nivel 3}
 
 	//obtener cliente
-	datosServicio.dniCLiente <- obtenerCliente(client) {nivel 2}
+	datosServicio.dniCliente <- obtenerCliente(client) {nivel 2}
 
 	//obtener un vehiculo al cual hacerle un servicio
-	buscar(client, datosServicio.dniCLiente, datosCliente)			{ADT ABB}
+	buscar(client, datosServicio.dniCliente, datosCliente)			{ADT ABB}
 	datosServicio.dominio <- obtenerPatente(datosCliente.vehiculos)	{nivel 3}
 
 	//obtener etapa de mantenimiento, verificando que haya
@@ -310,7 +298,7 @@ Inicio
 
 	insertar(serv, codigoServicio, datosServicio)											{ADT LO}
 
-	actualizarVS(client, codigoServicio, datosServicio.dominio, datosServicio.dniCLiente)	{nivel 3}
+	actualizarVS(client, codigoServicio, datosServicio.dominio, datosServicio.dniCliente)	{nivel 3}
 
 Excepciones
 	listaLLena => mostrar("No se puede agregar un servicio en este momento. Intente nuevamente más tarde")
@@ -325,7 +313,7 @@ procedimiento modificarServicio(E/S serv:tipoListaServicios; E/S client:tipoArbo
 {Qué Hace: modifica los datos de un servicio de mantenimiento en particular
 PRE: serv = S ; client = C ; model = M
 POST: serv = S1 ; client = C1 ; S1 es distinto de S y C1 distinto de C según lo haya decidido el usuario
-EXCEP:	errorEnModificarServicio}
+EXCEP:	- }
 Var
 	codigoServicio:tipoClaveServicios
 	datosServicio:tipoInfoServicios
@@ -337,9 +325,9 @@ Inicio
 		menuModifServicio()
 		ingresar(opc)
 		segun opc hacer
-			1: 	obtenerCliente(client, datosServicio.dniCLiente)										{nivel 2}
+			1: 	obtenerCliente(client, datosServicio.dniCliente)										{nivel 2}
 			2: 	inicio
-					buscar(client, datosServicio.dniCLiente, datosCliente)								{ADT ABB}
+					buscar(client, datosServicio.dniCliente, datosCliente)								{ADT ABB}
 					obtenerPatente(datosCliente.vehiculos, datosServicio.dominio) 						{nivel 3}
 				fin
 			3:	obtenerEtapa(model, datosCliente.vehiculos, datosServicio.dominio, datosServicio.etapa) {nivel 3}
@@ -348,13 +336,11 @@ Inicio
 		finSegun
 	hasta (opc = 6)
 
-	suprimir(serv, codigoServicio)
-	insertar(serv, codigoServicio, datosServicio)
+	modificar(serv, codigoServicio, datosServicio)
 
 	altaSV(client, codigoServicio, datosServicio.dominio)
 
 Excepciones
-	listaLlena => lanzar errorEnModificarServicio
 	noHayServicios => mostrar("No existen servicios. Agregue uno e intente nuevamente")
 	cancelarIngreso => nada
 Fin
@@ -411,8 +397,64 @@ Inicio
 	obtenerCliente <- dni 					{SC}
 Fin
 
+procedimiento mantenPorCliente(E client:tipoArbolClientes ; E serv:tipoListaServicios)
+{Qué Hace: muestra por pantalla los mantenimientos realizados por un mismo cliente
+PRE: client = C ; serv = S
+POST: - 
+EXCEP:}
+Var
+	total:entero
+	sigo:logico
+	codigoServicio:tipoClaveServicios
+	datosServicio:tipoInfoServicios
+	dni:tipoClaveClientes
+	datosCliente:tipoInfoClientes
+Incio
+	
+	total <- 0												{SC}
+	dni <- obtenerCliente(client)							{nivel 2}
+	buscar(client, dni, datosCliente)						{ADT ABB}
+	sigo <- V 												{SC}
+
+	recuPrim(serv, codigoServicio)							{ADT LO}
+	mostrarCabeceraMantenPorCliente(datosCliente.nombre)	{nivel 3}
+	
+	mientras sigo hacer
+		Inicio
+			recuClave(serv, codigoServicio, datosServicio)	{ADT LO}
+			si (datosServicio.dniCliente = dni)				
+				mostrarDatosServicio(datosServicio)			{nivel 3}
+				total <- total +1 							{SC}
+			finSi
+			recuSig(serv, codigoServicio, codigoServicio)	{ADT LO}
+		Excepciones
+			claveEsUltima => sigo <- F 						{SC}
+		Fin
+	finMientras
+	
+	mostrar("TOTAL: ", total)								{SC}
+
+Excepciones
+	cancelarIngreso => nada
+	arbolVacio => mostrar("No existen clientes. Agregue por lo menos uno para poder realizar esta consulta")
+	listaVacia => mostrar("No existen servicios realizados. Agregue por lo menos uno para poder realizar esta consulta")
+Fin
 
 
+procedimiento menuVehiculos()
+{Qué Hace: muestra el menu con las opciones correspondientes al ABM de vehiculos
+PRE: -
+POST: -
+EXCEP: - }
+Inicio
+
+	mostrar("Seleccione una opcion")
+	mostrar("1 - Agregar un Vehículo")
+	mostrar("2 - Modificar un Vehículo")
+	mostrar("3 - Quitar un Vehículo")
+	mostrar("4 - Salir")
+
+Fin
 
 procedimiento menuModelos()
 {Qué Hace: muestra el menu con las opciones correspondientes al ABM de modelos
@@ -464,8 +506,9 @@ EXCEP: -}
 
 Inicio
 	mostrar("Seleccione una Opcion")									{SC}
-	mostrar("1 - Consultar mantenimientos por modelos")					{SC}
-	mostrar("2 - Consultar mantenimientos por cliente")					{SC}
+	mostrar("1 - Consultar mantenimientos por cliente")					{SC}
+	mostrar("2 - Consultar mantenimientos por modelos")					{SC}
 	mostrar("3 - Consultar datos de clientes sin mantenimientos")		{SC}
 	mostrar("4 - Salir") 												{SC}
 Fin
+

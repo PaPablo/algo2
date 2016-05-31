@@ -19,8 +19,6 @@ Inicio
 			3: quitarModelo(model,serv,client)		{nivel 2}
 		finSegun
 	hasta (opc = 4) 				{SC}
-Excepciones
-	errorEnModificarModelo => mostrar("Ha habido un error al modificar un modelo. Intente nuevamente más tarde")
 Fin
 
 procedimiento ABMVehiculos (E/S client:tipoArbolClientes ; E/S model:tipoListaModelos, E/S serv:tipoListaServicios)
@@ -44,8 +42,6 @@ Inicio
 		finSegun
 	hasta (opc = 4)
 Excepciones
-	errorEnModificarVehiculo => mostrar("Ha habido un error al modificar un vehiculo. Intente nuevamente más tarde")
-	errorEnQuitarVehiculo => mostrar("Ha habido un error al quitar un vehiculo. Intente nuevamente más tarde")
 	arbolVacio => mostrar("No hay clientes agregados. Agregue un cliente e intente nuevamente")
 	cancelarIngreso => nada	
 Fin
@@ -70,8 +66,6 @@ Inicio
 			3: quitarCliente(client,serv)		nivel 2}
 		finSegun		
 	hastan(opc = 4)								{SC}
-Excepciones
-	errorEnModificarCliente => mostrar("Ha habido un error al modificar un cliente. Intente nuevamente mas tarde")
 Fin
 
 procedimiento ABMServicios(E/S serv:tipoListaServicios ; E/S client:tipoArbolClientes ; E/S model:tipoListaModelos)
@@ -92,8 +86,6 @@ Inicio
 			3: quitarServicio(serv,client)			{nivel 2}
 		finSegun
 	hasta (opc = 4)					{SC}
-Excepciones
-	errorEnModificarServicio => mostrar("Ha habido un error al modificar un servicio. Intente nuevamente más tarde")
 Fin
 
 AB
@@ -128,10 +120,11 @@ EXCEP: -}
 Inicio
 	mostrar("Consecionaria")			{SC}
 	mostrar("Seleccione una opcion")	{SC}
-	mostrar("1- Modelos")				{SC}
-	mostrar("2- Clientes")				{SC}
-	mostrar("3- Servicios")				{SC}
-	mostrar("4- Consultar")				{SC}
-	mostrar("5- Salir")					{SC}
+	mostrar("1 - Modelos")				{SC}
+	mostrar("2 - Clientes")				{SC}
+	mostrar("3 - Servicios")			{SC}
+	mostrar("4 - Vehículos")			{SC}
+	mostrar("5 - Consultas")			{SC}
+	mostrar("6- Salir")					{SC}
 Fin
 

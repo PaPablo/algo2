@@ -55,3 +55,35 @@ Inicio
 Excepciones
 	listaLlena => lanzar errorEnModificarCliente
 Fin
+
+procedimiento limpiarVehiculo(E/S vehiculos:tipoListaVahiculos ; E patente:tipoClaveVehiculos)
+{Qué Hace: Vacía las estructuras de datos pertenecientes a un vehículo
+PRE: vehiculos = A ; patente = P
+POST: vehiculos = A1 ; A1 en A con las estructuras pertenecientes a P vacías
+EXCEP:
+}
+Var
+	datosVehiculo:tipoInfoVehiculos
+Inicio
+	recuClave(vehiculos, patente, datosVehiculo)	{ADT LO}
+
+	vaciar(datosVehiculo.manten)					{ADT LO}
+
+	modificar(vehiculos, patente,datosVehiculo)		{ADT LO}
+Fin
+
+procedimiento limpiarCliente (E/S client:tipoArbolCLientes ; E dni:tipoClaveClientes)
+{Qué Hace: vacía todas las estructuras de datos pertenecientes a un cliente
+PRE: client = C; dni = D ; D pertenece a C
+POST: client = C1 ; C1 en C con las estructuras correspondientes al cliente D vacías
+EXCEP:	
+}
+Var
+	datosCliente:tipoInfoClientes
+Incio
+	buscar(client, dni, datosCliente)
+
+	
+Excepciones
+
+Fin
