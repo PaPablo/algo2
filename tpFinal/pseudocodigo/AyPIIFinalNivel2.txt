@@ -508,6 +508,64 @@ Excepciones
 	listaVacia => mostrar("No existen servicios. Agregue por lo menos uno e intente nuevamente")
 Fin
 
+procedimiento datosClientesSinMant(E client:tipoArbolClientes)
+{Qué Hace: muestra por pantalla los datos de los clientes sin mantenimientos
+PRE: client = C
+POST: - 
+EXCEP: - }
+Var
+	muestro:logico
+	total:entero
+	sigo:logico
+	patente:tipoClaveVehiculos
+	datosVehiculo:tipoInfoVehiculos
+	colaClientes:tipoColaClientes
+	dni:tipoClaveClientes
+	datosCliente:tipoInfoClientes
+Inicio
+	muestro <- V
+	total <- 0	
+	inOrder(client, colaClientes)									{ADT ABB}
+
+	mientras no(esVacia(colaClientes)) hacer
+		frente(colaClientes, dni)									{ADC Cola}
+		
+		buscar(client, dni, datosCliente)							{ADT ABB}
+
+		mostrarEncabezadoClientSinMant()							{nivel 3}
+
+		Inicio
+			logico <- V 											{SC}
+			
+			recuPrim(datosCliente.vehiculos, patente)				{ADT LO}
+
+			mientras sigo hacer
+				Inicio
+					recuClave(datosCliente.vehiculos, patente, datosVehiculo)	{ADT LO}
+					
+					muestro <- muestro y (esVacia(datosVehiculo.manten))		{ADT LO}
+
+					resuSig(datosCliente.vehiculos, patente, patente)			{ADT LO}
+				Excepciones
+					claveEsUltima => sigo <-  F
+				Fin
+			finMientras
+			
+			si (muestro) entonces
+				mostrarDatosCliente(datosCliente)								{nivel 3}
+			finSi
+
+		Excepciones
+			listaVacia => nada
+		Fin
+
+		desencolar(colaClientes)												{ADT Cola}
+	finMientras
+Excepciones
+
+Fin
+
+
 procedimiento menuVehiculos()
 {Qué Hace: muestra el menu con las opciones correspondientes al ABM de vehiculos
 PRE: -

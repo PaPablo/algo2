@@ -47,6 +47,8 @@ tipoInfoClientes =	reg
 				email : cadena
 				vehiculos : tipoListaVehiculos
 			finReg
+COLA PARA RECORRIDO CLIENTES
+	tipoInfo = tipoClaveClientes
 
 
 LISTA ORDENADA VEHICULOS
