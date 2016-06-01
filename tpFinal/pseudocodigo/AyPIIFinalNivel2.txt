@@ -25,7 +25,7 @@ Inicio
 
 				datosCliente.telefono <- EnteroMayorACero("Telefono")	{SC}
 
-				datosCliente.email <- obtenerEmail()						{nivel 3}
+				datosCliente.email <- obtenerEmail()				{nivel 3}
 
 				crear(cliente.vehiculos)							{ADT LO}
 

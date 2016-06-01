@@ -79,11 +79,76 @@ POST: client = C1 ; C1 en C con las estructuras correspondientes al cliente D va
 EXCEP:	
 }
 Var
+	sigo:logico
 	datosCliente:tipoInfoClientes
+	patente:tipoClaveVehiculo
+	datosVehiculo:tipoInfoVehiculo
 Incio
+	//recuperar el cliente a limpiar
 	buscar(client, dni, datosCliente)
 
+	sigo <- V
+
+	//recorrer la lista de vehiculos y por cada uno limpiar la lista de mantenimientos
+	recuPrim(datosCliente.vehiculos, patente)
+	mientras sigo hacer
+		Inicio
+			recuClave(datosCliente.vehiculos, patente, datosVehiculo)	
+			
+			//vacío la lista de mantenimientos
+			vaciar(datosVehiculo.manten)
+			//actualizo en la lista
+			modificar(datosCliente, patente, datosVehiculo)
+			
+			recuSig(datosCliente.vehiculos, patente, patente)
+		Excepciones
+			claveEsUltima => sigo <- F
+		Fin
+	finMientras
+	modificar(client, dni, datosCliente)
+Excepciones
 	
+Fin
+
+procedimiento bajaSC(E/S serv:tipoListaServicios ; E dni:tipoClaveClientes)
+{Qué Hace: da de baja los servicios a nombre de un cliente en particular
+PRE: serv = S ; dni = D
+POST:	serv = S1 ; S1 en S menos los servicios con dniCliente = D, que fueron eliminados
+EXCEP: }
+Var
+	siguiente:tipoClaveServicios
+	codigoServicio:tipoClaveServicios
+	datosServicio:tipoInfoServicios
+	sigo:logico
+Inicio
+	sigo <- V
+	recuPrim(serv, codigoServicios)
+
+	Inicio
+		recuSig(serv, codigoServicio, siguiente)
+	Excepciones
+		claveEsUltima => siguiente <- codigoServicio
+	Fin
+
+	mientras sigo hacer
+		Inicio
+			recuClave(serv, codigoServicio, datosServicio)
+
+			si datosServicio.dniCliente = dni entonces
+				suprimir(serv, codigoServicio)
+				codigoServicio <- siguiente
+				
+				Inicio
+					recuSig(serv, siguiente, siguiente)
+				Excepciones
+					claveEsUltima => nada
+				Fin
+			siNo
+				recuSig(serv, codigoServicio, codigoServicio)
+			finSi
+		Excepciones
+			claveNoExiste, claveEsUltima => sigo <- F
+		Fin
 Excepciones
 
 Fin
