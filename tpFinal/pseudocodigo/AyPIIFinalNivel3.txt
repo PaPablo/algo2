@@ -105,6 +105,10 @@ Incio
 			claveEsUltima => sigo <- F
 		Fin
 	finMientras
+
+	//vacío la lista de vehículos
+	vaciar (datosCliente.vehiculos)
+
 	modificar(client, dni, datosCliente)
 Excepciones
 	
@@ -137,7 +141,7 @@ Inicio
 			si datosServicio.dniCliente = dni entonces
 				suprimir(serv, codigoServicio)
 				codigoServicio <- siguiente
-				
+
 				Inicio
 					recuSig(serv, siguiente, siguiente)
 				Excepciones
@@ -152,3 +156,181 @@ Inicio
 Excepciones
 
 Fin
+
+funcion generarCodigoModelo(E model:tipoListaModelos)
+{Qué Hace: genera el codigo de modelo correspondiente a un nuevo modelo
+PRE: model = M
+POST:	generarCodigoModelo = CM ; CM es un codigo de modelo valido
+EXCEP: }
+Var
+	codigo:tipoClaveModelos
+Inicio
+	si (esVacia(model)) entonces
+		generarCodigoModelo <- 1
+	siNo
+		recuUlt(model, codigo)
+		generarCodigoModelo <- codigo + 1
+	finSi	
+Fin
+
+funcion obtenerModelo(E model:tipoListaModelos)
+{Qué Hace: obtiene un codigo válido de modelo
+PRE: model = M
+POST:
+EXCEP: noHayModelos,cancelarIngreso}
+Var
+	ok:logico
+	modelo:tipoClaveModelos
+	dm:tipoInfoModelos
+Inicio
+	
+	si(esVacia(model)) entonces
+		lanzar noHayModelos
+	siNo
+		ok <- F
+		repetir
+			mostrar("Ingrese codigo de modelos (0 para cancelar ingreso)")
+			ingresar(modelo)
+
+			si modelo = 0 entonces
+				lanzar cancelarIngreso
+			siNo
+				Inicio
+					recuClave(model, modelo, dm)
+					ok <- V
+				Excepciones
+					claveNoExiste => mostrar("Codigo de modelo invalido")
+				Fin
+			finSi
+		hasta ok
+	finSi
+
+	obtenerModelo <- modelo
+Fin
+
+procedimiento menuModifModelo()
+{Qué Hace: muestra un menu con las opciones para modificar los datos de un modelo
+PRE:
+POST:
+EXCEP:}
+Inicio
+	mostrar("	MODIFICAR MODELO")
+	mostrar("1 - Moficar Nombre")
+	mostrar("2 - Agregar, modificar o quitar etapas del calendario de su calendario de mantenimientos")
+	mostrar("3 - Volver al menú anterior")
+Fin
+
+procedimiento ABMCalendario(E/S calendario:tipoListaCalendario)
+{Qué Hace: Permite agregar, quitar o modificar etapas del calendario de mantenimientos de un modelo
+PRE: calendario = C
+POST: calendario = C1 ; C1 en C según lo haya querido el usuario
+EXCEP: }
+Var
+	opc:entero
+Incio
+	repetir
+		mostrarMenuCalendario()				{nivel 4}
+		ingresar(opc)						{SC}
+
+		segun opc hacer
+			1:agregarEtapa(calendario)		{nivel 4}
+			2:modificarEtapa(calendario)	{nivel 4}
+			3:quitarEtapa(calendario)		{nivel 4}
+		finSegun
+	hasta opc = 4							{SC}
+Excepciones
+
+Fin
+
+procedimiento bajaSMant(E/S serv:tipoListaServicios, E calendario:tipoListaCalendario)
+{Qué Hace: actualiza los servicios con respecto a las etapas de mantenimiento existentes
+PRE: serv = S ; client = C ; calendario = F 
+POST: 
+EXCEP: - }
+Var
+	siguiente:tipoClaveServicios
+	datosEtapa:tipoInfoCalendario
+	codigoServicio:tipoClaveServicios
+	datosServicio:tipoInfoServicios
+	sigo:logico
+Inicio
+	sigo <- V 										{SC}
+
+	recuPrim(serv, codigoServicios)					{ADT LO}
+
+	Inicio
+		recuSig(serv, codigoServicio, siguiente)		{ADT LO}
+	Excepciones
+		claveEsUltima => siguiente <- codigoServicio 	{SC}         
+	Fin
+
+	mientras sigo hacer
+		Inicio
+			recuClave(serv, codigoServicio, datosServicio)				{ADT LO}
+			
+			Incio
+				recuClave(calendario, datosServicio.etapa, datosEtapa)	{ADT LO}
+				recuSig(serv, codigoServicio, codigoServicio)			{ADT LO}
+			Excepciones
+				claveNoExiste => 
+					Inicio
+						suprimir(serv, codigoServicio)					{ADT LO}
+						codigoServicio <- siguiente						{SC}
+
+						Inicio
+							recuSig(serv, siguiente, siguiente)			{ADT LO}
+						Excepciones
+							claveEsUltima => nada						{SC}
+						Fin
+					Fin
+			Fin
+		Excepciones
+			claveNoExiste, claveEsUltima => sigo <- F 					{SC}
+		Fin
+	finMientras
+
+Excepciones
+
+Fin
+
+procedimiento actualizaVS(E/S client:tipoArbolClientes, E serv:tipoListaServicios)
+{Qué Hace: actualiza los vehiculos con respecto a los servicios
+PRE: client = C ; serv = S
+POST: client = C1 ; C1 en C menos los servicios correspondientes a codigos inexistentes en S
+EXCEP: - }
+Var
+	sigo:logico
+	codigoServicio:tipoClaveServicios
+	dni:tipoClaveClientes
+	datosCliente:tipoInfoClientes
+	colaClientes:tipoColaClientes
+	patente:tipoClaveVehiculo
+	datosVehiculo:tipoInfoVehiculo
+
+Inicio
+	crear(colaClientes)				{ADT Cola}			
+	inOrder(client, colaClientes)	{ADT ABB}
+
+	mientras(no(esVacia(colaClientes))) hacer
+		frente(colaClientes, dni)	{ADT Cola}
+		desencolar(colaClientes)	{ADT Cola}
+
+		buscar(client, dni, datosCliente)			{ADT ABB}
+
+		sigo <- V
+		recuPrim(datosCliente.vehiculos, patente)	{ADT LO}
+		mientras sigo hacer 
+			Inico
+				recuClave(datosCliente.vehiculo, patente, datosVehiculo)	{ADT LO}
+
+				bajaMantS(datosVehiculo.manten, serv)						{nivel 4}
+
+				recuSig(datosCliente.vehiculo, patente, patente)			{ADT LO}
+			Excepciones
+				claveEsUltima => sigo <- F 									{SC}
+			FIn
+		finMientras
+	finMientras
+Fin
+
+Excepciones

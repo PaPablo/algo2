@@ -142,8 +142,10 @@ Inicio
 		finSegun
 	hasta (opc = 3)
 
-	modificar(model, codigoModelo, datosModelo)								{ABB LO}
-	actualizarSM(serv, client, codigoModelo)								{nivel 3}
+	modificar(model, codigoModelo, datosModelo)	{ABB LO}
+
+	bajaSMant(serv, datosModelo.calendario)		{nivel 3}
+	actualizaVS(client, serv)					{nivel 3}
 
 Excepciones
 	noHayModelos => mostrar("No existen modelos. Agregue uno e intente nuevamente")
@@ -165,7 +167,7 @@ Inicio
 	si (confirma("Está seguro que desea eliminar este modelo?")) ent
 		limpiarModelo(model, codigoModelo) 	{nivel 3}
 		suprimir(model, codigoModelo)		{ADT LO}
-		bajaSM(codigoModelo, serv)	{nivel 3}
+		bajaVSM(client, serv, codigoModelo)
 	finSi
 
 Excepciones
@@ -523,6 +525,7 @@ Var
 	dni:tipoClaveClientes
 	datosCliente:tipoInfoClientes
 Inicio
+	crear(colaClientes)
 	muestro <- V
 	total <- 0	
 	inOrder(client, colaClientes)									{ADT ABB}
