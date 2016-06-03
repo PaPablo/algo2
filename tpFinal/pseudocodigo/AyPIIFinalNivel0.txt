@@ -7,6 +7,8 @@ Var
 	model:tipoListaModelos
 	client:tipoArbolClientes
 	serv:tipoListaServicios
+	vehiculos:tipoArbolVehiculos
+
 	opc: entero
 Inicio
 	crear(model)	{ADT LO}
@@ -17,11 +19,12 @@ Inicio
 		ingresar(opc)		{SC}
 		
 		segun (opc) hacer	{SC}
-			1: ABMModelos(model, serv, client) 	{nivel 1}
-			2: ABMClientes(client, serv, model)  {nivel 1}
-			3: ABMServicios(serv,client,model)	{nivel 1}
-			4: ABMVehiculos(client,model)		{nivel 1}
-			5: consultas(client,model,serv)		{nivel 1}
+	
+			1: ABMModelos(model, serv,vehiculos) 	{nivel 1}
+			2: ABMClientes(client,serv, model,vehiculos)	{nivel 1}
+			3: ABMServicios(serv,client,model,vehiculos)	{nivel 1}
+			4: ABMVehiculos(vehiculos, model, serv)			{nivel 1}
+			5: consultas(client,model,serv,vehiculos)		{nivel 1}
 
 		finSegun
 	hasta (opc = 6)				{SC}

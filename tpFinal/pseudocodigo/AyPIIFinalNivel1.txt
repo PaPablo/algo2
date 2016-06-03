@@ -2,10 +2,12 @@ ALGORITMICA 2 - TP Final
 
 NIVEL 1
 
-procedimiento ABMModelos (E/S model:tipoListaModelos ; E/S serv:tipoListaServicios ; E/S client:tipoArbolClientes)
+E/S vehiculos:tipoArbolVehiculos
+
+procedimiento ABMModelos (E/S model:tipoListaModelos ; E/S serv:tipoListaServicios ; E/S vehiculos:tipoArbolVehiculos)
 {Qué Hace: Permite agregar, modificar, o quitar modelos y etapas de sus calendarios de mantenimientos
-PRE: 	model = M ; M puede estar vacío o tener modelos válidos o está vacío
-POST: 	model = M1 ; M1 tiene modelos válidos
+PRE: 	model = M ; serv = S ; vehiculos = A ; M, S o A pueden estar vacios o tener informaciones validas
+POST: 	model = M1 ; serv = S1 ; vehiculos = A1 ; M1, S1 o A1 han cambiado segun lo que haya querido el usuario
 EXCEP:	 }
 Var
 	opc:entero
@@ -15,43 +17,37 @@ Inicio
 		ingresar(opc)	{SC}
 		segun (opc)		{SC}
 			1: agregarModelo(model)					{nivel 2}
-			2: modificarModelo(model,serv,client)	{nivel 2}
-			3: quitarModelo(model,serv,client)		{nivel 2}
+			2: modificarModelo(model,serv,vehiculos)	{nivel 2}
+			3: quitarModelo(model,serv,vehiculos)		{nivel 2}
 		finSegun
 	hasta (opc = 4) 				{SC}
 Fin
 
-procedimiento ABMVehiculos (E/S client:tipoArbolClientes ; E/S model:tipoListaModelos, E/S serv:tipoListaServicios)
+procedimiento ABMVehiculos (E/S vehiculos:tipoArbolVehiculos ; E/S model:tipoListaModelos, E/S serv:tipoListaServicios)
 {Qué Hace: Permite agregar, modificar o quitar vehiculos de los clientes, según el usuario lo desee
-PRE: client = C ; C contiene al menos un cliente válido; model = M ; M contiene al menos un modelos valido
-POST: client = C1 ; C1 tiene diferencias con respecto a C según lo haya deseado el usuario
+PRE: vehiculos = A ; A puede estar vacio o tener vehiculos validos;  model = M ; M puede estar vacio o tener modelos validos
+POST: vehiculos = A1 ; A1 tiene diferencias con respecto a A según lo haya deseado el usuario
 EXCEP: }
 Var
 	opc:entero
-	k:tipoClaveClientes
 Inicio
-	k <- obtenerCliente(client)	{nivel 2}
-			//excepcion para salir y no ingresar nada
 	repetir
 		menuVehiculos()	{nivel 2}
 		ingresar(opc)	{SC}
 		segun opc hacer
-			1: agregarVehiculo(client, k, model)		{nivel 2}
-			2: modificarVehiculo(client, k, model)		{nivel 2}
-			3: quitarVehiculo(client, k, serv)			{nivel 2}
+			1: agregarVehiculo(vehiculos, model, client)		{nivel 2}
+			2: modificarVehiculo(vehiculos, model, client)		{nivel 2}
+			3: quitarVehiculo(vehiculos, serv)			{nivel 2}
 		finSegun
 	hasta (opc = 4)
 Excepciones
-	arbolVacio => mostrar("No hay clientes agregados. Agregue un cliente e intente nuevamente")
 	cancelarIngreso => nada	
 Fin
 
-
-
-procedimiento ABMClientes(E/S client:tipoArbolClientes ; E/S serv:tipoListaServicios ; E/S model:tipoListaModelos)
+procedimiento ABMClientes(E/S client:tipoArbolClientes ; E/S serv:tipoListaServicios ; E/S model:tipoListaModelos ; E/S vehiculos:tipoArbolVehiculos)
 {Qué Hace: Permite agregar, modificar, o quitar clientes y sus vehículos
-PRE: 	client = C ; C puede estar vacío o tener clientes válidos
-POST:	client = C1; C1 tiene clientes válidos o está vacío
+PRE: 	client = C ; serv = S ; model= M ; vehiculos = A; C,S,M,A pueden estar vacios o tener informacion valida
+POST:	client = C1 ; serv = S2 ; model = M1 ; vehiculos = A1; C1,S1,M1,A1 tiene cambios con respecto a C,S,M,A (respectivamente, segun lo haya deseado el usuario)
 EXCEP: -}
 Var
 	opc: 
@@ -61,17 +57,17 @@ Inicio
 		ingresar(opc)	{SC}
 		
 		segun (opc) hacer
-			1: agregarCliente(client) 			{nivel 2}
-			2: modificarCliente(client,model)	{nivel 2}
-			3: quitarCliente(client,serv)		nivel 2}
+			1: agregarCliente(client) 					{nivel 2}
+			2: modificarCliente(cliente, vehiculos, serv)		{nivel 2}
+			3: quitarCliente(client, vehiculos, serv)	{nivel 2}
 		finSegun		
 	hastan(opc = 4)								{SC}
 Fin
 
-procedimiento ABMServicios(E/S serv:tipoListaServicios ; E/S client:tipoArbolClientes ; E/S model:tipoListaModelos)
+procedimiento ABMServicios(E/S serv:tipoListaServicios ; E/S client:tipoArbolClientes ; E/S model:tipoListaModelos ; E/S vehiculos:tipoArbolVehiculos)
 {Qué Hace: Permite agregar, modificar, o quitar servicios de mantenimiento realizados
-PRE: 	serv = S ; S puede estar vacío o tener servicios válidos
-POST:	serv = S1; S1 tiene servicios válido o está vacío
+PRE: 	client = C ; serv = S ; model= M ; vehiculos = A; C,S,M,A pueden estar vacios o tener informacion valida
+POST:	client = C1 ; serv = S2 ; model = M1 ; vehiculos = A1; C1,S1,M1,A1 tiene cambios con respecto a C,S,M,A (respectivamente, segun lo haya deseado el usuario)
 EXCEP:	}
 Var
 	opc:entero
@@ -81,9 +77,9 @@ Inicio
 		ingresar(opc)	{SC}
 
 		segun opc hacer
-			1: agregarServicio(serv,client,model)	{nivel 2}
-			2: modificarServicio(serv,client,model)	{nivel 2}
-			3: quitarServicio(serv,client)			{nivel 2}
+			1: agregarServicio(serv,client,model,vehiculos)		{nivel 2}
+			2: modificarServicio(serv,client,model,vehiculos)	{nivel 2}
+			3: quitarServicio(serv, vehiculos)					{nivel 2}
 		finSegun
 	hasta (opc = 4)					{SC}
 Fin
@@ -105,8 +101,8 @@ Inicio
 
 		segun opc hacer
 			1: mantenPorCliente(client,serv) 		{nivel 2}
-			2: mantPorModelo(model,serv,client)		{nivel 2}
-			3: datosClientesSinMant(client)			{nivel 2}
+			2: mantPorModelo(model,serv,vehiculos)	{nivel 2}
+			3: datosClientesSinMant(client, serv)	{nivel 2}
 		finSegun
 	hasta (que el usuario lo desee)				{SC}
 Fin 
