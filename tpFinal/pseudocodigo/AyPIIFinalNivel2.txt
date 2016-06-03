@@ -441,7 +441,7 @@ Incio
 		Inicio
 			recuClave(serv, codigoServicio, datosServicio)	{ADT LO}
 			si (datosServicio.dniCliente = dni)				
-				mostrarDatosServicio(datosServicio)			{nivel 3]
+				mostrarDatosServicio(datosServicio,codigoServicio)			{nivel 3]
 				total <- total +1 							{SC}
 			finSi
 			recuSig(serv, codigoServicio, codigoServicio)	{ADT LO}
@@ -480,7 +480,8 @@ Inicio
 	sigo <- V
 	total <- 0
 
-	mostrarEncabezadoMantModelo()			{nivel 3}
+	recuClave(model,codigoModelo, datosModelo)
+	mostrarEncabezadoMantModelo(datosModelo.nombre)			{nivel 3}
 	mientras sigo hacer
 		Inicio
 			//recupero los datos del servicio
@@ -494,7 +495,7 @@ Inicio
 			
 			//si el modelo coincide, muestro y contabilizo
 			si (datosVehiculo.modelo = codigoModelo) entonces
-				mostrarDatosServicio(datosServicio)									{nivel 3}
+				mostrarDatosServicioyDNI(datosServicio,datosServicio.dniCliente)	{nivel 3}
 				total <- total + 1														{SC}
 			finSI
 
@@ -555,7 +556,7 @@ Inicio
 			finMientras
 			
 			si (muestro) entonces
-				mostrarDatosCliente(datosCliente)								{nivel 3}
+				mostrarDatosCliente(datosCliente,dni)							{nivel 3}
 			finSi
 
 		Excepciones

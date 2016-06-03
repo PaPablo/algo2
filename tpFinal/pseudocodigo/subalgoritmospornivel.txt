@@ -40,7 +40,7 @@ Nivel 3
 
 obtenerEmail		H
 
-menuModifClient
+menuModifClient 	H
 actualizarSC		H
 
 limpiarCliente		H
@@ -54,18 +54,18 @@ ABMCalendario		H
 bajaSMant		H
 actualizaVS		H
 
-limpiarModelo
+limpiarModelo H
 
-obtenerPatente
+obtenerPatente H
 
 obtenerVehiculo
 menuModifVehiculo
 
 limpiarVehiculo		H
-bajaSV
+bajaSV	H
 
-generarCodigoServicio
-obtenerEtapa
+generarCodigoServicio H
+obtenerEtapa 	H
 obtenerKmReal
 obtenerFecha
 
@@ -75,13 +75,13 @@ actualizarVS
 obtenerServicio
 altaSV	
 
-mostrarCabeceraMantenPorCliente
-mostrarDatosServicio	
+mostrarCabeceraMantenPorCliente  H
+mostrarDatosServicio 			 H	
 
-mostrarEncabezadoMantModelo
+mostrarEncabezadoMantModelo 	 H
 
-mostrarEncabezadoClientSinMant
-mostrarDatosCliente
+mostrarEncabezadoClientSinMant 	H
+mostrarDatosCliente				H
 
 Nivel 4
 
