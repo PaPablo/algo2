@@ -54,19 +54,19 @@ ABMCalendario		H
 bajaSMant		H
 actualizaVS		H
 
-limpiarModelo
+limpiarModelo	H
 
-obtenerPatente
+obtenerPatente	H
 
-obtenerVehiculo
+obtenerVehiculo H
 menuModifVehiculo
 
-limpiarVehiculo		H
-bajaSV
+limpiarVehiculo	H
+bajaSV			H
 
-generarCodigoServicio
-obtenerEtapa
-obtenerKmReal
+generarCodigoServicio 	H
+obtenerEtapaValida		H	
+obtenerKmReal	
 obtenerFecha
 
 obtenerPrecioFinal
