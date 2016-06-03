@@ -70,7 +70,7 @@ obtenerKmReal
 
 obtenerFecha
 
-obtenerPrecioFinal
+obtenerPrecioFinal	H
 actualizarVS
 		
 obtenerServicio			H

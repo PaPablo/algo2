@@ -1,0 +1,15 @@
+Nivel 4
+
+Procedimiento mostrarMenuCalendario()
+{que hace: muestra las opciones para el ABM de calendario
+pre:-
+pos:-
+exp:-}
+
+Inicio
+	mostrar("Menu Calendario")
+	mostrar("1-Agregar etapa de Mantenimiento")
+	mostrar("2-Modificar etapa de Mantenimiento")
+	mostrar("3-Quitar etapa de Mantenimiento")
+	mostrar("4-Salir")
+FinProcedimiento

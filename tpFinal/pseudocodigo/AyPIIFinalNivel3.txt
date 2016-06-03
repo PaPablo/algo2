@@ -613,6 +613,23 @@ pre: model:M y etapa=E
 pos: precio=P y P es un precio valido
 exp: }
 Var
+	datosCalen:tipoInfoCalendario
+	ok:logico
+
 
 Inicio
-	
+	ok<-f	
+	Repetir
+		Mostrar("Ingrese precio final")
+		Ingresar(precio)
+		recuClave(model.calendario,etapa,datosCalen)//no puede dar exp porque ya esta validada la etapa?
+		Si datosCalen=precio Entonces
+			mostrar("Precio correcto")
+			ok<-v
+		Sino 
+			Mostrar("Precio Incorrecto. Vuelva a ingresar")
+		Finsi
+	Hasta(ok)
+FinProcedimiento
+
+

@@ -156,7 +156,7 @@ Inicio
 		finSegun
 	hasta (opc = 3)
 
-	modificar(model, codigoModelo, datosModelo)	{ABM LO}
+	modificar(model, codigoModelo, datosModelo)	{ADT LO}
 
 	bajaSMant(serv, datosModelo.calendario)		{nivel 3}
 	actualizaVS(client, serv)					{nivel 3}
