@@ -1,33 +1,93 @@
-nivel 2
 
-agregarModelo(model)						-	
-modificarModelo(model,serv,client)			-
-quitarModelo(model,serv,client)				-
-agregarVehiculo(client, k, model)			-
-modificarVehiculo(client, k, model)			-
-quitarVehiculo(client, k, serv)	[nivel 2}	-
-agregarCliente(client) 						-
-modificarCliente(client,model)				-
-quitarCliente(client,serv)					-
-agregarServicio(serv,client,model)			-
-modificarServicio(serv,client,model)		-
-quitarServicio(serv,client,model)
-mantenPorCliente(client,serv)
-mantPorModelo(model,serv)
-datosClientesSinMant(client)
+Nivel 1
 
+menuGeneral 	H
+ABMModelos 	H
+ABMClientes 	H 
+ABMServicios 	H
+ABMVehiculos 	H
+consultas 	H
 
-nivel 3
+Nivel 2
 
-ABMCalendario()
-limpiarCliente(client, dni)										
-limpiarModelo(model, codigoModelo) 	
-obtenerEmail(cliente.email)
-obtenerPatente(patente) 					
-obtenerPatente(patente) 
-obtenerModelo(vehiculo.modelo,model)
-obtenerVehiculo(c.vehiculos, patente)		
-actualizarVM(codigoModelo,client)	
-actualizarSM(codigoModelo,serv)	
-actualizarSV(patente, serv)					
-										
+menuModelos		H
+agregarModelo		H
+modificarModelo		H
+quitarModelo 		H	
+
+obtenerCliente 		H
+menuVehiculos		H
+agregarVehiculo 	H
+modificarVehiculo 	H
+quitarVehiculo		H
+
+menuClientes		H
+agregarCliente		H
+modificarCliente 	H
+quitarCliente 		H
+
+menuServicios		H
+agregarServicio		H
+modificarServicio	H
+quitarServicio		H
+
+menuConsultas		H
+mantenPorCliente	H
+mantPorModelo		H
+datosClientesSinMant	H
+
+Nivel 3
+
+obtenerEmail		H
+
+menuModifClient
+actualizarSC		H
+
+limpiarCliente		H
+bajaSC			H
+
+generarCodigoModelo	H
+
+obtenerModelo		H
+menuModifModelo		H
+ABMCalendario		H
+bajaSMant		H
+actualizaVS		H
+
+limpiarModelo
+
+obtenerPatente
+
+obtenerVehiculo
+menuModifVehiculo
+
+limpiarVehiculo		H
+bajaSV
+
+generarCodigoServicio
+obtenerEtapa
+obtenerKmReal
+obtenerFecha
+
+obtenerPrecioFinal
+actualizarVS
+		
+obtenerServicio
+altaSV	
+
+mostrarCabeceraMantenPorCliente
+mostrarDatosServicio	
+
+mostrarEncabezadoMantModelo
+
+mostrarEncabezadoClientSinMant
+mostrarDatosCliente
+
+Nivel 4
+
+mostrarMenuCalendario
+agregarEtapa
+modificarEtapa
+quitarEtapa
+			
+bajaMantS		

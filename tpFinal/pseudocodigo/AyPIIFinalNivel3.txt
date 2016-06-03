@@ -33,21 +33,21 @@ Var
 Inicio
 	si (no(esVacia(serv))) entonces
 		sigo <- V
-		recuPrim(serv, codigoServicio)
+		recuPrim(serv, codigoServicio) {ADT LO}
 
 		mientras sigo hacer
 			Inicio
-				recuClave(serv, codigoServicio, datosServicio)
+				recuClave(serv, codigoServicio, datosServicio) {ADT LO}
 				
 				si (datosServicio.dniCliente = viejoDni) entonces
 					datosServicio.dniCliente <- dni
 				finSi
 
-				suprimir(serv, codigoServicio)
-				insertar(serv, codigoServicio, datosServicio)
+				suprimir(serv, codigoServicio) {ADT LO}
+				insertar(serv, codigoServicio, datosServicio) {ADT LO}
 
-				recuSig(serv, codigoServicio, codigoServicio)
-			Excepciones
+				recuSig(serv, codigoServicio, codigoServicio) {ADT LO}
+			Excepciones 
 				claveEsUltima => sigo <- F
 			Fin
 		finMientras
