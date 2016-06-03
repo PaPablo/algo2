@@ -3,6 +3,41 @@ ALGORITMICA 2 - TP Final
 NIVEL 2 
 
 
+procedimiento menuModelos()
+{Qué Hace: muestra el menu con las opciones correspondientes al ABM de modelos
+PRE: -
+POST:-
+EXCEP: -}
+Inicio
+
+	mostrar("Seleccione una Opcion")													{SC}
+	mostrar("1 - Agregar Modelo")														{SC}
+	mostrar("2 - Modificar Modelo (Nombre o Etapas de su calendario de Mantenimiento)")	{SC}
+	mostrar("3 - Quitar Modelo")														{SC}
+	mostrar("4 - Salir")																{SC}
+
+Fin
+
+procedimiento agregarModelo (E/S model:tipoListaModelos)
+{Qué Hace: crea un nuevo modelo
+PRE:	model = Mo ; Mo puede estar vacío o tener modelos válidos
+POST:	model = Mo1; Mo1 tiene un modelo válido más que Mo
+EXCEP:	}
+Var
+	datosModelo:tipoInfoModelos
+	codigoModelo:tipoClaveModelos
+Inicio
+
+	codigoModelo <- generarCodigoModelo(model)			{nivel 3}
+	modelo.nombre <- textoNoVacio("Nombre de Modelo")	{SC}
+	crear(datosModelo.calendario)						{ADT LO}
+	insertar(model, codigoModelo, datosModelo)				{ADT LO}
+
+Excepciones
+	listaLLena => mostrar("No hay espacio para un nuevo modelo, intente nuevamente más tarde.")
+Fin
+
+
 procedimiento agregarCliente (E/S client:tipoArbolClientes)
 {Qué Hace: agrega un nuevo cliente
 PRE: client = C ; C puede estar vacío o tener clientes válidos
@@ -99,27 +134,6 @@ Excepciones
 Fin
 
 
-procedimiento agregarModelo (E/S model:tipoListaModelos)
-{Qué Hace: crea un nuevo modelo
-PRE:	model = Mo ; Mo puede estar vacío o tener modelos válidos
-POST:	model = Mo1; Mo1 tiene un modelo válido más que Mo
-EXCEP:	}
-Var
-	datosModelo:tipoInfoModelos
-	codigoModelo:tipoClaveModelos
-Inicio
-
-	codigoModelo <- generarCodigoModelo(model)			{nivel 3}
- 
-	modelo.nombre <- textoNoVacio("Nombre de Modelo")	{SC}
-
-	crear(datosModelo.calendario)						{ADT LO}
-
-	insertar(model, codigoModelo, datosModelo)				{ADT LO}
-
-Excepciones
-	listaLLena => mostrar("No hay espacio para un nuevo modelo, intente nuevamente más tarde.")
-Fin
 
 procedimiento modificarModelo(E/S model:tipoListaModelos ; E/S serv:tipoListaServicios ; E/S client:tipoArbolClientes)
 {Qué Hace: Permite modificar los datos correpondientes a un modelo en particular y actualiza las relaciones de dicho modelos con los clientes y los servicios realizados
@@ -127,7 +141,7 @@ PRE: model = M ; M contiene al menos un modelo ; serv = S ; client = C
 POST: model = M1 ; serv = S1 ; client = C1 ; M1, S1, C1 tiene cambios con respecto a M, S y C (respectivamente), segun lo haya querido el usuario
 EXCEP: }
 Var
-	codigoModelo:tipoClaveModeloSs
+	codigoModelo:tipoClaveModelos
 	datosModelo:tipoInfoModelos
 Inicio
 
@@ -142,7 +156,7 @@ Inicio
 		finSegun
 	hasta (opc = 3)
 
-	modificar(model, codigoModelo, datosModelo)	{ABB LO}
+	modificar(model, codigoModelo, datosModelo)	{ABM LO}
 
 	bajaSMant(serv, datosModelo.calendario)		{nivel 3}
 	actualizaVS(client, serv)					{nivel 3}
@@ -337,7 +351,7 @@ Var
 	datosServicio:tipoInfoServicios
 Inicio
 	
-	codigoServicio <- obtenerServicio(serv)																{nivel 3}
+	codigoServicio <- obtenerServicio(serv)							{nivel 3}
 
 	repetir
 		menuModifServicio()
@@ -585,20 +599,6 @@ Inicio
 
 Fin
 
-procedimiento menuModelos()
-{Qué Hace: muestra el menu con las opciones correspondientes al ABM de modelos
-PRE: -
-POST:-
-EXCEP: -}
-Inicio
-
-	mostrar("Seleccione una Opcion")													{SC}
-	mostrar("1 - Agregar Modelo")														{SC}
-	mostrar("2 - Modificar Modelo (Nombre o Etapas de su calendario de Mantenimiento)")	{SC}
-	mostrar("3 - Quitar Modelo")														{SC}
-	mostrar("4 - Salir")																{SC}
-
-Fin
 
 procedimiento menuClientes()
 {Qué Hace: muestra el menu con las opciones correspondientes al ABM de clientes

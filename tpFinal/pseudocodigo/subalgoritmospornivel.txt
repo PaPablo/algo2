@@ -73,7 +73,7 @@ obtenerFecha
 obtenerPrecioFinal
 actualizarVS
 		
-obtenerServicio
+obtenerServicio			H
 altaSV	
 
 mostrarCabeceraMantenPorCliente  H

@@ -4,7 +4,7 @@ NIVEL 1
 
 procedimiento ABMModelos (E/S model:tipoListaModelos ; E/S serv:tipoListaServicios ; E/S client:tipoArbolClientes)
 {Qué Hace: Permite agregar, modificar, o quitar modelos y etapas de sus calendarios de mantenimientos
-PRE: 	model = M ; M puede estar vacío o tener modelos válidos o está vacío
+PRE: 	model = M ; M puede estar vacío o tener modelos válidos; serv=S y client=C y C debe tener al menos un cliente valido
 POST: 	model = M1 ; M1 tiene modelos válidos
 EXCEP:	 }
 Var
@@ -13,7 +13,7 @@ Inicio
 	repetir
 		menuModelos()	{nivel 2}
 		ingresar(opc)	{SC}
-		segun (opc)		{SC}
+		segun (opc)	hacer	{SC}
 			1: agregarModelo(model)					{nivel 2}
 			2: modificarModelo(model,serv,client)	{nivel 2}
 			3: quitarModelo(model,serv,client)		{nivel 2}

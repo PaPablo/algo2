@@ -158,7 +158,7 @@ Excepciones
 
 Fin
 
-funcion generarCodigoModelo(E model:tipoListaModelos)
+funcion generarCodigoModelo(E model:tipoListaModelos): entero
 {Qué Hace: genera el codigo de modelo correspondiente a un nuevo modelo
 PRE: model = M
 POST:	generarCodigoModelo = CM ; CM es un codigo de modelo valido
@@ -245,7 +245,7 @@ Fin
 
 procedimiento bajaSMant(E/S serv:tipoListaServicios, E calendario:tipoListaCalendario)
 {Qué Hace: actualiza los servicios con respecto a las etapas de mantenimiento existentes
-PRE: serv = S ; client = C ; calendario = F 
+PRE: serv = S ; calendario = F 
 POST: 
 EXCEP: - }
 Var
@@ -505,10 +505,10 @@ Fin
 funcion obtenerKmReal(E model:tipoListaModelo  client, datosServicio.dominio)
 
 Procedimiento menuModifClient()
-que hace: muestra las opciones para modificar un cliente
+{que hace: muestra las opciones para modificar un cliente
 pre:-
 pos:-
-exp:-
+exp:-}
 
 Inicio
 	mostrar("¿Que desea modificar?")
@@ -519,10 +519,10 @@ Inicio
 FinProcedimiento
 
 Procedimiento mostrarCabeceraMantenPorCliente(E: nomCli:cadena)
-que hace: muestra la cabecera de los mantenimientos de un cliente
+{que hace: muestra la cabecera de los mantenimientos de un cliente
 pre: nomCli=N y N no es vacio
 pos: -
-exp: -
+exp: -}
 
 Inicio
 	mostrar("Mantenimientos realizados por el cliente", nomCli)
@@ -531,20 +531,21 @@ Inicio
 FinProcedimiento
 
 Procedimiento mostrarDatosServicio(E datosServicio:tipoInfoServicios, E codigoServicio:tipoClaveServicios)
-que hace: muestra los datos de servicio de mantenimiento realizado por un cliente
+{que hace: muestra los datos de servicio de mantenimiento realizado por un cliente
 pre: datosServicio=D y D tiene que tener datos validos; codigoServicio=C y tiene un codigo valido
 pos: -
-exp: -
+exp: -}
+
 
 Inicio
 	mostrar(codigoServicio, "   " , datosServicio.Dominio, "  ", datosServicio.etapa, "   ", datosServicio.KmReal, "  ", datosServicio.fecha,"   ", datosServicio.precioFinal)
 FinProcedimiento
 
 Procedimiento mostrarEncabezadoMantModelo (E nomMod:cadena, E dniCliente:entero)
-que hace: muestra el encabezado de los mantenimientos por modelo
+{que hace: muestra el encabezado de los mantenimientos por modelo
 pre: nomMod=N y N tiene un nombre de modelo valido
 pos: -
-exp: -
+exp: -}
 
 Inicio
 	mostrar("Mantenimientos realidos por el modelo", nomMod, "Al cliente:",dniCliente)
@@ -552,10 +553,10 @@ Inicio
 FinProcedimiento
 
 Procedimiento mostrarEncabezadoClientSinMant()
-que hace: muestra el encabezado de los clientes sin mantenimientos
+{que hace: muestra el encabezado de los clientes sin mantenimientos
 pre:-
 pos:-
-exp:-
+exp:-}
 
 Inicio
 	mostrar("Datos de los clientes que no han realizado ningun mantenimiento en sus vehiculos")
@@ -571,3 +572,47 @@ exp:
 Inicio
 	mostrar(dni,"  ", datosCliente.nombre,"  ", datosCliente.Telefono, "  ", datosCliente.email)
 FinProcedimiento
+
+Funcion obtenerServicio(E servicio:tipoListaServicios): entero
+{que hace: obtiene un codigo valido de servicio
+pre: servicio=S 
+pos: obtenerServicio=OS y OS es un codigo valido
+exp: noHayServicios- cancelarIngreso}
+
+Var
+	ok:logico
+	claServ:tipoClaveServicios
+	infoSer:tipoInfoServicios
+
+Inicio
+	si(esVacia(servicio)) entonces
+		lanzar noHayServicios				{SC}
+	siNo
+		ok <- F
+		repetir
+			mostrar("Ingrese codigo de servicios (0 para cancelar ingreso)")
+			ingresar(claServ)	{SC}
+			si claServ = 0 entonces
+				lanzar cancelarIngreso	{SC}
+			siNo
+				Inicio
+					recuClave(servicios, claServ, infoSer)	{ADT LO}
+					ok <- V 						{SC}
+				Excepciones	
+					claveNoExiste => mostrar("Codigo de servicio invalido")	{SC}
+				Fin
+			finSi
+		hasta (ok)
+	finSi
+	obtenerServicio <- claServ 
+FinFuncion
+
+Procedimiento obtenerPrecioFinal (E model:tipoListaModelos; E etapa:entero o tipoClaveCalendario; S precio:entero)
+{que hace: obtiene un precio final valido respecto a la etapa de calendario
+pre: model:M y etapa=E 
+pos: precio=P y P es un precio valido
+exp: }
+Var
+
+Inicio
+	
