@@ -40,7 +40,7 @@ Inicio
 				recuClave(serv, codigoServicio, datosServicio) {ADT LO}
 				
 				si (datosServicio.dniCliente = viejoDni) entonces
-					datosServicio.dniCliente <- dni
+					datosServicio.dniCliente <- dni 				{SC}
 				finSi
 
 				suprimir(serv, codigoServicio) {ADT LO}
@@ -85,22 +85,22 @@ Var
 	datosVehiculo:tipoInfoVehiculo
 Incio
 	//recuperar el cliente a limpiar
-	buscar(client, dni, datosCliente)
+	buscar(client, dni, datosCliente)	{ADT ABB}
 
 	sigo <- V
 
 	//recorrer la lista de vehiculos y por cada uno limpiar la lista de mantenimientos
-	recuPrim(datosCliente.vehiculos, patente)
+	recuPrim(datosCliente.vehiculos, patente)	{ADT LO}
 	mientras sigo hacer
 		Inicio
-			recuClave(datosCliente.vehiculos, patente, datosVehiculo)	
+			recuClave(datosCliente.vehiculos, patente, datosVehiculo)	{ADT LO}
 			
 			//vacío la lista de mantenimientos
-			vaciar(datosVehiculo.manten)
+			vaciar(datosVehiculo.manten)								{ADT LO}
 			//actualizo en la lista
-			modificar(datosCliente, patente, datosVehiculo)
+			modificar(datosCliente.vehiculo, patente, datosVehiculo)	{ADT LO}
 			
-			recuSig(datosCliente.vehiculos, patente, patente)
+			recuSig(datosCliente.vehiculos, patente, patente)			{ADT LO}
 		Excepciones
 			claveEsUltima => sigo <- F
 		Fin
@@ -126,33 +126,34 @@ Var
 	sigo:logico
 Inicio
 	sigo <- V
-	recuPrim(serv, codigoServicios)
+	recuPrim(serv, codigoServicios)						{ADT LO}
 
 	Inicio
-		recuSig(serv, codigoServicio, siguiente)
+		recuSig(serv, codigoServicio, siguiente)		{ADT LO}
 	Excepciones
 		claveEsUltima => siguiente <- codigoServicio
 	Fin
 
 	mientras sigo hacer
 		Inicio
-			recuClave(serv, codigoServicio, datosServicio)
+			recuClave(serv, codigoServicio, datosServicio)	{ADT LO}
 
 			si datosServicio.dniCliente = dni entonces
-				suprimir(serv, codigoServicio)
+				suprimir(serv, codigoServicio)				{ADT LO}
 				codigoServicio <- siguiente
 
 				Inicio
-					recuSig(serv, siguiente, siguiente)
+					recuSig(serv, siguiente, siguiente)		{ADT LO}
 				Excepciones
 					claveEsUltima => nada
 				Fin
 			siNo
-				recuSig(serv, codigoServicio, codigoServicio)
+				recuSig(serv, codigoServicio, codigoServicio)	{ADT LO}
 			finSi
 		Excepciones
 			claveNoExiste, claveEsUltima => sigo <- F
 		Fin
+	finMientras
 Excepciones
 
 Fin
@@ -185,21 +186,21 @@ Var
 Inicio
 	
 	si(esVacia(model)) entonces
-		lanzar noHayModelos
+		lanzar noHayModelos				{SC}
 	siNo
 		ok <- F
 		repetir
 			mostrar("Ingrese codigo de modelos (0 para cancelar ingreso)")
-			ingresar(modelo)
+			ingresar(modelo)	{SC}
 
 			si modelo = 0 entonces
-				lanzar cancelarIngreso
+				lanzar cancelarIngreso	{SC}
 			siNo
 				Inicio
-					recuClave(model, modelo, dm)
-					ok <- V
-				Excepciones
-					claveNoExiste => mostrar("Codigo de modelo invalido")
+					recuClave(model, modelo, dm)	{ADT LO}
+					ok <- V 						{SC}
+				Excepciones	
+					claveNoExiste => mostrar("Codigo de modelo invalido")	{SC}
 				Fin
 			finSi
 		hasta ok
@@ -335,71 +336,171 @@ Fin
 
 Excepciones
 
-
-Procedimiento menuModifClient()
-que hace: muestra las opciones para modificar un cliente
-pre:-
-pos:-
-exp:-
-
+procedimiento limpiarModelo(E/S model:tipoListaModelos, E codigoModelo:tipoClaveModelos)
+{Que Hace: vacia las estructuras de un modelo en particular
+PRE: model = M ; codigoModelo = K
+POST: model = M1 ; M1 en M, salvo el modelo de codigo K que tiene ese modelo con las estructuras vacias
+EXCEP: - }
+Var
+	datosModelo:tipoInfoModelos
 Inicio
-	mostrar("¿Que desea modificar?")
-	mostrar("1- DNI")
-	mostrar("2- Nombre")
-	mostrar("3- Numero de Telefono")
-	mostrar("4- E-Mail")
-FinProcedimiento
+	recuClave(model, codigoModelo, datosModelo)		{ADT LO}
 
-Procedimiento mostrarCabeceraMantenPorCliente(E: nomCli:cadena)
-que hace: muestra la cabecera de los mantenimientos de un cliente
-pre: nomCli=N y N no es vacio
-pos: -
-exp: -
+	vaciar(datosModelo.calendario)					{ADT LO}
 
+	modificar(model, codigoModelo, datosModelo)		{ADT LO}
+Excepciones
+Fin
+
+funcion obtenerPatente():cadena
+{Que Hace:
+PRE: - 
+POST:	obtenerCadena = P ;P es una patente valida
+EXCEP:	-	}
+Var
+	letras:cadena
+	numeros:entero
 Inicio
-	mostrar("Mantenimientos realizados por el cliente", nomCli)
-	mostrar("Codigo servicio 	Dominio		etapa 	Km Real 	Fecha de Mantenimiento 		Precio Final")
-	mostrar("___________________________________________________________________________________________")
-FinProcedimiento
 
-Procedimiento mostrarDatosServicio(E datosServicio:tipoInfoServicios, E codigoServicio:tipoClaveServicios)
-que hace: muestra los datos de servicio de mantenimiento realizado por un cliente
-pre: datosServicio=D y D tiene que tener datos validos; codigoServicio=C y tiene un codigo valido
-pos: -
-exp: -
+	repetir
+		mostrar("Ingrese letras")			{SC}
+		ingresar(letras)					{SC}
+	hasta ((letras <= "zzz") y (letras <= "ZZZ")) o ((letras >= "aaa") y (letras >= "AAA"))
 
+	repetir
+		mostrar("Ingrese numeros")			{SC}
+		ingresar(numeros)					{SC}
+	hasta ((numeros <= 999) y (numeros>= 0))
+
+	obtenerPatente <- letras + enteroACadena(numeros)	{SC}
+Excepciones
+
+Fin
+
+funcion obtenerVehiculo(E vehiculos:tipoListaVehiculos)
+{Que Hace: devuelve un vehiculo valido de una lista de vehiculos
+PRE: vehiculos = L
+POST: obtenerVehiculo = A ; A pertence a  L
+EXCEP: noHayVehiculos}
+Var
+	ok:logico
+	patente:tipoClaveVehiculos
+	datosVehiculo:tipoInfo
 Inicio
-	mostrar(codigoServicio, "   " , datosServicio.Dominio, "  ", datosServicio.etapa, "   ", datosServicio.KmReal, "  ", datosServicio.fecha,"   ", datosServicio.precioFinal)
-FinProcedimiento
+	ok <- F
+	repetir
+		patente <- obtenerPatente() {nivel 3}
+		Inicio
+			recuClave(vehiculos, patente, datosVehiculo) {ADT LO}	
+			ok <- V
+		Excepciones
+			listaVacia => lanzar noHayVehiculos								{SC}
+			claveNoExiste => mostrar("Vehiculo no pertece al cliente")		{SC}
+		Fin
+	hasta ok
 
-Procedimiento mostrarEncabezadoMantModelo (E nomMod:cadena, E dniCliente:entero)
-que hace: muestra el encabezado de los mantenimientos por modelo
-pre: nomMod=N y N tiene un nombre de modelo valido
-pos: -
-exp: -
+	obtenerVehiculo <- patente 												{SC}
+Excepciones
+Fin
 
+procedimiento bajaSV(E/S serv:tipoListaServicios; E patente:tipoClaveVehiculos)
+{Que Hace: actualiza los servicios con respecto a los vehiculos existentes
+PRE: serv = S ; patente = P
+POST: serv = S1 ; S1 en S menos los servicios realizados a vehiculos de patente P
+EXCEP: - }
+Var
+	siguiente:tipoClaveServicios
+	sigo:logico
+	codigoServicio:tipoClaveServicios
+	datosServicio:tipoInfoServicios
 Inicio
-	mostrar("Mantenimientos realidos por el modelo", nomMod, "Al cliente:",dniCliente)
-	mostrar("Codigo servicio 	Dominio		etapa 	Km Real 	Fecha de Mantenimiento 		Precio Final")
-FinProcedimiento
+	
+	sigo <- V
+	recuPrim(serv, codigoServicios)
 
-Procedimiento mostrarEncabezadoClientSinMant()
-que hace: muestra el encabezado de los clientes sin mantenimientos
-pre:-
-pos:-
-exp:-
+	Inicio
+		recuSig(serv, codigoServicio, siguiente)		{ADT LO}
+	Excepciones
+		claveEsUltima => siguiente <- codigoServicio 	{SC}
+	Fin
 
+	mientras sigo hacer
+		Inicio
+			recuClave(serv, codigoServicio, datosServicio)	{ADT LO}
+
+			si datosServicio.dominio = patente entonces
+				suprimir(serv, codigoServicio)				{ADT LO}
+				codigoServicio <- siguiente					{SC}
+
+				Inicio
+					recuSig(serv, siguiente, siguiente)		{ADT LO}
+				Excepciones
+					claveEsUltima => nada					{SC}
+				Fin
+			siNo
+				recuSig(serv, codigoServicio, codigoServicio)	{ADT LO}
+			finSi
+		Excepciones
+			claveNoExiste, claveEsUltima => sigo <- F 			{SC}
+		Fin
+	finMientras
+
+Excepciones
+Fin 
+
+funcion generarCodigoServicio(E serv:tipoListaServicios)
+{Que Hace: devuelve un nuevo codigo de servicio valido
+PRE: serv = S
+POST: generarCodigoServicio = K ; K es un codigo valido en S
+EXCEP: - }
+Var
+	ok:logico
+	codigo:tipoClaveServicios
 Inicio
-	mostrar("Datos de los clientes que no han realizado ningun mantenimiento en sus vehiculos")
-	mostrar("DNI 	Nombre 	  Telefono 	 E-Mail ")
-FinProcedimiento
+	si esVacia(serv) entonces
+		codigo <- 1
+	siNo
+		recuUlt(serv, codigo)
+		codigo <- codigo + 1
+	finSi
 
-Procedimiento mostrarClientes(E datosCliente:tipoInfoClientes, E dni:entero)
-que hace: muestra los datos de los clientes que no han realizado mantenimientos
-pre: datosCliente=C y C tiene datos validos
-pos: 
-exp:
+	generarCodigoServicio <- codigo
+Excepciones
 
+Fin
+
+
+funcion obtenerEtapaValida(E model:tipoListaModelos ; E vehiculos:tipoListaVehiculos ; E dominio:tipoClaveVehiculos)
+{Que Hace: devuelve una etapa del calendario de mantenimientos valida correspondiente a un modelo
+PRE: model = M ; vehiculos = A ; dominio = D ; D pertenece a A
+POST: obtenerEtapaValida = E ; E es una etapa valida al vehiculo de dominio D, perteneciente a A con modelo en M
+EXCEP: }
+Var
+	datosModelo:tipoInfoModelos
+	ok:logico
+	etapa:tipoClaveCalendario
+	datosEtapa:tipoInfoCalendario
+	datosVehiculo:tipoInfoVehiculos
 Inicio
-	mostrar(dni,"  ", datosCliente.nombre,"  ", datosCliente.Telefono, "  ", datosCliente.email)
-FinProcedimiento
+	ok <- F
+
+	repetir
+		mostrar("Ingrese etapa de mantenimiento")
+		ingresar(etapa)
+		recuClave(vehiculos, patente, datosVehiculo)
+		recuClave(model, datosVehiculo.modelo, datosModelo)
+
+		Inicio
+			recuClave(datosModelo.calendario, etapa, datosEtapa)
+			ok <- V
+		Excepciones
+			claveNoExiste => ("Etapa invalida")
+		Fin
+	hasta ok
+
+	obtenerEtapaValida <- etapa
+
+Fin
+
+funcion obtenerKmReal(E model:tipoListaModelo  client, datosServicio.dominio)
+>>>>>>> origin/master

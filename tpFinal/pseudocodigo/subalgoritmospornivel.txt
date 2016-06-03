@@ -58,15 +58,16 @@ limpiarModelo H
 
 obtenerPatente H
 
-obtenerVehiculo
+obtenerVehiculo H
 menuModifVehiculo
 
-limpiarVehiculo		H
-bajaSV	H
+limpiarVehiculo	H
+bajaSV			H
 
-generarCodigoServicio H
-obtenerEtapa 	H
-obtenerKmReal
+generarCodigoServicio 	H
+obtenerEtapaValida		H	
+obtenerKmReal	
+
 obtenerFecha
 
 obtenerPrecioFinal
