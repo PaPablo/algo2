@@ -277,7 +277,7 @@ Fin
 
 
 
-procedimiento agregarServicio(E/S serv:tipoListaServicios ; E client:tipoArbolClientes ; E model:tipoListaModelos ; E vehiculos:tipoArbolVehiculos )
+procedimiento agregarServicio(E/S serv:tipoListaServicios ; E client:tipoArbolClientes ; E model:tipoListaModelos ; E/S vehiculos:tipoArbolVehiculos )
 {Qué Hace: agrega un nuevo servicio realizado a un vehiculo en particular
 PRE:	serv = S ; client = C ; model = M ; vehiculos = A
 POST:	serv = S1 ; S1 tiene un nuevo servicio según lo haya querido el usuario
@@ -349,8 +349,8 @@ Inicio
 			finSegun
 			segun opc hacer
 				1: datosServicio.dniCliente <- obtenerCliente(client)										{nivel 2}
-				2: datosServicio.dominio <- obtenerVehiculo(vehiculos, datosServicio.dniCliente) 						{nivel 3}
-				3:	obtenerEtapaValida(model, vehiculos, datosServicio.dominio, etapa) {nivel 3}
+				2: datosServicio.dominio <- obtenerVehiculo(vehiculos, datosServicio.dniCliente) 			{nivel 3}
+				3:	obtenerEtapaValida(model, vehiculos, datosServicio.dominio, etapa) 						{nivel 3}
 				4:	obtenerFecha("Fecha del servicio", datosServicio.fecha)									{nivel 3}
 				5:	obtenerPrecioFinal(model, datosServicio.etapa, datosServicio.precioFinal)				{nivel 3}
 			finSegun
@@ -501,7 +501,7 @@ Inicio
 				total <- total + 1														{SC}
 			finSI
 
-			recuSig(serv, codigoServicio, codigoServ)								{ADT LO}
+			recuSig(serv, codigoServicio, codigoServicio)								{ADT LO}
 		Excepciones
 			claveEsUltima => sigo <- F 													{SC}
 		Fin
@@ -513,17 +513,15 @@ Excepciones
 	listaVacia => mostrar("No existen servicios. Agregue por lo menos uno e intente nuevamente")
 Fin
 
-procedimiento datosClientesSinMant(E client:tipoArbolClientes)
+procedimiento datosClientesSinMant(E client:tipoArbolClientes ; E serv:tipoListaServicios)
 {Qué Hace: muestra por pantalla los datos de los clientes sin mantenimientos
-PRE: client = C
+PRE: client = C ; serv = S
 POST: - 
 EXCEP: - }
 Var
 	muestro:logico
 	total:entero
 	sigo:logico
-	patente:tipoClaveVehiculos
-	datosVehiculo:tipoInfoVehiculos
 	colaClientes:tipoColaClientes
 	dni:tipoClaveClientes
 	datosCliente:tipoInfoClientes
@@ -531,42 +529,37 @@ Inicio
 	crear(colaClientes)
 	muestro <- V
 	total <- 0	
-	inOrder(client, colaClientes)									{ADT ABB}
+	inOrder(client, colaClientes)										{ADT ABB}
+
+	mostrarEncabezadoClientSinMant()									{nivel 3}
+
 
 	mientras no(esVacia(colaClientes)) hacer
-		frente(colaClientes, dni)									{ADC Cola}
-		
-		buscar(client, dni, datosCliente)							{ADT ABB}
+		frente(colaClientes, dni)										{ADC Cola}
 
-		mostrarEncabezadoClientSinMant()							{nivel 3}
+		recuPrim(serv, codigoServicio)									{ADT LO}
+		sigo <- V
 
-		Inicio
-			logico <- V 											{SC}
-			
-			recuPrim(datosCliente.vehiculos, patente)				{ADT LO}
+		mientras sigo hacer
+			Inicio
+				recuClave(serv, codigoServicio, datosServicio)			{ADT LO}
+				muestro <- muestro y (dni = datosServicio.dniCliente)	{SC}
 
-			mientras sigo hacer
-				Inicio
-					recuClave(datosCliente.vehiculos, patente, datosVehiculo)	{ADT LO}
-					
-					muestro <- muestro y (esVacia(datosVehiculo.manten))		{ADT LO}
+				recuSig(serv, codigoServicio, codigoServicio)			{ADT LO}
+			Excepciones
+				claveEsUltima => sigo <- F
+			Fin
+		finMientras
 
-					resuSig(datosCliente.vehiculos, patente, patente)			{ADT LO}
-				Excepciones
-					claveEsUltima => sigo <-  F
-				Fin
-			finMientras
-			
-			si (muestro) entonces
-				mostrarDatosCliente(datosCliente,dni)							{nivel 3}
-			finSi
+		si muestro entonces
+			buscar(client, dni, datosCliente)
+			mostrarDatosCliente(dni, datosCliente)
+			total <- total + 1
+		finSi
 
-		Excepciones
-			listaVacia => nada
-		Fin
-
-		desencolar(colaClientes)												{ADT Cola}
+		desencolar(colaClientes)										{ADT Cola}
 	finMientras
+	mostrar("TOTAL: ", total)											{SC}
 Excepciones
 
 Fin
