@@ -45,8 +45,8 @@ tipoInfoClientes =	reg
 				nombre : cadena
 				telefono : entero
 				email : cadena
-				vehiculos : tipoListaVehiculos
 			finReg
+
 COLA PARA RECORRIDO CLIENTES
 	tipoInfo = tipoClaveClientes
 
@@ -54,11 +54,11 @@ COLA PARA RECORRIDO CLIENTES
 LISTA ORDENADA VEHICULOS
 tipoClaveVehiculos = cadena {patente}
 tipoInfoVehiculos =	reg
+				dueño	:tipoClaveClientes
 				modelo : tipoClaveModelos
 				añoFabric : entero {año}
 				manten : tipoListaMantenimientos
 			finReg
-
 
 LISTA ORDENADA MANTENIMIENTOS
 tipoClaveMantenimientos = tipoClaveServicios

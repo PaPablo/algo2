@@ -502,7 +502,53 @@ Inicio
 
 Fin
 
-funcion obtenerKmReal(E model:tipoListaModelo  client, datosServicio.dominio)
+funcion obtenerKmReal(E model:tipoListaModelo ; E vehiculos:tipoListaVehiculos ; E dominio:tipoClaveVehiculos; E etapa:tipoClaveCalendario)
+{Que Hace: obtiene un kiloemtraje real para poder realizar un mantenimiento 
+PRE: model = M ; vehiculos = A ; dominio = D ; etapa = T;  D pertenece a A, y el modelo del auto con dominio D pertenece a M y T es una etapa de mantenimiento valida para este
+POST: obtnerKmReal = K ; K esta entre T y la proxima etapa para ese modelo
+EXCEP: - }
+Var
+	etapaSiguiente:tipoClaveCalendario
+	km:entero
+	ok:logico
+	datosCalendario:tipoInfoCalendario
+	datosModelo:tipoInfoModelos
+	datosVehiculo:tipoInfoVehiculos
+Inicio
+	recuClave(vehiculos, dominio, datosVehiculo)						{ADT LO}
+	recuClave(model, datosVehiculo.modelo, datosModelo)					{ADT LO}
+
+	ok <- F
+	repetir
+		mostrar("Ingrese kilomentraje del vehiculo")	{SC}
+		ingresar(km)									{SC}
+
+		Inicio
+			recuClave(datosModelo.calendario, etapa, datosCalendario)	{ADT LO}
+			recuSig(datosModelo.calendario, etapa, etapaSiguiente)		{ADT LO}
+			si ((km >= etapa) y (km <= etapaSiguiente)) entonces
+				ok <- V 												{SC}
+			siNo
+				mostrar("Kilometraje Invalido")							{SC}
+			finSi
+		Excepciones	
+			claveEsUltima => ok <- V 									{SC}
+		Fin
+	hasta ok
+
+	obtenerKmReal <- km   {SC}
+Fin
+
+
+procedimiento altaSV(E/S client:tipoArbolClientes; E codigoServicio:tipoClaveServicio; E datosServicio:tipoInfoServicios)
+{Que Hace:
+PRE: client = C; codigoServicio = K ; datosServicio = S ; S es los datos del servicio K y el vehiculos al cual sele realizo el servicio K es de un cliente que esta en C
+POST: client = C1 ; C1 en C mas el servicio con codigo K hecho a un vehiculo perteneciente a un cliente
+EXCEP:	-	}
+
+
+
+
 
 Procedimiento menuModifClient()
 {que hace: muestra las opciones para modificar un cliente

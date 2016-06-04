@@ -42,7 +42,7 @@ procedimiento agregarCliente (E/S client:tipoArbolClientes)
 {Qué Hace: agrega un nuevo cliente
 PRE: client = C ; C puede estar vacío o tener clientes válidos
 POST: client = C1 ; C1 tiene un cliente nuevo agregado
-EXCEP:	}
+EXCEP: - }
 Var
 	datosCliente:tipoInfoClientes
 	dni:tipoClaveClientes
@@ -52,7 +52,7 @@ Inicio
 
 	Inicio
 		buscar(client, dni, datosCliente) {ADT ABB}
-		mostrar("Cliente ya existe") {SD}
+		mostrar("Cliente ya existe") {SC}
 	Excepciones
 		ClaveNoExiste => 
 			Inicio
@@ -62,8 +62,6 @@ Inicio
 
 				datosCliente.email <- obtenerEmail()				{nivel 3}
 
-				crear(cliente.vehiculos)							{ADT LO}
-
 				insertar(client, dni, cliente)						{ADT LO}
 			Fin
 	Fin
@@ -71,9 +69,9 @@ Excepciones
 	arbolLleno => mostrar("No se puede agregar un cliente, intente nuevamente más tarde")
 Fin
 
-procedimiento modificarCliente(E/S client:tipoArbolClientes ; E/S serv:tipoListaServicios)
+procedimiento modificarCliente(E/S client:tipoArbolClientes ; E/S vehiculos:tipoArbolVehiculos ; E/S serv:tipoListaServicios)
 {Qué Hace: permite modificar los datos pertenecientes a un cliente en particular
-PRE: client = C ; C contiene al menos un cliente válido ; model = M ; M contiene al menos un modelo valido
+PRE: client = C ; vehiculos = A ; serv = S ; 
 POST: client = C1 ; C1 contiene un cliente con los datos modificados o no
 EXCEP: - }
 Var
@@ -83,7 +81,7 @@ Var
 	opc:entero
 Inicio
 
-	viejoDni <- obtenerCliente(client)	{nivel 2} //opcion para cancela modif a traves de excep
+	viejoDni <- obtenerCliente(client)	{nivel 2} 
 	dni <- viejoDni
 	
 	repetir
@@ -103,13 +101,14 @@ Inicio
 		actualizarSC(serv, viejoDni, dni)	{nivel 3}
 	finSi
 
+	actualizarVC(vehiculos, dni)			{nivel 3}
 Excepciones
 	noHayClientes => mostrar("No hay clientes agregados. Agregue un cliente e intente nuevamente")
 	cancelarIngreso => nada
 Fin
 
 
-procedimiento quitarCliente(E/S client:tipoArbolClientes ; E/S serv:tipoListaServicios)
+procedimiento quitarCliente(E/S client:tipoArbolClientes ; E/S vehiculos:tipoArbolVehiculos ; E/S serv:tipoListaServicios)
 {Qué Hace: quita un cliente y actualiza su relación con respecto a los servicios a su nombre
 PRE: client = C ; C tiene que tener al menos un cliente válido ; serv = S 
 POST: client = C1 ; C1 tiene un cliente menos ; serv = S1 ; S1 tiene uno o más servicios menos si el cliente eliminado tenía algún servicio a su nombre
@@ -121,11 +120,12 @@ Inicio
 	dni <- obtenerCliente(client)	{nivel 2}	//opcion para cancela modif a traves excep
 	
 	si (confirma("Esta seguro que desea eliminar este cliente?")) ent 	{SC}
-		limpiarCliente(client, dni)										{nivel 3}
-		suprimir(client, dni)											{ADT LO}
+	
+			suprimir(client, dni)											{ADT LO}
 
 		//elimina de los servicios todos aquellos que tengan ese dni como dniCliente
 		bajaSC(serv, dni)											{nivel 3}
+		bajaVC(vehiculos, dni)	{nivel 3}
 	finSi
 
 Excepciones
@@ -135,10 +135,10 @@ Fin
 
 
 
-procedimiento modificarModelo(E/S model:tipoListaModelos ; E/S serv:tipoListaServicios ; E/S client:tipoArbolClientes)
+procedimiento modificarModelo(E/S model:tipoListaModelos ; E/S serv:tipoListaServicios ; E/S vehiculos:tipoArbolVehiculos)
 {Qué Hace: Permite modificar los datos correpondientes a un modelo en particular y actualiza las relaciones de dicho modelos con los clientes y los servicios realizados
-PRE: model = M ; M contiene al menos un modelo ; serv = S ; client = C
-POST: model = M1 ; serv = S1 ; client = C1 ; M1, S1, C1 tiene cambios con respecto a M, S y C (respectivamente), segun lo haya querido el usuario
+PRE: model = M ; M contiene al menos un modelo ; serv = S ; vehiculos = A
+POST: model = M1 ; serv = S1 ; vehiculos = A1  ; M1, S1, A1 tiene cambios con respecto a M, S y A (respectivamente), segun lo haya deseado el usuario
 EXCEP: }
 Var
 	codigoModelo:tipoClaveModelos
@@ -159,17 +159,17 @@ Inicio
 	modificar(model, codigoModelo, datosModelo)	{ADT LO}
 
 	bajaSMant(serv, datosModelo.calendario)		{nivel 3}
-	actualizaVS(client, serv)					{nivel 3}
+	actualizarVS(vehiculos, serv)					{nivel 3}
 
 Excepciones
 	noHayModelos => mostrar("No existen modelos. Agregue uno e intente nuevamente")
 	cancelarIngreso => nada
 Fin
 
-procedimiento quitarModelo(E/S model:tipoListaModelos ; E/S serv:tipoListaServicios ; E/S client:tipoArbolClientes)
+procedimiento quitarModelo(E/S model:tipoListaModelos ; E/S serv:tipoListaServicios ; E/S vehiculos:tipoArbolVehiculos)
 {Qué Hace: quita un modelo y actualiza su relacion con los clientes y los servicios
-PRE:	model = M ; M tiene al menos un modelo ; serv = S ; client = C
-POST:	model = M1 ; M1 tiene un cliente menos ; serv = S1 ; client = C1 ; C1 y S1 tienen clientes o servicios menos si el modelo eliminado tenia servicios
+PRE:	model = M ; M tiene al menos un modelo ; serv = S ; vehiculos = A
+POST:	model = M1 ; M1 tiene un modelo menos ; serv = S1 ; vehiculos = A1 ; C1 y S1 tienen clientes o servicios menos si el modelo eliminado tenia servicios
 		relacionados o un cliente tenía un vehiculo de ese modelo en particular
 EXCEP: }
 Var
@@ -181,7 +181,7 @@ Inicio
 	si (confirma("Está seguro que desea eliminar este modelo?")) ent
 		limpiarModelo(model, codigoModelo) 	{nivel 3}
 		suprimir(model, codigoModelo)		{ADT LO}
-		bajaVSM(client, serv, codigoModelo)
+		bajaVSM(vehiculos, serv, codigoModelo)	{nivel 3}
 	finSi
 
 Excepciones
@@ -189,60 +189,60 @@ Excepciones
 	cancelarIngreso => nada
 Fin
 
-procedmiento agregarVehiculo(E/S client:tipoArbolClientes; E dni:tipoClaveClientes ; E model:tipoListaModelosModelos)
+procedmiento agregarVehiculo( E/S vehiculos:tipoArbolClientes ; E client:tipoArbolClientes ; E model:tipoListaModelosModelos)
 {Que Hace: agrega un vehiculo para un cliente determinado
-PRE: 	client = C ; C tiene al menos un cliente valido ; dni = K ; K es un numero de DNI perteneciente a un cliente existente
-		model = M ; M contiene al menos un modelo valido
-POST:	client = C1; C1 tiene un nuevo vehiculo agregado a un cliente segun lo que haya decidido el usuario
-EXCEP: }
+PRE: vehiculos = A ; client = C ; model = M; 
+POST:	vehiculos = A1 ; A1 tiene un vehiculo mas con respecto a A
+EXCEP: - }
 Var
-	datosCliente:tipoInfoClientes
-	vehiculo:tipoInfoVehiculos
+	datosVehiculo:tipoInfoVehiculos
 	patente:tipoClaveVehiculos
 Inicio
 	
-	patente <- obtenerPatente() {nivel 3}
-	Inicio
-		buscar(client, dni, datosCliente)										{ADT ABB}
+	mostrar("Ingrese el dueño del vehiculo a agregar")
+	datosVehiculo.dueño <- obtenerCliente(client) {nivel 2}
 
-		recuClave(datosCliente.vehiculos, patente, vehiculo)					{ADT LO}
+	si (esVacia(model)) entonces
+		lanzar noHayModelos
+	siNo
+		patente <- obtenerPatente() {nivel 3}
+		Inicio
+			recuClave(vehiculos, patente, datosVehiculo)		{ADT LO}
 
-		mostrar("Vehiculo ya existe") {SD}
-	Excepciones
-		claveNoExiste => 
-			Inicio
-				vehiculo.modelo <- obtenerModelo(model)								{nivel 3}
+			mostrar("Vehiculo ya existe") {SD}
+		Excepciones
+			claveNoExiste => 
+				Inicio
 
-				vehiculo.añoFabric <- enteroMayorACero("Ingrese año de fabricacion")	{SC}
+					datosVehiculo.dueño <- obtenerCliente(client) {nivel 2}
+					datosVehiculo.modelo <- obtenerModelo(model)								{nivel 3}
 
-				crear(vehiculo.manten)												{ADT LO}
+					datosVehiculo.añoFabric <- enteroMayorACero("Ingrese año de fabricacion")	{SC}
 
-				modificar(client, dni, datosCliente)								{ADT ABB}
-			Fin
-	Fin			
-Fin
-
-	
-
+					crear(datosVehiculo.manten)												{ADT LO}
+					insertar(vehiculos, patente, datosVehiculo)	{ADT ABB}
+										
+				Fin
+		Fin	
+	finSi		
 Excepciones
-	listaLlena => mostrar("No se puede agregar un vehículo en este momento. Intente nuevamente más tarde")
+	ArbolLleno => mostrar("No se puede agregar un vehículo en este momento. Intente nuevamente más tarde")
+	noHayClientes => mostrar("No hay clientes agregado. Agregue uno e intente nuevamente")
 	noHayModelos => mostrar("No existen modelos. Agregue uno e intente nuevamente")
 	cancelarIngreso => nada
 
 Fin
 
-procedimiento modificarVehiculo(E/S client:tipoArbolCLientes ; E dni:tipoClaveClientes ; E model:tipoListaModelos)
+procedimiento modificarVehiculo(E/S vehiculos:tipoArbolVehiculos ; E client:tipoArbolCLientes ; E model:tipoListaModelos)
 {Que Hace: modifica los vehiculos pertenecientes a un cliente en particular
-PRE: client = C ; dni = K y K pertence a C; model = M ; M contiene al menos un modelo valido
-POST: client = C1 ; C1 tiene cambios segun lo haya decidido el usuario
+PRE: vehiculos = A ; client = C; model = M;
+POST: vehiculos = A1 ; A1 tiene cambios con respecto a A segun lo hay deseado el usuario
 EXCEP: - }
 Var
-	datosCliente:tipoInfoClientes
-	vehiculo:tipoInfoVehiculos
+	datosVehiculo:tipoInfoVehiculos
 	patente:tipoClaveVehiculos
 	opc:entero
 Inicio
-	buscar(client, dni, datosCliente)						{ADT ABB}
 	patente <- obtenerVehiculo(datosCliente.vehiculos)		{nivel 3}
 	recuClave(datosCliente.vehiculos, patente, vehiculo)	{ADT LO}
 	
@@ -251,13 +251,12 @@ Inicio
 		ingresar(opc)							{SC}
 
 		segun (opc) hacer
-			1: vehiculo.modelo <- obtenerModelo(model)								{nivel 3}
-			2: vehiculo.añoFabric <- enteroMayorACero("Ingrese nuevo año de fabricacion"){SC}
+			1: datosVehiculo.modelo <- obtenerModelo(model)								{nivel 3}
+			2: datosVehiculo.añoFabric <- enteroMayorACero("Ingrese nuevo año de fabricacion"){SC}
 		finSegun
 	hasta (opc = 3)
 
-	modificar(datosCliente.vehiculos, patente, vehiculo)	{ADT LO}
-	modificar(client, dni, datosCliente)					{ADT ABB}
+	modificar(vehiculos, patente, datosVehiculo)	{ADT ABB}
 
 Excepciones
 	noHayVehiculos => mostrar("No existen vehiculos. Agregue uno e intente nuevamente")
@@ -270,22 +269,18 @@ PRE: client = C ; dni = K ; K pertenece a C ; serv = S
 POST:	client = C1 ; C1 tiene un vehiculo menos segun haya deseado el usuario
 EXCEP: - }
 Var
-	vehiculo:tipoInfoVehiculos
+	datosVehiculo:tipoInfoVehiculos
 	patente:tipoClaveVehiculos
-	datosCliente:tipoInfoClientes
+
 Inicio
-	//recuperamos el cliente
-	buscar(client, dni, datosCliente)						{ADT ABB}
 	
 	//recuperamos el vehiculo
 	patente <- obtenerVehiculo(datosCliente.vehiculos)		{nivel 3}
-	limpiarVehiculo(datosCliente.vehiculos, patente)		{nivel 3}
+	limpiarVehiculo(vehiculos, patente)		{nivel 3}
 	
 	//eliminamos dicho vehiculo
-	suprimir(datosCliente.vehiculos, patente)				{ADT LO}
+	suprimir(vehiculos, patente)				{ADT ABB}
 
-	//modificamos dicho nodo del arbol de clientes
-	modificar(client, dni, datosCliente)					{ADT ABB}
 
 	//actualizamos referencias cruzadas en servicios
 	bajaSV(serv, patente)									{nivel 3}
@@ -296,9 +291,9 @@ Fin
 
 
 
-procedimiento agregarServicio(E/S serv:tipoListaServicios ; E/S client:tipoArbolClientes ; E model:tipoListaModelos)
+procedimiento agregarServicio(E/S serv:tipoListaServicios ; E client:tipoArbolClientes ; E model:tipoListaModelos ; E/S vehiculos:tipoArbolVehiculos )
 {Qué Hace: agrega un nuevo servicio realizado a un vehiculo en particular
-PRE:	serv = S ; client = C ; model = M 
+PRE:	serv = S ; client = C ; model = M ; vehiculos = A
 POST:	serv = S1 ; S1 tiene un nuevo servicio según lo haya querido el usuario
 EXCEP:	}
 Var
@@ -312,15 +307,13 @@ Inicio
 	//obtener cliente
 	datosServicio.dniCliente <- obtenerCliente(client) {nivel 2}
 
-	//obtener un vehiculo al cual hacerle un servicio
-	buscar(client, datosServicio.dniCliente, datosCliente)			{ADT ABB}
-	datosServicio.dominio <- obtenerVehiculo(datosCliente.vehiculos)	{nivel 3}
+	datosServicio.dominio <- obtenerVehiculo(datosServicio.dniCliente, vehiculos)	{nivel 3}
 
 	//obtener etapa de mantenimiento, verificando que haya
-	datosServicio.etapa <- obtenerEtapa(model, datosCliente.vehiculos, datosServicio.dominio)	{nivel 3}
+	datosServicio.etapa <- obtenerEtapa(model, vehiculos, datosServicio.dominio)	{nivel 3}
 
 	//obtener kilometraje real, verificando que no sea menor al de la etapa de calendario, ni mayor a la que sigue
-	datosServicio.kmReal <- obtenerKmReal(model, client, datosServicio.dominio)								{nivel 3}
+	datosServicio.kmReal <- obtenerKmReal(model, vehiculos, datosServicio.dominio, datosServicio.etapa)								{nivel 3}
 
 	//obtener fecha del mantenimiento
 	datosServicio.fecha <- obtenerFecha("Fecha del servicio")								{nivel 3}
@@ -330,7 +323,7 @@ Inicio
 
 	insertar(serv, codigoServicio, datosServicio)											{ADT LO}
 
-	actualizarVS(client, codigoServicio, datosServicio.dominio, datosServicio.dniCliente)	{nivel 3}
+	altaSV(vehiculos, codigoServicio, datosServicio.dominio)	{nivel 3}
 
 Excepciones
 	listaLLena => mostrar("No se puede agregar un servicio en este momento. Intente nuevamente más tarde")
@@ -341,12 +334,13 @@ Excepciones
 
 Fin
 
-procedimiento modificarServicio(E/S serv:tipoListaServicios; E/S client:tipoArbolClientes ; E model:tipoListaModelos)
+procedimiento modificarServicio(E/S serv:tipoListaServicios; E/S client:tipoArbolClientes ; E model:tipoListaModelos ; E/S vehiculos:tipoArbolVehiculos)
 {Qué Hace: modifica los datos de un servicio de mantenimiento en particular
-PRE: serv = S ; client = C ; model = M
-POST: serv = S1 ; client = C1 ; S1 es distinto de S y C1 distinto de C según lo haya decidido el usuario
+PRE: serv = S ; client = C ; model = M ; vehiculos = A 
+POST: serv = S1 ; client = C1 ; model = M1 ; vehiculos = A1 ; S1, A1 tienen cambios con respecto a S1 y A1 segun lo haya deseado el usuario
 EXCEP:	- }
 Var
+	viejoDominio:tipoClaveVehiculos
 	codigoServicio:tipoClaveServicios
 	datosServicio:tipoInfoServicios
 Inicio
@@ -354,30 +348,43 @@ Inicio
 	codigoServicio <- obtenerServicio(serv)							{nivel 3}
 
 	repetir
-		menuModifServicio()
-		ingresar(opc)
-		segun opc hacer
-			1: 	obtenerCliente(client, datosServicio.dniCliente)										{nivel 2}
-			2: 	inicio
-					buscar(client, datosServicio.dniCliente, datosCliente)								{ADT ABB}
-					 datosServicio.dominio <- obtenerVehiculo(datosCliente.vehiculos) 						{nivel 3}
-				fin
-			3:	obtenerEtapaValida(model, datosCliente.vehiculos, datosServicio.dominio, datosServicio.etapa) {nivel 3}
-			4:	obtenerFecha("Fecha del servicio", datosServicio.fecha)									{nivel 3}
-			5:	obtenerPrecioFinal(model, datosServicio.etapa, datosServicio.precioFinal)				{nivel 3}
-		finSegun
+		Inicio
+			menuModifServicio()
+			opc <- 0
+			//ESTE SEGUN EVITA INCONSISTENCIAS A LA HORA DE CAMBIAR DATOS DEL SERVICIO
+			segun opc hacer
+				1: opc <- 2
+				2: Inicio
+						opc <- 3
+						viejoDominio <- datosServicio.dominio
+					Fin
+				3: opc <- 5
+				siNo: ingresar(opc)
+			finSegun
+			segun opc hacer
+				1: datosServicio.dniCliente <- obtenerCliente(client)										{nivel 2}
+				2: datosServicio.dominio <- obtenerVehiculo(vehiculos, datosServicio.dniCliente) 			{nivel 3}
+				3:	obtenerEtapaValida(model, vehiculos, datosServicio.dominio, etapa) 						{nivel 3}
+				4:	obtenerFecha("Fecha del servicio", datosServicio.fecha)									{nivel 3}
+				5:	obtenerPrecioFinal(model, datosServicio.etapa, datosServicio.precioFinal)				{nivel 3}
+			finSegun
+		Excepciones
+			cancelaIngreso => nada
+		Fin
 	hasta (opc = 6)
 
 	modificar(serv, codigoServicio, datosServicio)
 
-	altaSV(client, codigoServicio, datosServicio.dominio)
+	si viejoDominio <> datosServicio.dominio entonces
+		bajaSV(vehiculos, codigoServicio, viejoDominio)
+	finSi
 
 Excepciones
 	noHayServicios => mostrar("No existen servicios. Agregue uno e intente nuevamente")
 	cancelarIngreso => nada
 Fin
 
-procedimiento quitarServicio(E/S serv:tipoListaServicios; E/S client:tipoArbolClientes)
+procedimiento quitarServicio(E/S serv:tipoListaServicios; E/S vehiculos:tipoArbolVehiculos)
 {Qué Hace: elimina un servicio
 PRE: serv = S; client = C
 POST: serv = S1 ; client = C1; S1 es distinto de S y C1 distinto de C según lo haya decidido el usuario
@@ -390,10 +397,10 @@ Inicio
 	codigoServicio <- obtenerServicio(serv)					{nivel 3}
 	recuClave(serv, codigoServicio, datosServicio)			{ADT LO}
 	suprimir(serv, codigoServicio)							{ADT LO}
-	bajaSV(client, codigoServicio, datosServicio.dominio)	{nivel 3}
+	bajaSV(vehiculos, codigoServicio, datosServicio.dominio)	{nivel 3}
 
 Excepciones
-	noHayServicios => mostrar("No existen servicios. Agregue uno e intente nuevamente")
+	noHayServicios => mostrar("No existen servicios. Agregue uno e intente nuevamente mas tarde")
 	cancelarIngreso => nada
 Fin 
 
@@ -473,7 +480,7 @@ Excepciones
 Fin
 
 
-procedimiento mantPorModelo(E model:tipoListaModelos,serv:tipoListaServicios, client:tipoArbolClientes)
+procedimiento mantPorModelo(E model:tipoListaModelos ; E serv:tipoListaServicios ; E vehiculos:tipoArbolVehiculos)
 {Qué Hace: muestra por pantalla los mantenimientos realizados para un mantenimiento en particular
 PRE: model = M ; serv: S ; client = C
 POST: -
@@ -484,7 +491,6 @@ Var
 	codigoModelo:tipoClaveModelos
 	codigoServicio:tipoClaveServicios
 	datosServicio:tipoInfoServicios
-	datosCliente:tipoInfoClientes
 	datosVehiculo:tipoInfoVehiculos
 Inicio
 	codigoModelo <- obtenerModelo(model)	{nivel 3}
@@ -500,20 +506,16 @@ Inicio
 		Inicio
 			//recupero los datos del servicio
 			recuClave(serv, codigoServicio, datosServicio)							{ADT LO}
-
-			//recupero los datos del cliente que lo solicitó
-			buscar(client, datosServicio.dniCliente, datosCliente)					{ADT ABB}
-
-			//busco en su lista de vehiculos al vehiculo que recibió el mantenimiento
-			recuClave(datosCliente.vehiculos, datosServicio.dominio, datosVehiculo)	{ADT LO}
+			//busco en el arbol de vehiculos
+			buscar(vehiculos, datosServicio.dominio, datosVehiculo)	{ADT LO}
 			
 			//si el modelo coincide, muestro y contabilizo
 			si (datosVehiculo.modelo = codigoModelo) entonces
-				mostrarDatosServicioyDNI(datosServicio,datosServicio.dniCliente)	{nivel 3}
+				mostrarDatosServicioyDNI(datosServicio)	{nivel 3}
 				total <- total + 1														{SC}
 			finSI
 
-			recuSig(serv, codigoServicio, codigoServ)								{ADT LO}
+			recuSig(serv, codigoServicio, codigoServicio)								{ADT LO}
 		Excepciones
 			claveEsUltima => sigo <- F 													{SC}
 		Fin
@@ -525,17 +527,15 @@ Excepciones
 	listaVacia => mostrar("No existen servicios. Agregue por lo menos uno e intente nuevamente")
 Fin
 
-procedimiento datosClientesSinMant(E client:tipoArbolClientes)
+procedimiento datosClientesSinMant(E client:tipoArbolClientes ; E serv:tipoListaServicios)
 {Qué Hace: muestra por pantalla los datos de los clientes sin mantenimientos
-PRE: client = C
+PRE: client = C ; serv = S
 POST: - 
 EXCEP: - }
 Var
 	muestro:logico
 	total:entero
 	sigo:logico
-	patente:tipoClaveVehiculos
-	datosVehiculo:tipoInfoVehiculos
 	colaClientes:tipoColaClientes
 	dni:tipoClaveClientes
 	datosCliente:tipoInfoClientes
@@ -543,42 +543,37 @@ Inicio
 	crear(colaClientes)
 	muestro <- V
 	total <- 0	
-	inOrder(client, colaClientes)									{ADT ABB}
+	inOrder(client, colaClientes)										{ADT ABB}
+
+	mostrarEncabezadoClientSinMant()									{nivel 3}
+
 
 	mientras no(esVacia(colaClientes)) hacer
-		frente(colaClientes, dni)									{ADC Cola}
-		
-		buscar(client, dni, datosCliente)							{ADT ABB}
+		frente(colaClientes, dni)										{ADC Cola}
 
-		mostrarEncabezadoClientSinMant()							{nivel 3}
+		recuPrim(serv, codigoServicio)									{ADT LO}
+		sigo <- V
 
-		Inicio
-			logico <- V 											{SC}
-			
-			recuPrim(datosCliente.vehiculos, patente)				{ADT LO}
+		mientras sigo hacer
+			Inicio
+				recuClave(serv, codigoServicio, datosServicio)			{ADT LO}
+				muestro <- muestro y (dni = datosServicio.dniCliente)	{SC}
 
-			mientras sigo hacer
-				Inicio
-					recuClave(datosCliente.vehiculos, patente, datosVehiculo)	{ADT LO}
-					
-					muestro <- muestro y (esVacia(datosVehiculo.manten))		{ADT LO}
+				recuSig(serv, codigoServicio, codigoServicio)			{ADT LO}
+			Excepciones
+				claveEsUltima => sigo <- F
+			Fin
+		finMientras
 
-					resuSig(datosCliente.vehiculos, patente, patente)			{ADT LO}
-				Excepciones
-					claveEsUltima => sigo <-  F
-				Fin
-			finMientras
-			
-			si (muestro) entonces
-				mostrarDatosCliente(datosCliente,dni)							{nivel 3}
-			finSi
+		si muestro entonces
+			buscar(client, dni, datosCliente)
+			mostrarDatosCliente(dni, datosCliente)
+			total <- total + 1
+		finSi
 
-		Excepciones
-			listaVacia => nada
-		Fin
-
-		desencolar(colaClientes)												{ADT Cola}
+		desencolar(colaClientes)										{ADT Cola}
 	finMientras
+	mostrar("TOTAL: ", total)											{SC}
 Excepciones
 
 Fin
