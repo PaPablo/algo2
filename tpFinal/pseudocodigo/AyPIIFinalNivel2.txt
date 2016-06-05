@@ -316,7 +316,7 @@ Inicio
 	datosServicio.kmReal <- obtenerKmReal(model, vehiculos, datosServicio.dominio, datosServicio.etapa)								{nivel 3}
 
 	//obtener fecha del mantenimiento
-	datosServicio.fecha <- obtenerFecha("Fecha del servicio")								{nivel 3}
+	datosServicio.fecha <- obtenerFecha("Ingrese Fecha del servicio")								{nivel 3}
 
 	//obtener precio final del mismo, verificando que no sea menor al establecido en el calendario
 	datosServicio.precioFinal <- obtenerPrecioFinal(model, datosServicio.etapa)				{nivel 3}

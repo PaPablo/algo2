@@ -669,7 +669,7 @@ Inicio
 		Mostrar("Ingrese precio final")
 		Ingresar(precio)
 		recuClave(model.calendario,etapa,datosCalen)//no puede dar exp porque ya esta validada la etapa?
-		Si datosCalen=precio Entonces
+		Si datosCalen=<precio Entonces
 			mostrar("Precio correcto")
 			ok<-v
 		Sino 
@@ -678,4 +678,24 @@ Inicio
 	Hasta(ok)
 FinProcedimiento
 
+Funcion obtenerFecha(E msj:cadena):tipoFecha
+{Que hace: obtiene la fecha en la que se realizo el servicio
+pre: msj=M 
+pos: obtenerFecha=N y N es una fecha valida}
+
+var
+	fecha:tipoFecha
+
+Inicio
+	Repetir
+		mostrar(msj)
+		mostrar("Dia")
+		ingresar(fecha.dia)
+		mostrar("Mes")
+		ingresar(fecha.mes)
+		mostrar("Año")
+		ingresar(fecha.año)
+	Hasta esFechaCorrecta(fecha)
+	obtenerFecha<-fecha
+FinFuncion
 
