@@ -51,7 +51,7 @@ COLA PARA RECORRIDO CLIENTES
 	tipoInfo = tipoClaveClientes
 
 
-LISTA ORDENADA VEHICULOS
+ABB VEHICULOS
 tipoClaveVehiculos = cadena {patente}
 tipoInfoVehiculos =	reg
 				dueño	:tipoClaveClientes

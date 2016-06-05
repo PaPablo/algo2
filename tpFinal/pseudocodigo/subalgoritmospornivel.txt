@@ -66,7 +66,7 @@ bajaSV			H
 
 generarCodigoServicio 	H
 obtenerEtapaValida		H	
-obtenerKmReal	
+obtenerKmReal	H
 
 obtenerFecha
 
@@ -86,7 +86,7 @@ mostrarDatosCliente				H
 
 Nivel 4
 
-mostrarMenuCalendario
+mostrarMenuCalendario H 
 agregarEtapa
 modificarEtapa
 quitarEtapa
