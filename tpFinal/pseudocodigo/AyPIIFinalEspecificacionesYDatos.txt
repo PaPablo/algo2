@@ -15,7 +15,7 @@ Consultar los mantenimientos solicitados por un cliente
 ESTRUCTURAS
 
 LISTA ORDENADA DE MODELOS
-tipoClaveModelos = entero {autonumerada 1,2,3,....}
+tipoClaveModelos = entero {autonumerada 1,2,3,....} //codigo
 tipoInfoModelos =	reg
 				nombre:cadena
 				calendario:tipoListaCalendario

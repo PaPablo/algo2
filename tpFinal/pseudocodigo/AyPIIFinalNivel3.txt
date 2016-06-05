@@ -174,10 +174,10 @@ Inicio
 	finSi	
 Fin
 
-funcion obtenerModelo(E model:tipoListaModelos)
+funcion obtenerModelo(E model:tipoListaModelos):entero
 {Qué Hace: obtiene un codigo válido de modelo
 PRE: model = M
-POST:
+POST: obtenerModelo=N y N es un modelo valido
 EXCEP: noHayModelos,cancelarIngreso}
 Var
 	ok:logico
@@ -185,10 +185,10 @@ Var
 	dm:tipoInfoModelos
 Inicio
 	
-	si(esVacia(model)) entonces
+	si(esVacia(model)) entonces {ADT LO}
 		lanzar noHayModelos				{SC}
 	siNo
-		ok <- F
+		ok <- F {SD}
 		repetir
 			mostrar("Ingrese codigo de modelos (0 para cancelar ingreso)")
 			ingresar(modelo)	{SC}
@@ -249,10 +249,9 @@ PRE: serv = S ; calendario = F
 POST: 
 EXCEP: - }
 Var
-	siguiente:tipoClaveServicios
-	datosEtapa:tipoInfoCalendario
-	codigoServicio:tipoClaveServicios
+	codigoServicio,siguiente:tipoClaveServicios	
 	datosServicio:tipoInfoServicios
+	datosEtapa:tipoInfoCalendario
 	sigo:logico
 Inicio
 	sigo <- V 										{SC}
@@ -294,47 +293,31 @@ Excepciones
 
 Fin
 
-procedimiento actualizaVS(E/S client:tipoArbolClientes, E serv:tipoListaServicios)
+procedimiento actualizarVS(E/S client:tipoArbolClientes, E serv:tipoListaServicios)
 {Qué Hace: actualiza los vehiculos con respecto a los servicios
 PRE: client = C ; serv = S
 POST: client = C1 ; C1 en C menos los servicios correspondientes a codigos inexistentes en S
 EXCEP: - }
 Var
-	sigo:logico
-	codigoServicio:tipoClaveServicios
-	dni:tipoClaveClientes
-	datosCliente:tipoInfoClientes
 	colaClientes:tipoColaClientes
+
 	patente:tipoClaveVehiculo
 	datosVehiculo:tipoInfoVehiculo
 
 Inicio
 	crear(colaClientes)				{ADT Cola}			
-	inOrder(client, colaClientes)	{ADT ABB}
+	inOrder(vehiculos, colaClientes)	{ADT ABB}
 
 	mientras(no(esVacia(colaClientes))) hacer
-		frente(colaClientes, dni)	{ADT Cola}
+		frente(colaClientes, patente)	{ADT Cola}
 		desencolar(colaClientes)	{ADT Cola}
 
-		buscar(client, dni, datosCliente)			{ADT ABB}
+		buscar(vehiculos, patente, datosVehiculos)			{ADT ABB}
 
-		sigo <- V
-		recuPrim(datosCliente.vehiculos, patente)	{ADT LO}
-		mientras sigo hacer 
-			Inico
-				recuClave(datosCliente.vehiculo, patente, datosVehiculo)	{ADT LO}
-
-				bajaMantS(datosVehiculo.manten, serv)						{nivel 4}
-
-				recuSig(datosCliente.vehiculo, patente, patente)			{ADT LO}
-			Excepciones
-				claveEsUltima => sigo <- F 									{SC}
-			FIn
-		finMientras
+		bajaMantS(datosVehiculo.manten, serv)						{nivel 4}
 	finMientras
 Fin
 
-Excepciones
 
 procedimiento limpiarModelo(E/S model:tipoListaModelos, E codigoModelo:tipoClaveModelos)
 {Que Hace: vacia las estructuras de un modelo en particular
