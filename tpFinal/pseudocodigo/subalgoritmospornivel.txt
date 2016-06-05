@@ -55,6 +55,7 @@ bajaSMant		H
 actualizaVS		H
 
 limpiarModelo H
+bajaVSM 
 
 obtenerPatente H
 
@@ -66,9 +67,9 @@ bajaSV			H
 
 generarCodigoServicio 	H
 obtenerEtapaValida		H	
-obtenerKmReal	H
+obtenerKmReal			H
 
-obtenerFecha
+obtenerFecha 		H
 
 obtenerPrecioFinal	H
 actualizarVS

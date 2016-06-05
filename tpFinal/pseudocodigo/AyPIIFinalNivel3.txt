@@ -131,10 +131,10 @@ Inicio
 	finSi	
 Fin
 
-funcion obtenerModelo(E model:tipoListaModelos)
+funcion obtenerModelo(E model:tipoListaModelos):entero
 {Qué Hace: obtiene un codigo válido de modelo
 PRE: model = M
-POST:
+POST: obtenerModelo=N y N es un modelo valido
 EXCEP: noHayModelos,cancelarIngreso}
 Var
 	ok:logico
@@ -142,10 +142,10 @@ Var
 	dm:tipoInfoModelos
 Inicio
 	
-	si(esVacia(model)) entonces
+	si(esVacia(model)) entonces {ADT LO}
 		lanzar noHayModelos				{SC}
 	siNo
-		ok <- F
+		ok <- F {SD}
 		repetir
 			mostrar("Ingrese codigo de modelos (0 para cancelar ingreso)")
 			ingresar(modelo)	{SC}
@@ -206,10 +206,9 @@ PRE: serv = S ; calendario = F
 POST: 
 EXCEP: - }
 Var
-	siguiente:tipoClaveServicios
-	datosEtapa:tipoInfoCalendario
-	codigoServicio:tipoClaveServicios
+	codigoServicio,siguiente:tipoClaveServicios	
 	datosServicio:tipoInfoServicios
+	datosEtapa:tipoInfoCalendario
 	sigo:logico
 Inicio
 	sigo <- V 										{SC}
@@ -274,7 +273,7 @@ Inicio
 
 		buscar(vehiculos, patente, datosVehiculo)
 
-		recuprim(datosVehiculo.manten, mantenimiento)
+		recuPrim(datosVehiculo.manten, mantenimiento)
 		
 		Inicio
 			recuSig(datosVehiculo.manten, siguiente)
@@ -310,7 +309,6 @@ Inicio
 	finMientras
 Fin
 
-Excepciones
 
 procedimiento limpiarModelo(E/S model:tipoListaModelos, E codigoModelo:tipoClaveModelos)
 {Que Hace: vacia las estructuras de un modelo en particular
@@ -522,7 +520,7 @@ Inicio
 Fin
 
 
-procedimiento altaSV(E/S vehiculos:tipoArbolVehiculos; E codigoServicio:tipoClaveServicio; E datosServicio:tipoInfoServicios)
+procedimiento altaSV(E/S vehiculos:tipoArbolVehiculos; E codigoServicio:tipoClafveServicio; E datosServicio:tipoInfoServicios)
 {Que Hace: da de alta un servicio en la lista de mantenimientos de un vehiculos
 PRE: client = C; codigoServicio = K ; datosServicio = S ; S es los datos del servicio K y el vehiculos al cual sele realizo el servicio K es de un cliente que esta en C
 POST: client = C1 ; C1 en C mas el servicio con codigo K hecho a un vehiculo perteneciente a un cliente

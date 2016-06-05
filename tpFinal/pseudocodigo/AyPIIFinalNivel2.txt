@@ -2,7 +2,6 @@ ALGORITMICA 2 - TP Final
 
 NIVEL 2 
 
-
 procedimiento menuModelos()
 {Qué Hace: muestra el menu con las opciones correspondientes al ABM de modelos
 PRE: -
@@ -169,8 +168,7 @@ Fin
 procedimiento quitarModelo(E/S model:tipoListaModelos ; E/S serv:tipoListaServicios ; E/S vehiculos:tipoArbolVehiculos)
 {Qué Hace: quita un modelo y actualiza su relacion con los clientes y los servicios
 PRE:	model = M ; M tiene al menos un modelo ; serv = S ; vehiculos = A
-POST:	model = M1 ; M1 tiene un modelo menos ; serv = S1 ; vehiculos = A1 ; C1 y S1 tienen clientes o servicios menos si el modelo eliminado tenia servicios
-		relacionados o un cliente tenía un vehiculo de ese modelo en particular
+POST:	model = M1 ; M1 tiene un modelo menos ; serv = S1 ; vehiculos = A1 ; C1 y S1 tienen clientes o servicios menos si el modelo eliminado tenia servicios relacionados o un cliente tenía un vehiculo de ese modelo en particular
 EXCEP: }
 Var
 	codigoModelo:tipoClaveModelos
