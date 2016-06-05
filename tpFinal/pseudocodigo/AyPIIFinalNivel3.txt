@@ -537,10 +537,6 @@ Excepciones
 Fin
 	
 
-
-
-
-
 Procedimiento menuModifClient()
 {que hace: muestra las opciones para modificar un cliente
 pre:-
@@ -644,7 +640,7 @@ Inicio
 	obtenerServicio <- claServ 
 FinFuncion
 
-Procedimiento obtenerPrecioFinal (E model:tipoListaModelos; E etapa:entero o tipoClaveCalendario; S precio:entero)
+Procedimiento obtenerPrecioFinal (E model:tipoListaModelos; E etapa:tipoClaveCalendario; S precio:entero)
 {que hace: obtiene un precio final valido respecto a la etapa de calendario
 pre: model:M y etapa=E 
 pos: precio=P y P es un precio valido
