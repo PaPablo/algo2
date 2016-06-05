@@ -47,19 +47,16 @@ Var
 	precio:tipoInfoCalendario
 
 Inicio
+
+	etapa<-obtenerEtapa(calendario, "Ingrese la etapa de mantenimiento que desea modificar") {nivel5}
 	Repetir
-		etapaVieja<-enteroMayoraCero("Ingrese la etapa de mantenimiento que desea modificar (0 para salir)") {SD}
-		Inicio
-			recuclave(calendario,etapaVieja,precio){ADT LO}
-			mostrarMenuModiCal(){nivel5}
-			Segun (opc) Hacer
-				1: etapaNueva<-enteroMayoraCero("Ingrese la nueva etapa de mantenimiento") {SD}
-				2: precio<-enteroMayoraCero("Ingrese precio de mantenimiento") {SD}
-			FinSegun
-		Exepciones
-			cuando claveNoExiste=> mostrar("No existe esa etapa que desea modificar") {SD}
-		Fin 
-	Hasta (etapaVieja=0) o (opc=3)
+		mostrarMenuModiCal() {nivel5}
+		segun (opc) hacer
+			1: etapa<-obtenerEtapa(calendario,"Ingrese la nueva etapa de mantenimiento"){nivel5}
+			2: precio<-enteroMayoraCero("Ingrese nuevo precio de mantenimiento") {SD}
+		FinSegun
+	Hasta (opc=3)
+
 FinProcedimiento
 
 Procedimiento quitarEtapa(E/S calendario:tipoListaCalendario)
@@ -70,11 +67,6 @@ exp: -}
 Var
 
 Inicio
-	etapa<-enteroMayoraCero("Ingrese etapa de mantenimiento que desea elimiar") {SD}
-	Inicio
-		recuclave(calendario,etapa,precio){ADT LO}
-		suprimir(calendario,etapa){ADT LO}
-	Exepciones
-		cuando claveNoExiste=> mostrar("No existe esa etapa de mantenimiento") {SD}
-	Fin
+	etapa<-obtenerEtapa(calendario){nivel5}
+	suprimir(calendario,etapa){ADTO LO}
 FinProcedimiento

@@ -60,7 +60,7 @@ bajaVSM
 obtenerPatente H
 
 obtenerVehiculo H
-menuModifVehiculo
+menuModifVehiculo H
 
 limpiarVehiculo	H
 bajaSV			H
@@ -88,8 +88,13 @@ mostrarDatosCliente				H
 Nivel 4
 
 mostrarMenuCalendario H 
-agregarEtapa
-modificarEtapa
-quitarEtapa
+agregarEtapa H
+modificarEtapa H
+quitarEtapa H
 			
-bajaMantS		
+bajaMantS	
+
+Nivel 5
+
+obtenerEtapa H
+menuModiCale H	
