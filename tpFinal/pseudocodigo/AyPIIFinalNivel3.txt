@@ -520,7 +520,7 @@ Inicio
 Fin
 
 
-procedimiento altaSV(E/S vehiculos:tipoArbolVehiculos; E codigoServicio:tipoClafveServicio; E datosServicio:tipoInfoServicios)
+procedimiento altaSV(E/S vehiculos:tipoArbolVehiculos; E codigoServicio:tipoClaveServicio; E datosServicio:tipoInfoServicios)
 {Que Hace: da de alta un servicio en la lista de mantenimientos de un vehiculos
 PRE: client = C; codigoServicio = K ; datosServicio = S ; S es los datos del servicio K y el vehiculos al cual sele realizo el servicio K es de un cliente que esta en C
 POST: client = C1 ; C1 en C mas el servicio con codigo K hecho a un vehiculo perteneciente a un cliente
