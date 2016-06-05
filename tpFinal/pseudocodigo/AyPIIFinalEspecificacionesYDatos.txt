@@ -60,7 +60,10 @@ tipoInfoVehiculos =	reg
 				manten : tipoListaMantenimientos
 			finReg
 
+COLA PARA RECORRIDO VEHICULOS
+	tipoInfo = tipoClaveVehiculos
+
 LISTA ORDENADA MANTENIMIENTOS
 tipoClaveMantenimientos = tipoClaveServicios
-tipoInfoMantenimientos = logico (siempre en V)
+tipoInfoMantenimientos = entero {precio final del servicio}
 ----------------------------------------------------------------------------------------------------

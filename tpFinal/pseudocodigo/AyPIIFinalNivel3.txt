@@ -43,8 +43,7 @@ Inicio
 					datosServicio.dniCliente <- dni 				{SC}
 				finSi
 
-				suprimir(serv, codigoServicio) {ADT LO}
-				insertar(serv, codigoServicio, datosServicio) {ADT LO}
+				modificar(serv, codigoServicio, datosServicio) {ADT LO}
 
 				recuSig(serv, codigoServicio, codigoServicio) {ADT LO}
 			Excepciones 
@@ -65,53 +64,11 @@ EXCEP:
 Var
 	datosVehiculo:tipoInfoVehiculos
 Inicio
-	recuClave(vehiculos, patente, datosVehiculo)	{ADT LO}
+	buscar(vehiculos, patente, datosVehiculo)		{ADT ABB}
 
 	vaciar(datosVehiculo.manten)					{ADT LO}
 
-	modificar(vehiculos, patente,datosVehiculo)		{ADT LO}
-Fin
-
-procedimiento limpiarCliente (E/S client:tipoArbolCLientes ; E dni:tipoClaveClientes)
-{Qué Hace: vacía todas las estructuras de datos pertenecientes a un cliente
-PRE: client = C; dni = D ; D pertenece a C
-POST: client = C1 ; C1 en C con las estructuras correspondientes al cliente D vacías
-EXCEP:	
-}
-Var
-	sigo:logico
-	datosCliente:tipoInfoClientes
-	patente:tipoClaveVehiculo
-	datosVehiculo:tipoInfoVehiculo
-Incio
-	//recuperar el cliente a limpiar
-	buscar(client, dni, datosCliente)	{ADT ABB}
-
-	sigo <- V
-
-	//recorrer la lista de vehiculos y por cada uno limpiar la lista de mantenimientos
-	recuPrim(datosCliente.vehiculos, patente)	{ADT LO}
-	mientras sigo hacer
-		Inicio
-			recuClave(datosCliente.vehiculos, patente, datosVehiculo)	{ADT LO}
-			
-			//vacío la lista de mantenimientos
-			vaciar(datosVehiculo.manten)								{ADT LO}
-			//actualizo en la lista
-			modificar(datosCliente.vehiculo, patente, datosVehiculo)	{ADT LO}
-			
-			recuSig(datosCliente.vehiculos, patente, patente)			{ADT LO}
-		Excepciones
-			claveEsUltima => sigo <- F
-		Fin
-	finMientras
-
-	//vacío la lista de vehículos
-	vaciar (datosCliente.vehiculos)
-
-	modificar(client, dni, datosCliente)
-Excepciones
-	
+	modificar(vehiculos, patente,datosVehiculo)		{ADT ABB}
 Fin
 
 procedimiento bajaSC(E/S serv:tipoListaServicios ; E dni:tipoClaveClientes)
@@ -294,7 +251,7 @@ Excepciones
 
 Fin
 
-procedimiento actualizaVS(E/S client:tipoArbolClientes, E serv:tipoListaServicios)
+procedimiento actualizarVS(E/S vehiculos:tipoArbolVehiculos, E serv:tipoListaServicios)
 {Qué Hace: actualiza los vehiculos con respecto a los servicios
 PRE: client = C ; serv = S
 POST: client = C1 ; C1 en C menos los servicios correspondientes a codigos inexistentes en S
@@ -302,34 +259,53 @@ EXCEP: - }
 Var
 	sigo:logico
 	codigoServicio:tipoClaveServicios
-	dni:tipoClaveClientes
-	datosCliente:tipoInfoClientes
-	colaClientes:tipoColaClientes
 	patente:tipoClaveVehiculo
 	datosVehiculo:tipoInfoVehiculo
-
+	colaVehiculos:tipoColaVehiculos
+	siguiente:tipoClaveMantenimientos
+	mantenimiento:tipoClaveMantenimientos
 Inicio
-	crear(colaClientes)				{ADT Cola}			
-	inOrder(client, colaClientes)	{ADT ABB}
+	crear(colaVehiculos)
+	inOrder(vehiculos, colaVehiculos)
 
-	mientras(no(esVacia(colaClientes))) hacer
-		frente(colaClientes, dni)	{ADT Cola}
-		desencolar(colaClientes)	{ADT Cola}
+	mientras no(esVacia(colaVehiculos)) hacer
+		frente(colaVehiculos, patente)
+		desencolar(colaVehiculos)
 
-		buscar(client, dni, datosCliente)			{ADT ABB}
+		buscar(vehiculos, patente, datosVehiculo)
 
+		recuprim(datosVehiculo.manten, mantenimiento)
+		
+		Inicio
+			recuSig(datosVehiculo.manten, siguiente)
+		Excepciones
+			claveEsUltima => siguiene <- mantenimiento
+		Fin
+		
 		sigo <- V
-		recuPrim(datosCliente.vehiculos, patente)	{ADT LO}
-		mientras sigo hacer 
-			Inico
-				recuClave(datosCliente.vehiculo, patente, datosVehiculo)	{ADT LO}
 
-				bajaMantS(datosVehiculo.manten, serv)						{nivel 4}
+		mientras sigo hacer
+			Inicio
+				Inicio
+					recuClave(serv, mantenimiento, datosServicio)
+					recuSig(datosVehiculo.manten, mantenimeinto, mantenimiento)		
+				Excepciones
+					claveNoExiste => 
+						Inicio
+							suprimir(datosVehiculo.manten, mantenimiento)
+							mantenimiento <- siguiente
+						Fin
+				Fin
 
-				recuSig(datosCliente.vehiculo, patente, patente)			{ADT LO}
+				Inicio
+					recusig(datosVehiculo.manten, siguiente, siguiente)
+				Excepciones
+					claveEsUltima => nada
+				Fin
+
 			Excepciones
-				claveEsUltima => sigo <- F 									{SC}
-			FIn
+				claveEsUltima, claveNoExiste => sigo <- F
+			Fin
 		finMientras
 	finMientras
 Fin
@@ -377,7 +353,7 @@ Excepciones
 
 Fin
 
-funcion obtenerVehiculo(E vehiculos:tipoListaVehiculos)
+funcion obtenerVehiculo(E vehiculos:tipoArbolVehiculos)
 {Que Hace: devuelve un vehiculo valido de una lista de vehiculos
 PRE: vehiculos = L
 POST: obtenerVehiculo = A ; A pertence a  L
@@ -385,17 +361,17 @@ EXCEP: noHayVehiculos}
 Var
 	ok:logico
 	patente:tipoClaveVehiculos
-	datosVehiculo:tipoInfo
+	datosVehiculo:tipoInfoVehiculos
 Inicio
 	ok <- F
 	repetir
 		patente <- obtenerPatente() {nivel 3}
 		Inicio
-			recuClave(vehiculos, patente, datosVehiculo) {ADT LO}	
+			buscar(vehiculos, patente, datosVehiculo) 					{ADT ABB}	
 			ok <- V
 		Excepciones
 			listaVacia => lanzar noHayVehiculos								{SC}
-			claveNoExiste => mostrar("Vehiculo no pertece al cliente")		{SC}
+			claveNoExiste => mostrar("Vehiculo Inexistente")		{SC}
 		Fin
 	hasta ok
 
@@ -439,6 +415,12 @@ Inicio
 				Fin
 			siNo
 				recuSig(serv, codigoServicio, codigoServicio)	{ADT LO}
+				
+				Inicio
+					recuSig(serv, siguiente, siguiente)
+				Excepciones
+					claveEsUltima => nada
+				Fin
 			finSi
 		Excepciones
 			claveNoExiste, claveEsUltima => sigo <- F 			{SC}
@@ -470,7 +452,7 @@ Excepciones
 Fin
 
 
-funcion obtenerEtapaValida(E model:tipoListaModelos ; E vehiculos:tipoListaVehiculos ; E dominio:tipoClaveVehiculos)
+funcion obtenerEtapaValida(E model:tipoListaModelos ; E vehiculos:tipoArbolVehiculos ; E dominio:tipoClaveVehiculos)
 {Que Hace: devuelve una etapa del calendario de mantenimientos valida correspondiente a un modelo
 PRE: model = M ; vehiculos = A ; dominio = D ; D pertenece a A
 POST: obtenerEtapaValida = E ; E es una etapa valida al vehiculo de dominio D, perteneciente a A con modelo en M
@@ -487,7 +469,7 @@ Inicio
 	repetir
 		mostrar("Ingrese etapa de mantenimiento")
 		ingresar(etapa)
-		recuClave(vehiculos, patente, datosVehiculo)
+		buscar(vehiculos, patente, datosVehiculo)
 		recuClave(model, datosVehiculo.modelo, datosModelo)
 
 		Inicio
@@ -540,11 +522,22 @@ Inicio
 Fin
 
 
-procedimiento altaSV(E/S client:tipoArbolClientes; E codigoServicio:tipoClaveServicio; E datosServicio:tipoInfoServicios)
-{Que Hace:
+procedimiento altaSV(E/S vehiculos:tipoArbolVehiculos; E codigoServicio:tipoClaveServicio; E datosServicio:tipoInfoServicios)
+{Que Hace: da de alta un servicio en la lista de mantenimientos de un vehiculos
 PRE: client = C; codigoServicio = K ; datosServicio = S ; S es los datos del servicio K y el vehiculos al cual sele realizo el servicio K es de un cliente que esta en C
 POST: client = C1 ; C1 en C mas el servicio con codigo K hecho a un vehiculo perteneciente a un cliente
 EXCEP:	-	}
+Var
+	datosVehiculo:tipoInfoVehiculo
+Inicio
+	buscar(vehiculos, datosServicio.dominio,datosVehiculo)						{ADT ABB}
+
+	insertar(datosVehiculo.manten, codigoServicio, datosServicio.precioFinal)	{ADT LO}
+	
+Excepciones
+	listaLlena => lanzar errorAlAgregarServicio
+Fin
+	
 
 
 

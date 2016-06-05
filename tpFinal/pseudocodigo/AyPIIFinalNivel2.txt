@@ -121,7 +121,7 @@ Inicio
 	
 	si (confirma("Esta seguro que desea eliminar este cliente?")) ent 	{SC}
 	
-			suprimir(client, dni)											{ADT LO}
+			suprimir(client, dni)											{ADT ABB}
 
 		//elimina de los servicios todos aquellos que tengan ese dni como dniCliente
 		bajaSC(serv, dni)											{nivel 3}
@@ -243,8 +243,8 @@ Var
 	patente:tipoClaveVehiculos
 	opc:entero
 Inicio
-	patente <- obtenerVehiculo(datosCliente.vehiculos)		{nivel 3}
-	recuClave(datosCliente.vehiculos, patente, vehiculo)	{ADT LO}
+	patente <- obtenerVehiculo(vehiculos)		{nivel 3}
+	buscar(vehiculos, patente, datosVehiculo)
 	
 	repetir
 		menuModifVehiculo()						{nivel 3}
@@ -253,8 +253,9 @@ Inicio
 		segun (opc) hacer
 			1: datosVehiculo.modelo <- obtenerModelo(model)								{nivel 3}
 			2: datosVehiculo.añoFabric <- enteroMayorACero("Ingrese nuevo año de fabricacion"){SC}
+			3: datoVehiculo.dueño <- obtenerCliente(client)
 		finSegun
-	hasta (opc = 3)
+	hasta (opc = 4)
 
 	modificar(vehiculos, patente, datosVehiculo)	{ADT ABB}
 
@@ -323,10 +324,10 @@ Inicio
 
 	insertar(serv, codigoServicio, datosServicio)											{ADT LO}
 
-	altaSV(vehiculos, codigoServicio, datosServicio.dominio)	{nivel 3}
+	altaSV(vehiculos, codigoServicio, datosServicio)	{nivel 3}
 
 Excepciones
-	listaLLena => mostrar("No se puede agregar un servicio en este momento. Intente nuevamente más tarde")
+	errorAlAgregarServicio, listaLLena => mostrar("No se puede agregar un servicio en este momento. Intente nuevamente más tarde")
 	noHayEtapas => mostrar("El modelo seleccionado no posee etapas en el calendario de mantenimientos. Agregue una e intente nuevamente")
 	noHayClientes => mostrar("No hay clientes agregados. Agregue uno e intente nuevamente")
 	noHayVehiculos => mostrar("El cliente no tiene vehiculos a su nombre. Agregue uno e intente nuevamente")
