@@ -2,8 +2,6 @@ ALGORITMICA 2 - TP Final
 
 NIVEL 1
 
-E/S vehiculos:tipoArbolVehiculos
-
 procedimiento ABMModelos (E/S model:tipoListaModelos ; E/S serv:tipoListaServicios ; E/S vehiculos:tipoArbolVehiculos)
 {Qué Hace: Permite agregar, modificar, o quitar modelos y etapas de sus calendarios de mantenimientos
 PRE: 	model = M ; serv = S ; vehiculos = A ; M, S o A pueden estar vacios o tener informaciones validas
@@ -16,7 +14,7 @@ Inicio
 		menuModelos()	{nivel 2}
 		ingresar(opc)	{SC}
 		segun (opc)	hacer	{SC}
-			1: agregarModelo(model)					{nivel 2}
+			1: agregarModelo(model)						{nivel 2}
 			2: modificarModelo(model,serv,vehiculos)	{nivel 2}
 			3: quitarModelo(model,serv,vehiculos)		{nivel 2}
 		finSegun
@@ -37,7 +35,7 @@ Inicio
 		segun opc hacer
 			1: agregarVehiculo(vehiculos, model, client)		{nivel 2}
 			2: modificarVehiculo(vehiculos, model, client)		{nivel 2}
-			3: quitarVehiculo(vehiculos, serv)			{nivel 2}
+			3: quitarVehiculo(vehiculos, serv)					{nivel 2}
 		finSegun
 	hasta (opc = 4)
 Excepciones
@@ -57,9 +55,9 @@ Inicio
 		ingresar(opc)	{SC}
 		
 		segun (opc) hacer
-			1: agregarCliente(client) 					{nivel 2}
+			1: agregarCliente(client) 							{nivel 2}
 			2: modificarCliente(cliente, vehiculos, serv)		{nivel 2}
-			3: quitarCliente(client, vehiculos, serv)	{nivel 2}
+			3: quitarCliente(client, vehiculos, serv)			{nivel 2}
 		finSegun		
 	hastan(opc = 4)								{SC}
 Fin

@@ -59,9 +59,9 @@ Inicio
 
 				datosCliente.telefono <- EnteroMayorACero("Telefono")	{SC}
 
-				datosCliente.email <- obtenerEmail()				{nivel 3}
+				datosCliente.email <- obtenerEmail()					{nivel 3}
 
-				insertar(client, dni, cliente)						{ADT LO}
+				insertar(client, dni, cliente)							{ADT LO}
 			Fin
 	Fin
 Excepciones
@@ -88,19 +88,19 @@ Inicio
 		ingresar(opc)		{SC}				
 		segun opc hacer
 			1:dni <- EnteroMayorACero("Ingrese DNI")							{SD}
-			2:datosCliente.nombre <- textoNoVacio("Ingrese Nombre")						{SC}
+			2:datosCliente.nombre <- textoNoVacio("Ingrese Nombre")				{SC}
 			3:datosCliente.telefono <- EnteroMayorACero("Numero de telefono")	{SC}
-			4:datosClientecliente.email <- obtenerEmail()									{nivel 3}
+			4:datosClientecliente.email <- obtenerEmail()						{nivel 3}
 		finSegun
 	hasta (opc = 5)
 			
 	modificar(client, dni, datosCliente)			{ADT ABB}
 	
-	si (dni <> viejoDni) entonces {SD}
-		actualizarSC(serv, viejoDni, dni)	{nivel 3}
+	si (dni <> viejoDni) entonces 					{SD}
+		actualizarSC(serv, viejoDni, dni)			{nivel 3}
 	finSi
 
-	actualizarVC(vehiculos, dni)			{nivel 3}
+	actualizarVC(vehiculos, dni)					{nivel 3}
 Excepciones
 	noHayClientes => mostrar("No hay clientes agregados. Agregue un cliente e intente nuevamente")
 	cancelarIngreso => nada
@@ -116,14 +116,14 @@ Var
 	dni:tipoClaveClientes
 Inicio
 
-	dni <- obtenerCliente(client)	{nivel 2}	//opcion para cancela modif a traves excep
-	
-	si (confirma("Esta seguro que desea eliminar este cliente?")) ent 	{SC}
+	dni <- obtenerCliente(client)											{nivel 2}	
+
+	si (confirma("Esta seguro que desea eliminar este cliente?")) entonces 	{SC}
 	
 			suprimir(client, dni)											{ADT ABB}
 
 		//elimina de los servicios todos aquellos que tengan ese dni como dniCliente
-		bajaSC(serv, dni)											{nivel 3}
+		bajaSC(serv, dni)													{nivel 3}
 		bajaVC(vehiculos, dni)	{nivel 3}
 	finSi
 
@@ -155,9 +155,9 @@ Inicio
 		finSegun
 	hasta (opc = 3)
 
-	modificar(model, codigoModelo, datosModelo)	{ADT LO}
+	modificar(model, codigoModelo, datosModelo)		{ADT LO}
 
-	bajaSMant(serv, datosModelo.calendario)		{nivel 3}
+	bajaSMant(serv, datosModelo.calendario)			{nivel 3}
 	actualizarVS(vehiculos, serv)					{nivel 3}
 
 Excepciones
@@ -174,11 +174,11 @@ Var
 	codigoModelo:tipoClaveModelos
 Inicio
 
-	codigoModelo <- obtenerModelo(model)	{nivel 3}	//opcion para cancela modif a traves excep
+	codigoModelo <- obtenerModelo(model)		{nivel 3}	
 
 	si (confirma("Está seguro que desea eliminar este modelo?")) ent
-		limpiarModelo(model, codigoModelo) 	{nivel 3}
-		suprimir(model, codigoModelo)		{ADT LO}
+		limpiarModelo(model, codigoModelo) 		{nivel 3}
+		suprimir(model, codigoModelo)			{ADT LO}
 		bajaVSM(vehiculos, serv, codigoModelo)	{nivel 3}
 	finSi
 
@@ -203,22 +203,22 @@ Inicio
 	si (esVacia(model)) entonces
 		lanzar noHayModelos
 	siNo
-		patente <- obtenerPatente() {nivel 3}
+		patente <- obtenerPatente() 						{nivel 3}
 		Inicio
-			recuClave(vehiculos, patente, datosVehiculo)		{ADT LO}
+			recuClave(vehiculos, patente, datosVehiculo)	{ADT LO}
 
-			mostrar("Vehiculo ya existe") {SD}
+			mostrar("Vehiculo ya existe") 					{SD}
 		Excepciones
 			claveNoExiste => 
 				Inicio
 
-					datosVehiculo.dueño <- obtenerCliente(client) {nivel 2}
+					datosVehiculo.dueño <- obtenerCliente(client) 								{nivel 2}
 					datosVehiculo.modelo <- obtenerModelo(model)								{nivel 3}
 
 					datosVehiculo.añoFabric <- enteroMayorACero("Ingrese año de fabricacion")	{SC}
 
-					crear(datosVehiculo.manten)												{ADT LO}
-					insertar(vehiculos, patente, datosVehiculo)	{ADT ABB}
+					crear(datosVehiculo.manten)													{ADT LO}
+					insertar(vehiculos, patente, datosVehiculo)									{ADT ABB}
 										
 				Fin
 		Fin	
@@ -249,9 +249,9 @@ Inicio
 		ingresar(opc)							{SC}
 
 		segun (opc) hacer
-			1: datosVehiculo.modelo <- obtenerModelo(model)								{nivel 3}
-			2: datosVehiculo.añoFabric <- enteroMayorACero("Ingrese nuevo año de fabricacion"){SC}
-			3: datoVehiculo.dueño <- obtenerCliente(client)
+			1: datosVehiculo.modelo <- obtenerModelo(model)										{nivel 3}
+			2: datosVehiculo.añoFabric <- enteroMayorACero("Ingrese nuevo año de fabricacion")	{SC}
+			3: datoVehiculo.dueño <- obtenerCliente(client)										{nivel 3}
 		finSegun
 	hasta (opc = 4)
 
@@ -275,10 +275,10 @@ Inicio
 	
 	//recuperamos el vehiculo
 	patente <- obtenerVehiculo(datosCliente.vehiculos)		{nivel 3}
-	limpiarVehiculo(vehiculos, patente)		{nivel 3}
+	limpiarVehiculo(vehiculos, patente)						{nivel 3}
 	
 	//eliminamos dicho vehiculo
-	suprimir(vehiculos, patente)				{ADT ABB}
+	suprimir(vehiculos, patente)							{ADT ABB}
 
 
 	//actualizamos referencias cruzadas en servicios
@@ -301,10 +301,10 @@ Var
 	datosCliente:tipoInfoClientes
 Inicio
 	//gener codigo de servicio
-	codigoServicio <- generarCodigoServicio(serv)	{nivel 3}
+	codigoServicio <- generarCodigoServicio(serv)									{nivel 3}
 
 	//obtener cliente
-	datosServicio.dniCliente <- obtenerCliente(client) {nivel 2}
+	datosServicio.dniCliente <- obtenerCliente(client) 								{nivel 2}
 
 	datosServicio.dominio <- obtenerVehiculo(datosServicio.dniCliente, vehiculos)	{nivel 3}
 
@@ -315,20 +315,20 @@ Inicio
 	datosServicio.kmReal <- obtenerKmReal(model, vehiculos, datosServicio.dominio, datosServicio.etapa)								{nivel 3}
 
 	//obtener fecha del mantenimiento
-	datosServicio.fecha <- obtenerFecha("Ingrese Fecha del servicio")								{nivel 3}
+	datosServicio.fecha <- obtenerFecha("Ingrese Fecha del servicio")				{nivel 3}
 
 	//obtener precio final del mismo, verificando que no sea menor al establecido en el calendario
-	datosServicio.precioFinal <- obtenerPrecioFinal(model, datosServicio.etapa)				{nivel 3}
+	datosServicio.precioFinal <- obtenerPrecioFinal(model, datosServicio.etapa)		{nivel 3}
 
-	insertar(serv, codigoServicio, datosServicio)											{ADT LO}
+	insertar(serv, codigoServicio, datosServicio)									{ADT LO}
 
-	altaSV(vehiculos, codigoServicio, datosServicio)	{nivel 3}
+	altaSV(vehiculos, codigoServicio, datosServicio)								{nivel 3}
 
 Excepciones
-	errorAlAgregarServicio, listaLLena => mostrar("No se puede agregar un servicio en este momento. Intente nuevamente más tarde")
-	noHayEtapas => mostrar("El modelo seleccionado no posee etapas en el calendario de mantenimientos. Agregue una e intente nuevamente")
-	noHayClientes => mostrar("No hay clientes agregados. Agregue uno e intente nuevamente")
-	noHayVehiculos => mostrar("El cliente no tiene vehiculos a su nombre. Agregue uno e intente nuevamente")
+	errorAlAgregarServicio, listaLLena => mostrar("No se puede agregar un servicio en este momento. Intente nuevamente más tarde")		{SC}
+	noHayEtapas => mostrar("El modelo seleccionado no posee etapas en el calendario de mantenimientos. Agregue una e intente nuevamente")		{SC}
+	noHayClientes => mostrar("No hay clientes agregados. Agregue uno e intente nuevamente")		{SC}
+	noHayVehiculos => mostrar("El cliente no tiene vehiculos a su nombre. Agregue uno e intente nuevamente")	{SC}
 	cancelarIngreso => nada
 
 Fin
@@ -355,7 +355,7 @@ Inicio
 				1: opc <- 2
 				2: Inicio
 						opc <- 3
-						viejoDominio <- datosServicio.dominio
+						viejoDominio <- datosServicio.dominio 			{SC}
 					Fin
 				3: opc <- 5
 				siNo: ingresar(opc)
@@ -393,9 +393,9 @@ Var
 	datosServicio:tipoInfoServicios
 Inicio
 
-	codigoServicio <- obtenerServicio(serv)					{nivel 3}
-	recuClave(serv, codigoServicio, datosServicio)			{ADT LO}
-	suprimir(serv, codigoServicio)							{ADT LO}
+	codigoServicio <- obtenerServicio(serv)						{nivel 3}
+	recuClave(serv, codigoServicio, datosServicio)				{ADT LO}
+	suprimir(serv, codigoServicio)								{ADT LO}
 	bajaSV(vehiculos, codigoServicio, datosServicio.dominio)	{nivel 3}
 
 Excepciones
@@ -449,28 +449,28 @@ Var
 	datosCliente:tipoInfoClientes
 Incio
 	
-	total <- 0												{SC}
-	dni <- obtenerCliente(client)							{nivel 2}
-	buscar(client, dni, datosCliente)						{ADT ABB}
-	sigo <- V 												{SC}
+	total <- 0																{SC}
+	dni <- obtenerCliente(client)											{nivel 2}
+	buscar(client, dni, datosCliente)										{ADT ABB}
+	sigo <- V 																{SC}
 
-	recuPrim(serv, codigoServicio)							{ADT LO}
-	mostrarCabeceraMantenPorCliente(datosCliente.nombre)	{nivel 3}
+	recuPrim(serv, codigoServicio)											{ADT LO}
+	mostrarCabeceraMantenPorCliente(datosCliente.nombre)					{nivel 3}
 	
 	mientras sigo hacer
 		Inicio
-			recuClave(serv, codigoServicio, datosServicio)	{ADT LO}
+			recuClave(serv, codigoServicio, datosServicio)					{ADT LO}
 			si (datosServicio.dniCliente = dni)				
 				mostrarDatosServicio(datosServicio,codigoServicio)			{nivel 3]
-				total <- total +1 							{SC}
+				total <- total +1 											{SC}
 			finSi
-			recuSig(serv, codigoServicio, codigoServicio)	{ADT LO}
+			recuSig(serv, codigoServicio, codigoServicio)					{ADT LO}
 		Excepciones
-			claveEsUltima => sigo <- F 						{SC}
+			claveEsUltima => sigo <- F 										{SC}
 		Fin
 	finMientras
 	
-	mostrar("TOTAL: ", total)								{SC}
+	mostrar("TOTAL: ", total)												{SC}
 
 Excepciones
 	cancelarIngreso => nada
