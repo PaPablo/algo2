@@ -251,7 +251,7 @@ Excepciones
 Fin
 
 procedimiento actualizarVS(E/S vehiculos:tipoArbolVehiculos, E serv:tipoListaServicios)
-{Qué Hace: actualiza los vehiculos con respecto a los servicios
+{Qué Hace: actualiza los mantenimientos de cada vehiculos con respecto a los servicios
 PRE: client = C ; serv = S
 POST: client = C1 ; C1 en C menos los servicios correspondientes a codigos inexistentes en S
 EXCEP: - }
@@ -378,7 +378,7 @@ Excepciones
 Fin
 
 procedimiento bajaSV(E/S serv:tipoListaServicios; E patente:tipoClaveVehiculos)
-{Que Hace: actualiza los servicios con respecto a los vehiculos existentes
+{Que Hace: quita los servicios pertenecientes a vehiculos inexistentes
 PRE: serv = S ; patente = P
 POST: serv = S1 ; S1 en S menos los servicios realizados a vehiculos de patente P
 EXCEP: - }
@@ -535,7 +535,37 @@ Inicio
 Excepciones
 	listaLlena => lanzar errorAlAgregarServicio
 Fin
-	
+
+procedimiento bajaVSM(E/S vehiculos:tipoArbolVehiculos ; E/S serv:tipoListaServicios ; E codigoModelo:tipoClaveModelos)
+{Qué Hace: elimina los vehiculos de modelos inexistentes y los servicios realizados a dichos vehiculos
+PRE: vehiculos = A ; serv = S ; codigoModelos = K ; K es un modelos inexistente
+POST:	vehiculos = A1 ; serv = S1 ; A1 en A menos los vehiculos de modelo K, si los hubiesen ; S1 en S menos los servicios realizados a los vehiculos de modelo K, si los hubiere
+EXCEP: - }
+Var
+	colaVehiculos:tipoColaVehiculos
+	patente:tipoClaveVehiculos
+	datosVehiculo:tipoInfoVehiculos
+Inicio
+	crear(colaVehiculos)	{ADT Cola}
+	inOrder(vehiculos, colaVehiculos)	{ADT ABB}
+
+	mientras (no(esVacia(colaVehiculos))) hacer
+		frente(colaVehiculos, patente)	{ADT Cola}
+		desencolar(colaVehiculos)		{ADT ABB}
+
+		buscar(vehiculos, patente, datosVehiculo)	{ADT ABB}
+
+		si (codigoModelo = datosVehiculo.modelo) entonces
+			suprimir(vehiculos, patente)					{ADT ABB}
+			bajaSV(serv, patente)							{nivel 3}
+		finSi
+	finMientras
+
+Excepciones
+
+Fin
+
+
 
 Procedimiento menuModifVehiculo()
 {que hace: muestra las opciones para modificar los datos de un vehiculo

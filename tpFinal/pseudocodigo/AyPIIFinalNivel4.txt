@@ -24,7 +24,6 @@ Var
 	precio:tipoInfoCalendario
 
 Inicio
-	
 	etapa<-enteroMayoraCero("Ingrese etapa de mantenimiento") {SD}
 	precio<-enteroMayoraCero("Ingrese precio de mantenimiento") {SD}
 	Inicio
@@ -47,7 +46,6 @@ Var
 	precio:tipoInfoCalendario
 
 Inicio
-
 	etapa<-obtenerEtapa(calendario, "Ingrese la etapa de mantenimiento que desea modificar") {nivel5}
 	Repetir
 		mostrarMenuModiCal() {nivel5}
@@ -65,7 +63,6 @@ pre: calendario=C y C tiene al menos una etapa valida
 pos: calendario=C1 y C1 tiene una etapa menos o esta vacia
 exp: -}
 Var
-
 Inicio
 	etapa<-obtenerEtapa(calendario){nivel5}
 	suprimir(calendario,etapa){ADTO LO}

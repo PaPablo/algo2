@@ -1,3 +1,5 @@
+Nivel 5
+
 Procedimiento mostrarMenuModiCal()
 {que hace: muestra las opcienes para modificar el calendario
 pre:-
@@ -5,7 +7,7 @@ pos:-
 exp:-}
 
 Inicio
-	mostrar("Menu modificacion calendario?")
+	mostrar("Menu modificacion Calendario")
 	mostrar("1-Etapa")
 	mostrar("2-Precio")
 	mostrar("3-Salir")
@@ -17,46 +19,18 @@ pre: calendario=C
 pos: obtenerEtapa=N y N>0
 exp: -}
 Var
-
+	etapa:tipoInfoCalendario
+	ok:logico
 Inicio
-	mostrar(msj) {SD}
-	ingresar(etapa){SD}
-	Inicio
-		recuclave(calendario,etapaVieja,precio){ADT LO}
-		obtenerEtapa<-etapa
-	Exepciones
-		cuando claveNoExiste=> mostrar("Esa etapa no existe")
-	Fin 
-FinProcedimiento
-
-
-
-
-
-
-	Repetir
-		etapaVieja<-enteroMayoraCero
-			recuclave
-			mostrarMenuModiCal(){nivel5}
-			Segun (opc) Hacer
-				1: etapaNueva<-enteroMayoraCero("Ingrese la nueva etapa de mantenimiento") {SD}
-				2: precio<-enteroMayoraCero("Ingrese precio de mantenimiento") {SD}
-			FinSegun
+	ok <- F
+	repetir	
+		mostrar(msj) {SD}
+		ingresar(etapa){SD}
+		Inicio
+			recuclave(calendario,etapaVieja,precio){ADT LO}
+			ok <- V
 		Exepciones
-			cuando claveNoExiste=> mostrar("No existe esa etapa que desea modificar") {SD}
+			cuando claveNoExiste=> mostrar("Esa etapa no existe")
 		Fin 
-	Hasta (etapaVieja=0) o (opc=3)
-
-
-
-
-
-	Inicio
-	etapa<-enteroMayoraCero("Ingrese etapa de mantenimiento que desea elimiar") {SD}
-	Inicio
-		recuclave(calendario,etapa,precio){ADT LO}
-		suprimir(calendario,etapa){ADT LO}
-	Exepciones
-		cuando claveNoExiste=> mostrar("No existe esa etapa de mantenimiento") {SD}
-	Fin
+	hasta ok
 FinProcedimiento
