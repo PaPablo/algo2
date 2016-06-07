@@ -174,7 +174,7 @@ EXCEP:}
 Inicio
 	mostrar("	MODIFICAR MODELO")
 	mostrar("1 - Moficar Nombre")
-	mostrar("2 - Agregar, modificar o quitar etapas del calendario de su calendario de mantenimientos")
+	mostrar("2 - Agregar, modificar o quitar etapas de su calendario de mantenimientos")
 	mostrar("3 - Volver al menú anterior")
 Fin
 

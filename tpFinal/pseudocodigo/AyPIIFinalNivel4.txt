@@ -42,7 +42,7 @@ pos: calendario=C1 y C1 tiene una etapa modificada
 exp: -}
 Var
 	opc:entero
-	etapaVieja:tipoClaveCalendario
+	etapa:tipoClaveCalendario
 	precio:tipoInfoCalendario
 
 Inicio
@@ -65,5 +65,5 @@ exp: -}
 Var
 Inicio
 	etapa<-obtenerEtapa(calendario){nivel5}
-	suprimir(calendario,etapa){ADTO LO}
+	suprimir(calendario,etapa){ADT LO}
 FinProcedimiento

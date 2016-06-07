@@ -27,7 +27,7 @@ Inicio
 		mostrar(msj) {SD}
 		ingresar(etapa){SD}
 		Inicio
-			recuclave(calendario,etapaVieja,precio){ADT LO}
+			recuclave(calendario,etapa,precio){ADT LO}
 			ok <- V
 		Exepciones
 			cuando claveNoExiste=> mostrar("Esa etapa no existe")
