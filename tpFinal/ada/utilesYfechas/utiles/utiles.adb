@@ -56,12 +56,13 @@ package body utiles is
          begin
             Put_Line(mensaje);
             get (nro);
+            Skip_Line;
             ok:= True;
          Exception
             when Data_Error =>
                begin
                   put_line("Entrada invalida. Intentelo nuevamente");
-                  skip_line;
+                  Skip_line;
                end;
          end;
       end loop;
