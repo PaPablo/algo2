@@ -647,10 +647,12 @@ Inicio
 FinFuncion
 
 Procedimiento modifModelo(E/S datosModelos:tipoInfoModelos)
-{Que hace: modifica lo seleccionado por el usuario
+{Que hace: modifica lo datos del modelo seleccionado por el usuario
 pre: datosModelos=M 
 pos: datosModelos=M1
 exp:- }
+Var
+	opc:entero
 
 Inicio
 
@@ -665,6 +667,13 @@ Inicio
 Fin 
 
 Procedimiento modifCliente(E/S datosClientes:tipoInfoClientes)
+{Que hace: modifica los datos del cliente seleccionado por el usuario
+pre: datosClientes=C
+pos: datosClientes=C1
+exp:- }
+
+Var
+	opc:entero
 
 Inicio
 	repetir
@@ -680,6 +689,13 @@ Inicio
 Fin
 
 Procedimiento modifVechiculo(E/S datosVehiculos:tipoInfoVehiculos)
+{Que hace: modifica los datos del vehiculo seleccionado por el usuario
+pre: datosClientes=V
+pos: datosClientes=V1
+exp:- }
+
+Var
+	opc:entero
 
 Inicio
 
