@@ -26,14 +26,5 @@ begin
    arbolClientes.crear(client);
    listaServicios.crear(serv);
    arbolVehiculos.crear(vehiculos);
-   Loop
-     opc:= menuGeneral;
-      Case opc is
-         When 1=>ABMModelos(model,serv,vehiculos);
-         When 2=>ABMClientes(client,serv,model,vehiculos);
-         When 3=>ABMServicios(serv,client,model,vehiculos);
-         When 4=>ABMvehiculos(vehiculos,client,model,vehiculos);  
-      end case;
-      exit when (opc=5);
-   end loop ;
+  
 end tpfinal;
