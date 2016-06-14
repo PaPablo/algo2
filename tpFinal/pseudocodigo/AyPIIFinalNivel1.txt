@@ -21,7 +21,7 @@ Inicio
 	hasta (opc = 4) 				{SC}
 Fin
 
-procedimiento ABMVehiculos (E/S vehiculos:tipoArbolVehiculos ; E/S model:tipoListaModelos, E/S serv:tipoListaServicios)
+procedimiento ABMVehiculos (E/S client:tipoArbolClientes; E/S vehiculos:tipoArbolVehiculos ; E/S model:tipoListaModelos, E/S serv:tipoListaServicios)
 {Qué Hace: Permite agregar, modificar o quitar vehiculos de los clientes, según el usuario lo desee
 PRE: vehiculos = A ; A puede estar vacio o tener vehiculos validos;  model = M ; M puede estar vacio o tener modelos validos
 POST: vehiculos = A1 ; A1 tiene diferencias con respecto a A según lo haya deseado el usuario
