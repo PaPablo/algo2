@@ -41,6 +41,28 @@ package body lista is
          when Storage_Error => raise listaLlena;
    end insertar;
 
+   -- Que hace: Modifica la info de un elemento dada su clave.
+   -- Precondiciones: l = L, k = K, i = I
+   -- Poscondiciones: l=L1 y L1 es L con el elemento de clave K ahora con info I
+   -- Excepciones: claveNoExiste
+   procedure modificar(l: in out tipoLista; k: in tipoClave; i: in tipoInfo)is
+      procedure free is new unchecked_deallocation (tipoNodo, tipoPunt);
+      ant, p: tipoPunt;
+   begin
+      p := l.lista;
+
+      while ( p /= null) and then(p.clave < k ) loop
+         ant := p;
+         p := p.sig;
+      end loop;
+
+      if (((p /= null) and then (k /= p.clave)) or else (p = null)) then
+         raise claveNoExiste;
+      else
+         p.info := i; --lo encontre y reemplazo la info
+      end if;
+   end modificar;
+
    -- Que hace: Quita un elemento de la lista dada su clave.
    -- Precondiciones: l = L, k=K
    -- Poscondiciones: l=L1 y L1 es L sin el elemento de clave clave=K
