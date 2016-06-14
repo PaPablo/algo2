@@ -9,9 +9,7 @@ procedure tpfinal is
    client:arbolClientes.tipoArbol;
    serv:listaServicios.tipoLista;
    vehiculos:arbolVehiculos.tipoArbol;
-   
-   opc:integer;
-   
+      
    --nivel 1
    
    function menuGeneral return integer is
@@ -25,13 +23,4 @@ begin
    arbolClientes.crear(client);
    listaServicios.crear(serv);
    arbolVehiculos.crear(vehiculos);
-   
-   loop
-      opc:= menuGeneral;
-      
-      exit when (opc = 6);
-   end loop;
-   
-   
-   
 end tpfinal;
