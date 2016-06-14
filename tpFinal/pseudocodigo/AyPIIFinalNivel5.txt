@@ -1,9 +1,10 @@
 Nivel 5
 
-Procedimiento mostrarMenuCalendario()
+
+funcion menuCalendario()
 {que hace: muestra las opciones para el ABM de calendario
 pre:-
-pos:-
+pos: menuCalendario = O ; O es una opcion valida
 exp:-}
 
 Inicio
@@ -12,6 +13,8 @@ Inicio
 	mostrar("2-Modificar etapa de Mantenimiento") {SD}
 	mostrar("3-Quitar etapa de Mantenimiento") {SD}
 	mostrar("4-Salir") {SD}
+
+	menuCalendario <- enteroEnRango("Ingrese su opción",1,4)
 FinProcedimiento
 
 Procedimiento agregarEtapa(E/S calendario:tipoListaCalendario)
@@ -48,7 +51,7 @@ Var
 Inicio
 	etapa<-obtenerEtapa(calendario, "Ingrese la etapa de mantenimiento que desea modificar") {nivel5}
 	Repetir
-		mostrarMenuModiCal() {nivel 6}
+		menuModiCal() {nivel 6}
 		segun (opc) hacer
 			1: etapa<-obtenerEtapa(calendario,"Ingrese la nueva etapa de mantenimiento"){nivel 6}
 			2: precio<-enteroMayoraCero("Ingrese nuevo precio de mantenimiento") {SD}
