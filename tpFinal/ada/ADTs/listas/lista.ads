@@ -29,6 +29,12 @@ package lista is
    -- Excepciones: listaLLena - claveExiste
    procedure insertar(l: in out tipoLista; k: in tipoClave; i: in tipoInfo);
 
+   -- Que hace: Modifica la info de un elemento dada su clave.
+   -- Precondiciones: l = L, k = K, i = I
+   -- Poscondiciones: l=L1 y L1 es L con el elemento de clave K ahora con info I
+   -- Excepciones: claveNoExiste
+   procedure modificar(l: in out tipoLista; k: in tipoClave; i: in tipoInfo);
+
    -- Que hace: Quita un elemento de la lista dada su clave.
    -- Precondiciones: l = L, k=K
    -- Poscondiciones: l=L1 y L1 es L sin el elemento de clave clave=K
