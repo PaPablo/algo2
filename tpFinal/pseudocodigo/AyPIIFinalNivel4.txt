@@ -1,15 +1,16 @@
 Nivel 4
 
-procedimiento menuModifModelo()
+funcion menuModifModelo()
 {Qué Hace: muestra un menu con las opciones para modificar los datos de un modelo
 PRE:
 POST:
 EXCEP:}
 Inicio
-	mostrar("	MODIFICAR MODELO")
-	mostrar("1 - Moficar Nombre")
-	mostrar("2 - Agregar, modificar o quitar etapas de su calendario de mantenimientos")
-	mostrar("3 - Volver al menú anterior")
+	mostrar("	MODIFICAR MODELO")															{SC}	
+	mostrar("1 - Moficar Nombre")															{SC}
+	mostrar("2 - Agregar, modificar o quitar etapas de su calendario de mantenimientos")	{SC}
+	mostrar("3 - Volver al menú anterior")													{SC}
+	menuModifModelo <- enteroEnRango("Ingrese su opcion",1,3)								{SC}
 Fin
 
 procedimiento ABMCalendario(E/S calendario:tipoListaCalendario)
@@ -54,10 +55,10 @@ Inicio
 
 Fin
 
-Procedimiento menuModifClient()
+funcion menuModifClient()
 {que hace: muestra las opciones para modificar un cliente
 pre:-
-pos:-
+pos: menuModifClient = O ; O es una opcion valida
 exp:-}
 
 Inicio
@@ -66,12 +67,14 @@ Inicio
 	mostrar("2- Nombre") 				{SD}
 	mostrar("3- Numero de Telefono") 	{SD}
 	mostrar("4- E-Mail") 				{SD}
+
+	menuModifClient <- enteroEnRango("Ingrese su opcion",1,4)
 FinProcedimiento
 
-Procedimiento menuModifVehiculo()
+funcion menuModifVehiculo()
 {que hace: muestra las opciones para modificar los datos de un vehiculo
 pre:-
-pos:-
+pos: menuModifVehiculo = O ; O es una opcion valida
 exp:-}
 
 Inicio
@@ -80,4 +83,6 @@ Inicio
 	Mostrar("2-Año de Fabricacion")		{SD}
 	mostrar("3-Dueño")					{SD}
 	mostrar("4-Salir")					{SD}
+
+	menuModifVehiculo <- enteroEnRango("Ingrese su opcion",1,4)
 FinProcedimiento	

@@ -1,9 +1,9 @@
 Nivel 6
 
-Procedimiento mostrarMenuModiCal()
+Procedimiento menuModiCal()
 {que hace: muestra las opcienes para modificar el calendario
 pre:-
-pos:-
+pos: menuModiCal = O ; O es una opcion valida 
 exp:-}
 
 Inicio
@@ -11,6 +11,8 @@ Inicio
 	mostrar("1-Etapa")
 	mostrar("2-Precio")
 	mostrar("3-Salir")
+
+	menuModiCal <- enteroEnRango("Ingrese su opcion",1,3)
 FinProcedimiento
 
 Funcion obtenerEtapa(E calendario:tipoListaCalendario, E msj:cadena):entero 
