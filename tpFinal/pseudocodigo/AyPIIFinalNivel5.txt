@@ -1,36 +1,70 @@
 Nivel 5
 
-Procedimiento mostrarMenuModiCal()
-{que hace: muestra las opcienes para modificar el calendario
+Procedimiento mostrarMenuCalendario()
+{que hace: muestra las opciones para el ABM de calendario
 pre:-
 pos:-
 exp:-}
 
 Inicio
-	mostrar("Menu modificacion Calendario")
-	mostrar("1-Etapa")
-	mostrar("2-Precio")
-	mostrar("3-Salir")
+	mostrar("Menu Calendario") {SD}
+	mostrar("1-Agregar etapa de Mantenimiento") {SD}
+	mostrar("2-Modificar etapa de Mantenimiento") {SD}
+	mostrar("3-Quitar etapa de Mantenimiento") {SD}
+	mostrar("4-Salir") {SD}
 FinProcedimiento
 
-Funcion obtenerEtapa(E calendario:tipoListaCalendario, E msj:cadena):entero 
-{que hace: valida que la etapa que se desea modificar exista
-pre: calendario=C
-pos: obtenerEtapa=N y N>0
+Procedimiento agregarEtapa(E/S calendario:tipoListaCalendario)
+{que hace: agrega una nueva eatapa al calenadrio de mantenimientos
+pre: calendario=C y C puede estar vacio o tenes estapas
+pos: calendario=C1 y C1 tiene una nueva estapa agregada
 exp: -}
 Var
-	etapa:tipoInfoCalendario
-	ok:logico
+	etapa:tipoClaveCalendario
+	precio:tipoInfoCalendario
+
 Inicio
-	ok <- F
-	repetir	
-		mostrar(msj) {SD}
-		ingresar(etapa){SD}
-		Inicio
-			recuclave(calendario,etapa,precio){ADT LO}
-			ok <- V
-		Exepciones
-			cuando claveNoExiste=> mostrar("Esa etapa no existe")
-		Fin 
-	hasta ok
+	etapa<-enteroMayoraCero("Ingrese etapa de mantenimiento") {SD}
+	precio<-enteroMayoraCero("Ingrese precio de mantenimiento") {SD}
+	Inicio
+		Insertar(calendario,etapa,precio) {ADT LO}
+	Exepciones
+		cuando claveExiste=> mostrar("Esa etapa de mantenimiento ya existe") {SD}
+	Fin 
+Exepciones
+	cuando listaLlena=> mostrar("No se pudo agregar la etapa. Intente nuevamente mas tarde") {SD}
 FinProcedimiento
+
+Procedimiento modificarEtapa(E/S calendario:tipoListaCalendario)
+{que hace: permite modificar las etapas de mantenimientos
+pre: calendario=C y C tiene al menos una etapa
+pos: calendario=C1 y C1 tiene una etapa modificada
+exp: -}
+Var
+	opc:entero
+	etapa:tipoClaveCalendario
+	precio:tipoInfoCalendario
+
+Inicio
+	etapa<-obtenerEtapa(calendario, "Ingrese la etapa de mantenimiento que desea modificar") {nivel5}
+	Repetir
+		mostrarMenuModiCal() {nivel 6}
+		segun (opc) hacer
+			1: etapa<-obtenerEtapa(calendario,"Ingrese la nueva etapa de mantenimiento"){nivel 6}
+			2: precio<-enteroMayoraCero("Ingrese nuevo precio de mantenimiento") {SD}
+		FinSegun
+	Hasta (opc=3)
+
+FinProcedimiento
+
+Procedimiento quitarEtapa(E/S calendario:tipoListaCalendario)
+{que hace: elimina una etpa del calendario de mantenimiento
+pre: calendario=C y C tiene al menos una etapa valida
+pos: calendario=C1 y C1 tiene una etapa menos o esta vacia
+exp: -}
+Var
+Inicio
+	etapa<-obtenerEtapa(calendario){nivel 6}
+	suprimir(calendario,etapa){ADT LO}
+FinProcedimiento
+

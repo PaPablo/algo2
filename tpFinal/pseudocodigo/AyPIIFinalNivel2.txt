@@ -82,20 +82,8 @@ Inicio
 
 	viejoDni <- obtenerCliente(client)	{nivel 2} 
 	dni <- viejoDni
-	
-	repetir
-		menuModifClient()	{nivel 3}
-		ingresar(opc)		{SC}				
-		segun opc hacer
-			1:dni <- EnteroMayorACero("Ingrese DNI")							{SD}
-			2:datosCliente.nombre <- textoNoVacio("Ingrese Nombre")				{SC}
-			3:datosCliente.telefono <- EnteroMayorACero("Numero de telefono")	{SC}
-			4:datosClientecliente.email <- obtenerEmail()						{nivel 3}
-		finSegun
-	hasta (opc = 5)
-			
-	modificar(client, dni, datosCliente)			{ADT ABB}
-	
+	modifClientes(datosCliente)		{nivel 3}	
+	modificar(client, dni, datosCliente)			{ADT ABB}	
 	si (dni <> viejoDni) entonces 					{SD}
 		actualizarSC(serv, viejoDni, dni)			{nivel 3}
 	finSi
@@ -145,18 +133,8 @@ Var
 Inicio
 
 	codigoModelo <- obtenerModelo(model)	{nivel 3}	//opcion para cancela modif a traves excep
-
-	repetir
-		menuModifModelo()	{nivel 3}
-		ingresar(opc)		{SC}
-		segun (opc) hacer
-			1: datosModelo.nombre <- textoNoVacio("Ingrese Nombre de Modelo")	{SC}
-			2: ABMCalendario(datosModelo.calendario)							{nivel 3}
-		finSegun
-	hasta (opc = 3)
-
+	modificarModelo(datosModelo) {nivel 3}
 	modificar(model, codigoModelo, datosModelo)		{ADT LO}
-
 	bajaSMant(serv, datosModelo.calendario)			{nivel 3}
 	actualizarVS(vehiculos, serv)					{nivel 3}
 
@@ -254,6 +232,8 @@ Inicio
 			3: datoVehiculo.dueño <- obtenerCliente(client)										{nivel 3}
 		finSegun
 	hasta (opc = 4)
+
+	modifVehiculo(datosVehiculos){nivel 3}
 
 	modificar(vehiculos, patente, datosVehiculo)	{ADT ABB}
 

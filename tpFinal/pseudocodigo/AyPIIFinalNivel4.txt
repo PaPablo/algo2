@@ -1,69 +1,83 @@
 Nivel 4
 
-Procedimiento mostrarMenuCalendario()
-{que hace: muestra las opciones para el ABM de calendario
+procedimiento menuModifModelo()
+{Qué Hace: muestra un menu con las opciones para modificar los datos de un modelo
+PRE:
+POST:
+EXCEP:}
+Inicio
+	mostrar("	MODIFICAR MODELO")
+	mostrar("1 - Moficar Nombre")
+	mostrar("2 - Agregar, modificar o quitar etapas de su calendario de mantenimientos")
+	mostrar("3 - Volver al menú anterior")
+Fin
+
+procedimiento ABMCalendario(E/S calendario:tipoListaCalendario)
+{Qué Hace: Permite agregar, quitar o modificar etapas del calendario de mantenimientos de un modelo
+PRE: calendario = C
+POST: calendario = C1 ; C1 en C según lo haya querido el usuario
+EXCEP: }
+Var
+	opc:entero
+Incio
+	repetir
+		mostrarMenuCalendario()				{nivel 5}
+		ingresar(opc)						{SC}
+
+		segun opc hacer
+			1:agregarEtapa(calendario)		{nivel 5}
+			2:modificarEtapa(calendario)	{nivel 5}
+			3:quitarEtapa(calendario)		{nivel 5}
+		finSegun
+	hasta opc = 4							{SC}
+Excepciones
+Fin
+
+funcion obtenerEmail(E cad:cadena)
+{Que Hace: devuelve una direccion de email valida
+PRE: cad = C 
+POST: obtenerEmail = M ; M es un email valido
+EXCEP: }
+Var
+	ok:logico
+	email:cadena
+	i:entero
+Inicio
+	ok <- V 												{SC}
+
+	repetir 
+		ingresar(cad)										{SC}
+		desde i <- 1 hasta long(cad) hacer
+			ok <- ok y (cad[i] = @) 						{SC}
+		finDesde
+	hasta ok 
+
+Fin
+
+Procedimiento menuModifClient()
+{que hace: muestra las opciones para modificar un cliente
 pre:-
 pos:-
 exp:-}
 
 Inicio
-	mostrar("Menu Calendario") {SD}
-	mostrar("1-Agregar etapa de Mantenimiento") {SD}
-	mostrar("2-Modificar etapa de Mantenimiento") {SD}
-	mostrar("3-Quitar etapa de Mantenimiento") {SD}
-	mostrar("4-Salir") {SD}
+	mostrar("¿Que desea modificar?") 	{SD}
+	mostrar("1- DNI") 					{SD}
+	mostrar("2- Nombre") 				{SD}
+	mostrar("3- Numero de Telefono") 	{SD}
+	mostrar("4- E-Mail") 				{SD}
 FinProcedimiento
 
-Procedimiento agregarEtapa(E/S calendario:tipoListaCalendario)
-{que hace: agrega una nueva eatapa al calenadrio de mantenimientos
-pre: calendario=C y C puede estar vacio o tenes estapas
-pos: calendario=C1 y C1 tiene una nueva estapa agregada
-exp: -}
-Var
-	etapa:tipoClaveCalendario
-	precio:tipoInfoCalendario
+Procedimiento menuModifVehiculo()
+{que hace: muestra las opciones para modificar los datos de un vehiculo
+pre:-
+pos:-
+exp:-}
 
 Inicio
-	etapa<-enteroMayoraCero("Ingrese etapa de mantenimiento") {SD}
-	precio<-enteroMayoraCero("Ingrese precio de mantenimiento") {SD}
-	Inicio
-		Insertar(calendario,etapa,precio) {ADT LO}
-	Exepciones
-		cuando claveExiste=> mostrar("Esa etapa de mantenimiento ya existe") {SD}
-	Fin 
-Exepciones
-	cuando listaLlena=> mostrar("No se pudo agregar la etapa. Intente nuevamente mas tarde") {SD}
-FinProcedimiento
-
-Procedimiento modificarEtapa(E/S calendario:tipoListaCalendario)
-{que hace: permite modificar las etapas de mantenimientos
-pre: calendario=C y C tiene al menos una etapa
-pos: calendario=C1 y C1 tiene una etapa modificada
-exp: -}
-Var
-	opc:entero
-	etapa:tipoClaveCalendario
-	precio:tipoInfoCalendario
-
-Inicio
-	etapa<-obtenerEtapa(calendario, "Ingrese la etapa de mantenimiento que desea modificar") {nivel5}
-	Repetir
-		mostrarMenuModiCal() {nivel5}
-		segun (opc) hacer
-			1: etapa<-obtenerEtapa(calendario,"Ingrese la nueva etapa de mantenimiento"){nivel5}
-			2: precio<-enteroMayoraCero("Ingrese nuevo precio de mantenimiento") {SD}
-		FinSegun
-	Hasta (opc=3)
-
-FinProcedimiento
-
-Procedimiento quitarEtapa(E/S calendario:tipoListaCalendario)
-{que hace: elimina una etpa del calendario de mantenimiento
-pre: calendario=C y C tiene al menos una etapa valida
-pos: calendario=C1 y C1 tiene una etapa menos o esta vacia
-exp: -}
-Var
-Inicio
-	etapa<-obtenerEtapa(calendario){nivel5}
-	suprimir(calendario,etapa){ADT LO}
-FinProcedimiento
+	mostrar("¿Que desea modificar?")	{SD}
+	mostrar("1-Modelo")					{SD}
+	Mostrar("2-Año de Fabricacion")		{SD}
+	mostrar("3-Dueño")					{SD}
+	mostrar("4-Salir")					{SD}
+FinProcedimiento	

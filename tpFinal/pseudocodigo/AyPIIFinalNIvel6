@@ -1,0 +1,36 @@
+Nivel 6
+
+Procedimiento mostrarMenuModiCal()
+{que hace: muestra las opcienes para modificar el calendario
+pre:-
+pos:-
+exp:-}
+
+Inicio
+	mostrar("Menu modificacion Calendario")
+	mostrar("1-Etapa")
+	mostrar("2-Precio")
+	mostrar("3-Salir")
+FinProcedimiento
+
+Funcion obtenerEtapa(E calendario:tipoListaCalendario, E msj:cadena):entero 
+{que hace: valida que la etapa que se desea modificar exista
+pre: calendario=C
+pos: obtenerEtapa=N y N>0
+exp: -}
+Var
+	etapa:tipoInfoCalendario
+	ok:logico
+Inicio
+	ok <- F
+	repetir	
+		mostrar(msj) {SD}
+		ingresar(etapa){SD}
+		Inicio
+			recuclave(calendario,etapa,precio){ADT LO}
+			ok <- V
+		Exepciones
+			cuando claveNoExiste=> mostrar("Esa etapa no existe")
+		Fin 
+	hasta ok
+FinProcedimiento

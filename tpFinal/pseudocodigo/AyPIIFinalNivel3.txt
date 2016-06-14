@@ -1,26 +1,5 @@
 NIVEL 3 
 
-funcion obtenerEmail(E cad:cadena)
-{Que Hace: devuelve una direccion de email valida
-PRE: cad = C 
-POST: obtenerEmail = M ; M es un email valido
-EXCEP: }
-Var
-	ok:logico
-	email:cadena
-	i:entero
-Inicio
-	ok <- V 												{SC}
-
-	repetir 
-		ingresar(cad)										{SC}
-		desde i <- 1 hasta long(cad) hacer
-			ok <- ok y (cad[i] = @) 						{SC}
-		finDesde
-	hasta ok 
-
-Fin
-
 procedimiento actualizarSC(E/S serv:tipoLista, E viejoDni, dni:tipoClaveClientes)
 {Que Hace: actualiza el dni de un cliente en el listado de servicio
 PRE: serv = S ; viejoDni = T ; dni = R
@@ -166,39 +145,6 @@ Inicio
 	obtenerModelo <- modelo
 Fin
 
-procedimiento menuModifModelo()
-{Qué Hace: muestra un menu con las opciones para modificar los datos de un modelo
-PRE:
-POST:
-EXCEP:}
-Inicio
-	mostrar("	MODIFICAR MODELO")
-	mostrar("1 - Moficar Nombre")
-	mostrar("2 - Agregar, modificar o quitar etapas de su calendario de mantenimientos")
-	mostrar("3 - Volver al menú anterior")
-Fin
-
-procedimiento ABMCalendario(E/S calendario:tipoListaCalendario)
-{Qué Hace: Permite agregar, quitar o modificar etapas del calendario de mantenimientos de un modelo
-PRE: calendario = C
-POST: calendario = C1 ; C1 en C según lo haya querido el usuario
-EXCEP: }
-Var
-	opc:entero
-Incio
-	repetir
-		mostrarMenuCalendario()				{nivel 4}
-		ingresar(opc)						{SC}
-
-		segun opc hacer
-			1:agregarEtapa(calendario)		{nivel 4}
-			2:modificarEtapa(calendario)	{nivel 4}
-			3:quitarEtapa(calendario)		{nivel 4}
-		finSegun
-	hasta opc = 4							{SC}
-Excepciones
-
-Fin
 
 procedimiento bajaSMant(E/S serv:tipoListaServicios, E calendario:tipoListaCalendario)
 {Qué Hace: actualiza los servicios con respecto a las etapas de mantenimiento existentes
@@ -567,34 +513,6 @@ Fin
 
 
 
-Procedimiento menuModifVehiculo()
-{que hace: muestra las opciones para modificar los datos de un vehiculo
-pre:-
-pos:-
-exp:-}
-
-Inicio
-	mostrar("¿Que desea modificar?")	{SD}
-	mostrar("1-Modelo")					{SD}
-	Mostrar("2-Año de Fabricacion")		{SD}
-	mostrar("3-Dueño")					{SD}
-	mostrar("4-Salir")					{SD}
-FinProcedimiento	
-
-Procedimiento menuModifClient()
-{que hace: muestra las opciones para modificar un cliente
-pre:-
-pos:-
-exp:-}
-
-Inicio
-	mostrar("¿Que desea modificar?") 	{SD}
-	mostrar("1- DNI") 					{SD}
-	mostrar("2- Nombre") 				{SD}
-	mostrar("3- Numero de Telefono") 	{SD}
-	mostrar("4- E-Mail") 				{SD}
-FinProcedimiento
-
 Procedimiento mostrarCabeceraMantenPorCliente(E: nomCli:cadena)
 {que hace: muestra la cabecera de los mantenimientos de un cliente
 pre: nomCli=N y N no es vacio
@@ -728,3 +646,51 @@ Inicio
 	obtenerFecha<-fecha
 FinFuncion
 
+Procedimiento modifModelo(E/S datosModelos:tipoInfoModelos)
+{Que hace: modifica lo seleccionado por el usuario
+pre: datosModelos=M 
+pos: datosModelos=M1
+exp:- }
+
+Inicio
+
+	repetir
+		menuModifModelo()	{nivel 4}
+		ingresar(opc)		{SC}
+		segun (opc) hacer
+			1: datosModelo.nombre <- textoNoVacio("Ingrese Nombre de Modelo")	{SC}
+			2: ABMCalendario(datosModelo.calendario)							{nivel 4}
+		finSegun
+	hasta (opc = 3)
+Fin 
+
+Procedimiento modifCliente(E/S datosClientes:tipoInfoClientes)
+
+Inicio
+	repetir
+		menuModifClient()	{nivel 4}
+		ingresar(opc)		{SC}				
+		segun opc hacer
+			1:dni <- EnteroMayorACero("Ingrese DNI")							{SD}
+			2:datosCliente.nombre <- textoNoVacio("Ingrese Nombre")				{SC}
+			3:datosCliente.telefono <- EnteroMayorACero("Numero de telefono")	{SC}
+			4:datosClientecliente.email <- obtenerEmail()						{nivel 4}
+		finSegun
+	hasta (opc = 5)
+Fin
+
+Procedimiento modifVechiculo(E/S datosVehiculos:tipoInfoVehiculos)
+
+Inicio
+
+	repetir
+		menuModifVehiculo()						{nivel 4}
+		ingresar(opc)							{SC}
+
+		segun (opc) hacer
+			1: datosVehiculo.modelo <- obtenerModelo(model)										{nivel 3}
+			2: datosVehiculo.añoFabric <- enteroMayorACero("Ingrese nuevo año de fabricacion")	{SC}
+			3: datoVehiculo.dueño <- obtenerCliente(client)										{nivel 2}
+		finSegun
+	hasta (opc = 4)
+Fin
