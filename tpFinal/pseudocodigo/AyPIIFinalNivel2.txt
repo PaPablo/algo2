@@ -79,7 +79,6 @@ Var
 	dni:tipoClaveClientes
 	viejoDni:tipoClientes
 	datosCliente:tipoInfoClientes
-	opc:entero
 Inicio
 
 	viejoDni <- obtenerCliente(client)	{nivel 2} 
@@ -219,24 +218,10 @@ EXCEP: - }
 Var
 	datosVehiculo:tipoInfoVehiculos
 	patente:tipoClaveVehiculos
-	opc:entero
 Inicio
 	patente <- obtenerVehiculo(vehiculos)		{nivel 3}
 	buscar(vehiculos, patente, datosVehiculo)
-	
-	repetir
-		menuModifVehiculo()						{nivel 3}
-		ingresar(opc)							{SC}
-
-		segun (opc) hacer
-			1: datosVehiculo.modelo <- obtenerModelo(model)										{nivel 3}
-			2: datosVehiculo.añoFabric <- enteroMayorACero("Ingrese nuevo año de fabricacion")	{SC}
-			3: datoVehiculo.dueño <- obtenerCliente(client)										{nivel 3}
-		finSegun
-	hasta (opc = 4)
-
 	modifVehiculo(datosVehiculos){nivel 3}
-
 	modificar(vehiculos, patente, datosVehiculo)	{ADT ABB}
 
 Excepciones
