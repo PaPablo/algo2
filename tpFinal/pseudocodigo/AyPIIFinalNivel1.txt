@@ -106,19 +106,23 @@ Inicio
 Fin 
 
 
-procedimiento menuGeneral ()
+función menuGeneral ()
 {Qué Hace: muestra el menu con las opciones correspondientes a las tareas a realizar
 PRE: -
-POST:-
+POST:menuGeneral = O ; O es una opción válida
 EXCEP: -}
+Var
+	opcion:entero
 Inicio
-	mostrar("Consecionaria")			{SC}
-	mostrar("Seleccione una opcion")	{SC}
-	mostrar("1 - Modelos")				{SC}
-	mostrar("2 - Clientes")				{SC}
-	mostrar("3 - Servicios")			{SC}
-	mostrar("4 - Vehículos")			{SC}
-	mostrar("5 - Consultas")			{SC}
-	mostrar("6- Salir")					{SC}
+	mostrar("Consecionaria")								{SC}
+	mostrar("1 - Modelos")									{SC}
+	mostrar("2 - Clientes")									{SC}
+	mostrar("3 - Servicios")								{SC}
+	mostrar("4 - Vehículos")								{SC}
+	mostrar("5 - Consultas")								{SC}
+	mostrar("6- Salir")										{SC}
+
+	menuGeneral <- enteroEnRango("Seleccione una opcion",1,6)	{SC}
+
 Fin
 

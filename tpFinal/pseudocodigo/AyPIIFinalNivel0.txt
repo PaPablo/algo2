@@ -16,8 +16,8 @@ Inicio
 	crear(serv)		{ADT LO}
 	crear(vehiculos) {ADT ABB}
 	Repetir
-		menuGeneral()		{nivel 1}
-		ingresar(opc)		{SC}
+		opc <- menuGeneral()		{nivel 1}
+		
 		
 		segun (opc) hacer	{SC}
 	
