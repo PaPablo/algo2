@@ -2,10 +2,10 @@ ALGORITMICA 2 - TP Final
 
 NIVEL 2 
 
-procedimiento menuModelos()
+función menuModelos()
 {Qué Hace: muestra el menu con las opciones correspondientes al ABM de modelos
 PRE: -
-POST:-
+POST: menuModelos = O; O es una opcion valida
 EXCEP: -}
 Inicio
 
@@ -14,6 +14,8 @@ Inicio
 	mostrar("2 - Modificar Modelo (Nombre o Etapas de su calendario de Mantenimiento)")	{SC}
 	mostrar("3 - Quitar Modelo")														{SC}
 	mostrar("4 - Salir")																{SC}
+
+	menuModelos <- enteroEnRango("Ingrese su opción",1,4)	{SC}
 
 Fin
 
@@ -558,26 +560,27 @@ Excepciones
 Fin
 
 
-procedimiento menuVehiculos()
+funcion menuVehiculos()
 {Qué Hace: muestra el menu con las opciones correspondientes al ABM de vehiculos
 PRE: -
-POST: -
+POST: menuVehiculos = O ; O es una opción válida
 EXCEP: - }
 Inicio
 
-	mostrar("Seleccione una opcion")
-	mostrar("1 - Agregar un Vehículo")
-	mostrar("2 - Modificar un Vehículo")
-	mostrar("3 - Quitar un Vehículo")
+	mostrar("Seleccione una opcion")		{SC}
+	mostrar("1 - Agregar un Vehículo")		{SC}
+	mostrar("2 - Modificar un Vehículo")	{SC}
+	mostrar("3 - Quitar un Vehículo")		{SC}
 	mostrar("4 - Salir")
 
+	menuVehiculos <- enteroEnRango("Ingrese su opcion",1,4)	{SC}
 Fin
 
 
-procedimiento menuClientes()
+funcion menuClientes()
 {Qué Hace: muestra el menu con las opciones correspondientes al ABM de clientes
 PRE: -
-POST:-
+POST: menuClientes = O ; O es una opcion valida
 EXCEP: -}
 
 Inicio
@@ -585,12 +588,15 @@ Inicio
 	mostrar("1 - Agregar Cliente")		{SC}
 	mostrar("2 - Modificar Cliente")	{SC}
 	mostrar("3 - Quitar Cliente")		{SC}
-	mostrar("4 - Salir") {SD}
+	mostrar("4 - Salir") 				{SC}
 
-procedimiento menuServicios()
+	menuClientes <- enteroEnRango("Ingrese su opcion",1,4)	{SC}
+Fin
+
+funcion menuServicios()
 {Qué Hace: muestra el menu con las opciones correspondientes al ABM de clientes
 PRE: -
-POST:-
+POST: menuServicios = O ; O es una opción valida
 EXCEP: -}
 
 Inicio
@@ -599,12 +605,14 @@ Inicio
 	mostrar("2 - Modificar Servicios")	{SC}
 	mostrar("3 - Quitar Servicios")		{SC}
 	mostrar("4 - Salir") {SD}
+
+	menuServicios <- enteroEnRango("Ingrese su opción",1,4)	{SC}
 Fin 
 
-procedimiento menuConsultas()
+funcion menuConsultas()
 {Qué Hace: muestra el menu con las opciones correspondientes al ABM de clientes
 PRE: -
-POST:-
+POST: menuConsultas = O ; O es una opción valida
 EXCEP: -}
 
 Inicio
@@ -613,5 +621,7 @@ Inicio
 	mostrar("2 - Consultar mantenimientos por modelos")					{SC}
 	mostrar("3 - Consultar datos de clientes sin mantenimientos")		{SC}
 	mostrar("4 - Salir") 												{SC}
+
+	menuConsultas <- enteroEnRango("Ingrese su opción",1,4)				{SC}	
 Fin
 

@@ -10,7 +10,6 @@ procedure tpfinal is
    serv:listaServicios.tipoLista;
    vehiculos:arbolVehiculos.tipoArbol;
       
-   --nivel 1
    
    function menuGeneral return integer is
    begin

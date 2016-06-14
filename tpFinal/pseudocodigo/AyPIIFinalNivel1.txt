@@ -106,10 +106,10 @@ Inicio
 Fin 
 
 
-procedimiento menuGeneral ()
+función menuGeneral ()
 {Qué Hace: muestra el menu con las opciones correspondientes a las tareas a realizar
 PRE: -
-POST:-
+POST: menuGeneral = O ; O es una opcion valida
 EXCEP: -}
 Var
 	opcion:entero
@@ -122,5 +122,7 @@ Inicio
 	mostrar("4 - Vehículos")			{SC}
 	mostrar("5 - Consultas")			{SC}
 	mostrar("6- Salir")					{SC}
+
+	menuGeneral <- enteroEnRango("Ingrese su Opción",1,6) {SC}
 Fin
 
