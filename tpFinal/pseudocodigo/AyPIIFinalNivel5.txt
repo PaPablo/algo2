@@ -57,7 +57,8 @@ Inicio
 			2: precio<-enteroMayoraCero("Ingrese nuevo precio de mantenimiento") {SD}
 		FinSegun
 	Hasta (opc=3)
-
+Excepciones
+	noHayEtapas => mostrar("No hay etapas de mantenimiento. Agregue una e intente nuevamente")
 FinProcedimiento
 
 Procedimiento quitarEtapa(E/S calendario:tipoListaCalendario)
@@ -66,8 +67,11 @@ pre: calendario=C y C tiene al menos una etapa valida
 pos: calendario=C1 y C1 tiene una etapa menos o esta vacia
 exp: -}
 Var
+	etapa:tipoClaveCalendario
 Inicio
 	etapa<-obtenerEtapa(calendario){nivel 6}
 	suprimir(calendario,etapa){ADT LO}
+Excepciones
+	noHayEtapas => mostrar("No hay etapas de mantenimiento. Agregue una e intente nuevamente")
 FinProcedimiento
 

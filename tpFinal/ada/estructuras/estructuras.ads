@@ -52,6 +52,7 @@ package estructuras is
       dominio:tipoClaveVehiculos;
       etapa: tipoClaveCalendario;
       kmReal: integer;
+      precioFinal: integer;
       fecha:tFecha;
    end record;
    package listaServicios is new lista(tipoClaveServicios, tipoInfoServicios, "<", "=");

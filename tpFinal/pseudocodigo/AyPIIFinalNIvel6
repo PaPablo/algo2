@@ -19,20 +19,29 @@ Funcion obtenerEtapa(E calendario:tipoListaCalendario, E msj:cadena):entero
 {que hace: valida que la etapa que se desea modificar exista
 pre: calendario=C
 pos: obtenerEtapa=N y N>0
-exp: -}
+exp: cancelarIngreso, noHayEtapas}
 Var
-	etapa:tipoInfoCalendario
+	etapa:tipoClaveCalendario
 	ok:logico
 Inicio
 	ok <- F
-	repetir	
-		mostrar(msj) {SD}
-		ingresar(etapa){SD}
-		Inicio
-			recuclave(calendario,etapa,precio){ADT LO}
-			ok <- V
-		Exepciones
-			cuando claveNoExiste=> mostrar("Esa etapa no existe")
-		Fin 
-	hasta ok
+	si(esVacia(calendario)) ent
+		lanzar noHayEtapas
+	siNo
+		repetir	
+			mostrar(msj, "(0 para cancelar y volver al menu anterior)") {SD}
+			ingresar(etapa){SD}
+			si(etapa = 0) ent
+				lanzar cancelarIngreso
+			siNo
+				Inicio
+					recuclave(calendario,etapa,precio){ADT LO}
+					ok <- V
+				Exepciones
+					cuando claveNoExiste=> mostrar("Esa etapa no existe")
+				Fin
+			finSi
+		hasta ok
+	finSi
+	obtenerEtapa <- etapa
 FinProcedimiento

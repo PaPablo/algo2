@@ -83,7 +83,7 @@ Inicio
 Fin
 
 AB
-procedimiento consultas(E serv:tipoListaServicios ; E model:tipoListaModelos ; E client:tipoArbolClientes)
+procedimiento consultas( E client:tipoArbolClientes; E model:tipoListaModelos ; E serv:tipoListaServicios ; E vehiculos:tipoArbolVehiculos)
 {Qué Hace: Permite realizar distintas consultas especificadas
 PRE:	serv = S ; S tiene servicios válidos ; model = M ; M tiene modelos válidos
 		client = C ; C tiene clientes válidos

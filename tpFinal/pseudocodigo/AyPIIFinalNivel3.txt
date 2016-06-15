@@ -1,5 +1,24 @@
 NIVEL 3 
 
+
+menuModifServicio()
+{Qué Hace: muestra el menu con las opciones para modificar un servicio
+PRE: -
+POST: -
+EXCEP: -}
+Inicio
+	mostrar("Modificar Servicio")
+	mostrar("1 - Cambiar Cliente")
+	mostrar("2 - Cambiar vehiculo (dominio)")
+	mostrar("3 - Cambiar etapa de mantenimiento")
+	mostrar("4 - Cambiar Fecha")
+	mostrar("5 - Cambiar Precio final")
+	mostrar("6 - Cambiar kilometraje")
+	mostrar("7 - Volver al menu anterior")
+Fin
+
+
+
 procedimiento actualizarSC(E/S serv:tipoLista, E viejoDni, dni:tipoClaveClientes)
 {Que Hace: actualiza el dni de un cliente en el listado de servicio
 PRE: serv = S ; viejoDni = T ; dni = R
@@ -625,16 +644,16 @@ Inicio
 	Hasta(ok)
 FinProcedimiento
 
-Funcion obtenerFecha(E msj:cadena):tipoFecha
+procedimiento obtenerFecha(S fecha:tipoFecha)
 {Que hace: obtiene la fecha en la que se realizo el servicio
-pre: msj=M 
+pre: -
 pos: obtenerFecha=N y N es una fecha valida}
 
 var
 	fecha:tipoFecha
 Inicio
 	Repetir
-		mostrar(msj)				{SC}
+		mostrar("Ingrese Fecha")				{SC}
 		mostrar("Dia")				{SC}
 		ingresar(fecha.dia)			{SC}
 		mostrar("Mes")				{SC}
@@ -642,9 +661,7 @@ Inicio
 		mostrar("Año")				{SC}
 		ingresar(fecha.año)			{SC}
 	Hasta esFechaCorrecta(fecha)	{SC}
-
-	obtenerFecha<-fecha
-FinFuncion
+Fin
 
 Procedimiento modifModelo(E/S datosModelos:tipoInfoModelos)
 {Que hace: modifica lo datos del modelo seleccionado por el usuario
@@ -655,7 +672,6 @@ Var
 	opc:entero
 
 Inicio
-
 	repetir
 		menuModifModelo()	{nivel 4}
 		ingresar(opc)		{SC}
@@ -664,6 +680,7 @@ Inicio
 			2: ABMCalendario(datosModelo.calendario)							{nivel 4}
 		finSegun
 	hasta (opc = 3)
+
 Fin 
 
 Procedimiento modifCliente(E/S datosClientes:tipoInfoClientes)

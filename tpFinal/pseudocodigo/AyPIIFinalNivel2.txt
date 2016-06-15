@@ -1,4 +1,4 @@
-ALGORITMICA 2 - TP Final
+ 	ALGORITMICA 2 - TP Final
 
 NIVEL 2 
 
@@ -83,7 +83,7 @@ Inicio
 
 	viejoDni <- obtenerCliente(client)	{nivel 2} 
 	dni <- viejoDni
-	modifClientes(datosCliente)		{nivel 3}	
+	modifCliente(datosCliente)		{nivel 3}	
 	modificar(client, dni, datosCliente)			{ADT ABB}	
 	si (dni <> viejoDni) entonces 					{SD}
 		actualizarSC(serv, viejoDni, dni)			{nivel 3}
@@ -133,8 +133,9 @@ Var
 	datosModelo:tipoInfoModelos
 Inicio
 
-	codigoModelo <- obtenerModelo(model)	{nivel 3}	//opcion para cancela modif a traves excep
-	modificarModelo(datosModelo) {nivel 3}
+	codigoModelo <- obtenerModelo(model)			{nivel 3}	//opcion para cancela modif a traves excep
+	recuClave(model, codigoModelo, datosModelo)		{ADT LO}
+	modifModelo(datosModelo) 						{nivel 3}
 	modificar(model, codigoModelo, datosModelo)		{ADT LO}
 	bajaSMant(serv, datosModelo.calendario)			{nivel 3}
 	actualizarVS(vehiculos, serv)					{nivel 3}
@@ -166,7 +167,7 @@ Excepciones
 	cancelarIngreso => nada
 Fin
 
-procedmiento agregarVehiculo( E/S vehiculos:tipoArbolClientes ; E client:tipoArbolClientes ; E model:tipoListaModelosModelos)
+procedmiento agregarVehiculo( E/S vehiculos:tipoArbolVehiculos ; E client:tipoArbolClientes ; E model:tipoListaModelosModelos)
 {Que Hace: agrega un vehiculo para un cliente determinado
 PRE: vehiculos = A ; client = C ; model = M; 
 POST:	vehiculos = A1 ; A1 tiene un vehiculo mas con respecto a A
@@ -184,14 +185,12 @@ Inicio
 	siNo
 		patente <- obtenerPatente() 						{nivel 3}
 		Inicio
-			recuClave(vehiculos, patente, datosVehiculo)	{ADT LO}
+			buscar(vehiculos, patente, datosVehiculo)	{ADT LO}
 
 			mostrar("Vehiculo ya existe") 					{SD}
 		Excepciones
 			claveNoExiste => 
 				Inicio
-
-					datosVehiculo.dueño <- obtenerCliente(client) 								{nivel 2}
 					datosVehiculo.modelo <- obtenerModelo(model)								{nivel 3}
 
 					datosVehiculo.añoFabric <- enteroMayorACero("Ingrese año de fabricacion")	{SC}
@@ -204,7 +203,7 @@ Inicio
 	finSi		
 Excepciones
 	ArbolLleno => mostrar("No se puede agregar un vehículo en este momento. Intente nuevamente más tarde")
-	noHayClientes => mostrar("No hay clientes agregado. Agregue uno e intente nuevamente")
+	noHayClientes => mostrar("No hay clientes. Agregue uno e intente nuevamente")
 	noHayModelos => mostrar("No existen modelos. Agregue uno e intente nuevamente")
 	cancelarIngreso => nada
 
@@ -282,10 +281,10 @@ Inicio
 	datosServicio.kmReal <- obtenerKmReal(model, vehiculos, datosServicio.dominio, datosServicio.etapa)								{nivel 3}
 
 	//obtener fecha del mantenimiento
-	datosServicio.fecha <- obtenerFecha("Ingrese Fecha del servicio")				{nivel 3}
+	 obtenerFecha(datosServicio.fecha)				{nivel 3}
 
 	//obtener precio final del mismo, verificando que no sea menor al establecido en el calendario
-	datosServicio.precioFinal <- obtenerPrecioFinal(model, datosServicio.etapa)		{nivel 3}
+	datosServicio.precioFinal <- obtenerPrecioFinal(model, datosServicio.etapa)
 
 	insertar(serv, codigoServicio, datosServicio)									{ADT LO}
 
@@ -293,7 +292,7 @@ Inicio
 
 Excepciones
 	errorAlAgregarServicio, listaLLena => mostrar("No se puede agregar un servicio en este momento. Intente nuevamente más tarde")		{SC}
-	noHayEtapas => mostrar("El modelo seleccionado no posee etapas en el calendario de mantenimientos. Agregue una e intente nuevamente")		{SC}
+	noHayEtapas => mostrar("El modelo seleccionado no posee etapas en su calendario de mantenimientos. Agregue una e intente nuevamente")		{SC}
 	noHayClientes => mostrar("No hay clientes agregados. Agregue uno e intente nuevamente")		{SC}
 	noHayVehiculos => mostrar("El cliente no tiene vehiculos a su nombre. Agregue uno e intente nuevamente")	{SC}
 	cancelarIngreso => nada
@@ -309,13 +308,14 @@ Var
 	viejoDominio:tipoClaveVehiculos
 	codigoServicio:tipoClaveServicios
 	datosServicio:tipoInfoServicios
+	opc:entero
 Inicio
 	
 	codigoServicio <- obtenerServicio(serv)							{nivel 3}
-
+	recuClave(serv,codigoServicio, datosServicio)					{ADT LO}
 	repetir
 		Inicio
-			menuModifServicio()
+			menuModifServicio()			
 			opc <- 0
 			//ESTE SEGUN EVITA INCONSISTENCIAS A LA HORA DE CAMBIAR DATOS DEL SERVICIO
 			segun opc hacer
@@ -324,20 +324,22 @@ Inicio
 						opc <- 3
 						viejoDominio <- datosServicio.dominio 			{SC}
 					Fin
-				3: opc <- 5
+				3: opc <- 4
+				4: opc <- 6
 				siNo: ingresar(opc)
 			finSegun
 			segun opc hacer
-				1: datosServicio.dniCliente <- obtenerCliente(client)										{nivel 2}
-				2: datosServicio.dominio <- obtenerVehiculo(vehiculos, datosServicio.dniCliente) 			{nivel 3}
+				1:  datosServicio.dniCliente <- obtenerCliente(client)										{nivel 2}
+				2:  datosServicio.dominio <- obtenerVehiculo(vehiculos, datosServicio.dniCliente) 			{nivel 3}
 				3:	obtenerEtapaValida(model, vehiculos, datosServicio.dominio, etapa) 						{nivel 3}
 				4:	obtenerFecha("Fecha del servicio", datosServicio.fecha)									{nivel 3}
 				5:	obtenerPrecioFinal(model, datosServicio.etapa, datosServicio.precioFinal)				{nivel 3}
+				6: 	obtenerKmReal(model, vehiculos, datosServicio.dominio, datosServicio.etapa)				{nivel 3}
 			finSegun
 		Excepciones
 			cancelaIngreso => nada
 		Fin
-	hasta (opc = 6)
+	hasta (opc = 7)
 
 	modificar(serv, codigoServicio, datosServicio)
 
