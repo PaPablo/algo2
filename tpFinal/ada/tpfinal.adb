@@ -18,6 +18,19 @@ procedure tpfinal is
    begin
       return numeroEnt("Ingrese Opcion");
    end;
+   
+   procedure agregarModelo(model: in out listaModelos.tipoLista) is
+   datosModelo:tipoInfoModelos;
+   codigoModelo:tipoClaveModelos;
+   begin
+      codigoModelo:= generarCodigoModelo(model);
+      datosModelo.nombre:= textoNoVacio("Nombre de Modelo");
+      crear(datosModelo.calendario);
+      insertar(model,codigoModelo,datosModelo);
+   exception
+         when listaLlena=> Put_Line("No hay espacio para un nuevo modelo, intente nuevamente más tarde.");
+   end agregarModelo;
+    
         
    --nivel 1
    
@@ -99,8 +112,9 @@ begin
          When 2=>ABMClientes(client,serv,model,vehiculos);
          When 3=>ABMServicios(serv,client,model,vehiculos);
          When 4=>ABMvehiculos(vehiculos,serv,model,client);  
+         When 5=>Consultas(client,model,serv,vehiculos);
       end case;
-      exit when (opc=5);
+      exit when (opc=6);
    end loop ;
   
 end tpfinal;

@@ -30,7 +30,7 @@ Var
 Inicio
 
 	codigoModelo <- generarCodigoModelo(model)			{nivel 3}
-	modelo.nombre <- textoNoVacio("Nombre de Modelo")	{SC}
+	datosModelo.nombre <- textoNoVacio("Nombre de Modelo")	{SC}
 	crear(datosModelo.calendario)						{ADT LO}
 	insertar(model, codigoModelo, datosModelo)				{ADT LO}
 
