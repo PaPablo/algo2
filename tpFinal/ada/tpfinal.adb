@@ -2,6 +2,7 @@ with utiles, fechas, Ada.Strings.Unbounded, Ada.Text_IO, Ada.Integer_Text_IO;
 with estructuras;
 use estructuras;
 use utiles, fechas, Ada.Strings.Unbounded, Ada.Text_IO, Ada.Integer_Text_IO;
+with Ada.Exceptions; use Ada.Exceptions;
 
 
 
@@ -12,8 +13,38 @@ procedure tpfinal is
    serv:listaServicios.tipoLista;
    vehiculos:arbolVehiculos.tipoArbol;
    opc:integer;
-   
+   noHayClientes, cancelarIngreso, noHayServicios, noHayEtapas, noHayModelos:Exception;
+   noHayVehiculos, errorAlAgregarServicio:exception;
    --nivel 2
+   
+   function obtenerCliente(client:in arbolClientes.tipoArbol) return integer is
+      valido:Boolean;
+      dni:tipoClaveClientes;
+      i:tipoInfoClientes;
+      
+   begin
+      valido := False;
+      if (arbolClientes.esVacio(client)) then
+         raise noHayClientes;
+      else
+         loop
+            dni := numeroEnt("Ingrese cliente");
+            if (dni = 0) then
+               raise cancelarIngreso;
+            else
+               begin
+                  arbolClientes.buscar(client, dni, i);
+                  valido := True;
+               exception
+                  when arbolVehiculos.claveNoExiste => null;
+               end;
+            end if;
+            exit when valido;
+         end loop;
+      end if;
+      return dni;
+   end;
+   
    function menuModelos return integer is
    begin
       Put_Line("Modelos");
@@ -135,8 +166,8 @@ procedure tpfinal is
    
    
    procedure agregarVehiculo (vehiculos: in out arbolVehiculos.tipoArbol;
-                              client: in arbolClientes.tipoArbol;
-                              model: in listaModelos.tipoLista) is
+                              model: in listaModelos.tipoLista;
+                              client: in arbolClientes.tipoArbol) is
       datosVehiculo:tipoInfoVehiculos;
       patente:tipoClaveVehiculos;
    begin
@@ -169,8 +200,8 @@ procedure tpfinal is
    
    
    procedure agregarServicio(serv: in out listaServicios.tipoLista;
-                             model: in listaModelos.tipoLista;
                              client: in arbolClientes.tipoArbol;
+                             model: in listaModelos.tipoLista;
                              vehiculos: in out arbolVehiculos.tipoArbol) is
       
       codigoServicio:tipoClaveServicios;
@@ -211,9 +242,55 @@ procedure tpfinal is
       
       loop
          begin
-            menuModig
-                                      
-       
+            menuModifServicio;
+            opc:= 0;
+            --esto es para evitar inconsistencias
+            case opc is
+               when 1=> opc:= 2;
+               when 2 => 
+                  begin
+                     opc := 3;
+                     viejoDominio := datosServicio.dominio;
+                  end;
+               when 3 => opc := 4;
+               when 4 => opc := 6;               
+               when others => opc := enteroEnRango("Ingrese opción",1,6);
+            end case;
+            -- seleccion de opciones
+            case opc is
+               when 1 => datosServicio.dniCliente := obtenerCliente(client);
+               when 2 => datosServicio.dominio := obtenerVehiculo(vehiculos, datosServicio.dniCliente);
+               when 3 => obtenerEtapaValida(model, vehiculos, datosServicio.dominio, etapa);
+               when 4 => obtenerFecha("Fecha del servicio", datosServicio.fecha);				
+               when 5 => obtenerPrecioFinal(model, datosServicio.etapa, datosServicio.precioFinal);
+               when 6 => obtenerKmReal(model, vehiculos, datosServicio.dominio, datosServicio.etapa);
+            end case;
+            exit when opc = 7;
+         exception
+               when cancelarIngreso => null;
+         end;
+      end loop;
+      listaServicios.modificar(serv,codigoServicio,datosServicio);
+      if viejoDominio /= datosServicio.dominio then
+         bajaSV(vehiculos, codigoServicio,viejoDominio);
+      end if;
+   exception
+      when noHayServicios => Put_Line("No existen servicios. Agregue uno e intente nuevamente");
+      when cancelarIngreso => null;
+   end;
+   
+   procedure quitarServicio (serv: in out listaServicios.tipoLista ; vehiculos: in out arbolVehiculos.tipoArbol) is
+      codigoServicio:tipoClaveServicios;
+      datosServicio: tipoInfoServicios;
+   begin
+      codigoServicio := obtenerServicio(serv);
+      listaServicios.recuClave(serv, codigoServicio, datosServicio);
+      listaServicios.suprimir(serv,codigoServicio);
+      bajaSV(vehiculos, codigoServicio, datosServicio.dominio);
+   exception
+      when noHayServicios => Put_Line("No existen servicios. Agregue uno e intente nuevamente mas tarde");
+      when cancelarIngreso => null;      
+   end;
       
    --nivel 1
    
@@ -318,7 +395,7 @@ begin
    listaServicios.crear(serv);
    arbolVehiculos.crear(vehiculos);
     Loop
-     opc:= menuGeneral;
+     opc := menuGeneral;
       Case opc is
          When 1=>ABMModelos(model,serv,vehiculos);
          When 2=>ABMClientes(client,serv,model,vehiculos);
