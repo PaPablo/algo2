@@ -16,7 +16,7 @@ modificarModelo		H	I
 quitarModelo 		H	I	
 
 obtenerCliente 		H	I
-menuVehiculos		H
+menuVehiculos		H	I
 agregarVehiculo 	H	I
 modificarVehiculo 	H
 quitarVehiculo		H

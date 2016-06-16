@@ -16,7 +16,104 @@ procedure tpfinal is
    noHayClientes, cancelarIngreso, noHayServicios, noHayEtapas, noHayModelos:Exception;
    noHayVehiculos, errorAlAgregarServicio:exception;
    
+   --nivel 6
    
+   function menuModiCal return Integer is 
+   begin
+      Put_Line("Menu modificacion Calendario");
+      Put_Line("1-Etapa");
+      Put_Line("2-Precio");
+      Put_Line("3-Salir");
+      return enteroEnRango("Ingrese su opcion",1,4);
+      
+   end menuModiCal;
+   
+   function obtenerEtapa(calendario: in listaCalendario.tipoLista;
+                         msj: in String) return Integer is 
+      etapa: tipoClaveCalendario;
+      ok:Boolean; 
+   
+   begin
+      ok:=false;
+      if (listaCalendario.esVacia(calendario)) then 
+         raise noHayEtapas;
+      else
+         loop 
+            Put_Line(msj, "(0 para cancelar y volver al menu anterior)");
+            Get_Line(etapa);
+            If (etapa=0) then
+               raise cancelarIngreso;
+            else
+               begin
+                  listaCalendario.recuClave(calendario,etapa,precio);
+                  ok:=true; 
+               exception
+                  when listaCalendario.claveNoExiste=> Put_Line("Esa etapa no existe");
+               end;
+            end if;
+         exit when ok; 
+         end loop;     
+      end if; 
+      return etapa;
+      
+   end obtenerEtapa;
+   
+   --nivel 5
+   
+   function menuCalendario return integer is 
+   begin
+      Put_Line("Menu Calendario");
+      Put_Line("1-Agregar etapa de Mantenimiento");
+      Put_Line("2-Modificar etapa de Mantenimiento");
+      Put_Line("3-Quitar etapa de Mantenimiento");
+      Put_Line("4-Salir");
+      return enteroEnRango("Ingrese su opción",1,4);
+   end menuCalendario;
+   
+   procedure agregarEtapa(calendario: in out listaCalendario.tipoLista) is
+      etapa:tipoClaveCalendario;
+      precio:tipoInfoCalendario;
+   begin
+      etapa:=numeroEnt("Ingrese etapa de mantenimiento");
+      precio:=numeroEnt("Ingrese precio de mantenimiento");
+      begin 
+         listaCalendario.insertar(calendario,etapa,precio);
+      exception
+         when listaCalendario.claveExiste=> Put_Line("Esa etapa de mantenimiento ya existe");
+      end;
+   exception
+      when listaCalendario.listaLlena=> Put_Line("No se pudo agregar la etapa. Intente nuevamente mas tarde");
+   end agregarEtapa;
+   
+         
+   procedure modificarEtapa(calendario: in out listaCalendario.tipoLista) is
+            opc:integer;
+            etapa:tipoClaveCalendario;
+            precio:tipoInfoCalendario;
+   begin
+            etapa:=obtenerEtapa(calendario, "Ingrese la etapa de mantenimiento que desea modificar");
+            loop
+               opc:=menuModiCal;
+               case (opc) is
+                  when 1=> etapa:=obtenerEtapa(calendario,"Ingrese la nueva etapa de mantenimiento");
+                  when 2=> precio:=numeroEnt("Ingrese nuevo precio de mantenimiento");
+               end case;
+            exit when (opc=3);
+            end loop;   
+   exception 
+          when noHayEtapas=>Put_Line("No hay etapas de mantenimiento. Agregue una e intente nuevamente");
+   end modificarEtapa;
+   
+   procedure quitarEtapa(calendario: in out listaCalendario.tipoLista) is
+         etapa:tipoClaveCalendario;   
+            
+   begin 
+            etapa:=obtenerEtapa (calendario,"Ingrese la etapa de mantenimienot a quitar");
+            listaCalendario.suprimir(calendario,etapa);
+   exception
+         when noHayEtapas=>Put_Line("No hay etapas de mantenimiento. Agregue una e intente nuevamente");      
+   end quitarEtapa;            
+         
    --nivel 3
    
    procedure menuModifServicio is
