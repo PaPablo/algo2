@@ -6,7 +6,7 @@ PRE:
 POST:
 EXCEP:}
 Inicio
-	mostrar("	MODIFICAR MODELO")															{SC}	
+	mostrar("MODIFICAR MODELO")															{SC}	
 	mostrar("1 - Moficar Nombre")															{SC}
 	mostrar("2 - Agregar, modificar o quitar etapas de su calendario de mantenimientos")	{SC}
 	mostrar("3 - Volver al menú anterior")													{SC}
@@ -22,8 +22,7 @@ Var
 	opc:entero
 Incio
 	repetir
-		mostrarMenuCalendario()				{nivel 5}
-		ingresar(opc)						{SC}
+		opc<-MenuCalendario()				{nivel 5}
 
 		segun opc hacer
 			1:agregarEtapa(calendario)		{nivel 5}
@@ -47,7 +46,8 @@ Inicio
 	ok <- V 												{SC}
 
 	repetir 
-		ingresar(cad)										{SC}
+		mostrar(cad)
+		ingresar(email)										{SC}
 		desde i <- 1 hasta long(cad) hacer
 			ok <- ok y (cad[i] = @) 						{SC}
 		finDesde
@@ -69,7 +69,7 @@ Inicio
 	mostrar("4- E-Mail") 				{SD}
 
 	menuModifClient <- enteroEnRango("Ingrese su opcion",1,4)
-FinProcedimiento
+FinFuncion
 
 funcion menuModifVehiculo()
 {que hace: muestra las opciones para modificar los datos de un vehiculo
@@ -85,4 +85,4 @@ Inicio
 	mostrar("4-Salir")					{SD}
 
 	menuModifVehiculo <- enteroEnRango("Ingrese su opcion",1,4)
-FinProcedimiento	
+FinFuncion	

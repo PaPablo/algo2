@@ -113,8 +113,70 @@ procedure tpfinal is
             listaCalendario.suprimir(calendario,etapa);
    exception
          when noHayEtapas=>Put_Line("No hay etapas de mantenimiento. Agregue una e intente nuevamente");      
-   end quitarEtapa;            
-         
+   end quitarEtapa;  
+   
+   
+   --nivel 4
+   
+   function menuModiModelo return integer is 
+   begin 
+      Put_Line("MODIFICAR MODELO");
+      Put_Line("1 - Moficar Nombre");
+      Put_Line("2 - Agregar, modificar o quitar etapas de su calendario de mantenimientos");
+      Put_Line("3 - Volver al menú anterior");
+      return enteroEnRango("Ingrese su opcion",1,3);
+   end menuModiModelo;
+       
+    procedure ABMCalendario (calendario: in out listaCalendario.tipoLista) is 
+      opc:integer;
+    begin 
+      loop 
+         opc:=menuCalendario;
+         case (opc) is 
+            when 1=>agregarEtapa(calendario);
+            when 2=>modificarEtapa(calendario);
+            when 3=>quitarEtapa(calendario);
+         end case;
+         exit when (opc=4);
+      end loop;
+    end ABMCalendario;
+   
+   function obtenerEmail(cad: in Unbounded_String) return Unbounded_String is
+      ok:boolean;
+      email:Unbounded_String;
+      i:integer;
+   begin
+      ok:=true;
+      loop
+         Put_Line(cad);
+         Get_Line(email);
+         for i in 1..Length(email)loop
+            ok:= ok and (email(i)='@');
+         end loop; 
+         exit when ok;
+         return email;
+      end loop;
+   end obtenerEmail;
+      
+   function menuModifCliente return integer is 
+   begin 
+      Put_Line ("¿Que desea modificar?");
+      Put_Line("1- DNI");
+      Put_Line("2- Nombre");
+      Put_Line("3- Numero de Telefono");
+      Put_Line("4- E-Mail");
+      return enteroEnRango("Ingrese su opcion",1,4);
+   end menuModifCliente;
+   
+   function menuModifVehiculos return Integer is
+   begin 
+      Put_Line("¿Que desea modificar?");
+      Put_Line("1-Modelo");
+      Put_Line("2-Año de Fabricacion");
+      Put_Line("3-Dueño");
+      Put_Line("4-Salir");
+      return enteroEnRango("Ingrese su opcion",1,4);
+   end menuModifVehiculos;
    --nivel 3
    
    procedure menuModifServicio is
@@ -127,7 +189,7 @@ procedure tpfinal is
       Put_Line("5 - Cambiar Precio final");
       Put_Line("6 - Cambiar kilometraje");
       Put_Line("7 - Volver al menu anterior");
-   end;
+   end menuModifServicio;
    
    procedure actualizarSC(serv: in out listaServicios.tipoLista; viejoDni,dni: in tipoClaveClientes) is
       datosServicio:tipoInfoServicios;
@@ -614,7 +676,7 @@ procedure tpfinal is
       Put_Line("5 - Consultas");
       Put_Line("6 - Salir");
       return numeroEnt("Ingrese su opciòn");
-   end;
+   end menuGeneral;
    
    procedure ABMModelos (model: in out listaModelos.tipoLista; serv: in out listaServicios.tipoLista; vehiculos: in out arbolVehiculos.tipoArbol) is
    opc:integer;
@@ -699,9 +761,9 @@ procedure tpfinal is
       end loop;
    end;
    
-                 
-begin
+          
    --nivel 0
+begin
    listaModelos.crear(model);
    arbolClientes.crear(client);
    listaServicios.crear(serv);
