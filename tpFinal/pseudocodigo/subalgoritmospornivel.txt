@@ -1,38 +1,38 @@
 
 Nivel 1
 
-menuGeneral 	H
-ABMModelos 	H
-ABMClientes 	H 
-ABMServicios 	H
-ABMVehiculos 	H
-consultas 	H
+menuGeneral 	H    	I
+ABMModelos 	H			I
+ABMClientes 	H 		I
+ABMServicios 	H		I
+ABMVehiculos 	H		I
+consultas 	H			I
 
 Nivel 2
 
-menuModelos		H
-agregarModelo		H
-modificarModelo		H
-quitarModelo 		H	
+menuModelos			H	I		
+agregarModelo		H	I
+modificarModelo		H	I
+quitarModelo 		H	I	
 
-obtenerCliente 		H
+obtenerCliente 		H	I
 menuVehiculos		H
-agregarVehiculo 	H
+agregarVehiculo 	H	I
 modificarVehiculo 	H
 quitarVehiculo		H
 
 menuClientes		H
-agregarCliente		H
-modificarCliente 	H
-quitarCliente 		H
+agregarCliente		H	I
+modificarCliente 	H	I
+quitarCliente 		H	I
 
 menuServicios		H
-agregarServicio		H
-modificarServicio	H
-quitarServicio		H
+agregarServicio		H	I
+modificarServicio	H	I
+quitarServicio		H	I
 
 menuConsultas		H
-mantenPorCliente	H
+mantenPorCliente	H	I
 mantPorModelo		H
 datosClientesSinMant	H
 

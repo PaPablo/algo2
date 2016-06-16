@@ -15,6 +15,7 @@ procedure tpfinal is
    opc:integer;
    noHayClientes, cancelarIngreso, noHayServicios, noHayEtapas, noHayModelos:Exception;
    noHayVehiculos, errorAlAgregarServicio:exception;
+   
    --nivel 2
    
    function obtenerCliente(client:in arbolClientes.tipoArbol) return integer is
@@ -292,6 +293,162 @@ procedure tpfinal is
       when cancelarIngreso => null;      
    end;
       
+   procedure mantenPorCliente(client: in arbolClientes.tipoArbol; 
+                              serv: in listaServicios.tipoLista) is 
+      total:integer;
+      sigo:Boolean;
+      codigoServicios:tipoClaveServicios;
+      datosServicios:tipoInfoServicios;
+      dni:tipoClaveClientes;
+      datosCliente:tipoInfoClientes;
+   begin
+      total:=0;
+      dni:=obtenerCliente;
+      buscar(client,dni,datosCliente);
+      sigo:=True;
+      recuPrim(serv,codigoServicios);
+      mostrarCabeceraMantenPorCliente(datosCliente.nombre);
+      while sigo loop 
+         begin 
+            recuClave(serv,codigoServicios,datosServicios);
+            if (datosServicio.dniCliente = dni)	then
+               mostrarDatosServicios(datosServicios,codigoServicios);
+               total:=total+1;
+            end if;
+            recuSig(serv,codigoServicios,codigoServicios);
+         exception
+            when claveEsUltima=> sigo:=False;
+         end;
+      end loop; 
+      Put_Line("TOTAL: ", total);
+   exception
+      when cancelarIngreso=> null;
+      when noHayClientes=> Put_Line("No existen clientes. Agregue por lo menos uno para poder realizar esta consulta");
+      when listaVacia=> Put_Line("No existen servicios realizados. Agregue por lo menos uno para poder realizar esta consulta");
+   end mantenPorCliente; 
+   
+   
+   procedure mantPorModelo( model: in listaModelos.tipoLista;
+                            serv: in listaServicios.tipoLista;
+                            vehiculos: in arbolVehiculos.tipoArbol) is
+   	total:integer;
+	sigo:boolen;
+	codigoModelo:tipoClaveModelos;
+	codigoServicio:tipoClaveServicios;
+	datosServicio:tipoInfoServicios;
+        datosVehiculo:tipoInfoVehiculos;
+        datosModelo:tipoInfoModelos;
+   begin
+      codigoModelo:=obtenerModelo;
+      recuPrim(ser,codigoServicio);
+      sigo:=true;
+      total:=0;
+      recuClave(model,codigoModelo,datosModelo);
+      mostrarEncabezadoMantModelo(datosModelo.nombre);
+         while sigo loop
+            begin
+               --recupero los datos del servicio
+               recuClave(serv, codigoServicio, datosServicio);
+               --busco en el arbol de vehiculos
+               buscar(vehiculos, datosServicio.dominio, datosVehiculo);
+               --si el modelo coincide, muestro y contabilizo
+               if (datosVehiculo.modelo = codigoModelo) then
+                  mostrarDatosServicioyDNI(datosServicio);
+                  total:= total + 1;
+               end if;
+            
+               recuSig(serv, codigoServicio, codigoServicio);
+            exception
+               when claveEsUltima=> sigo:=false;
+            end;   
+         end loop;
+         Put_Line("TOTAL: ", total);
+   exception
+         when noHayModelos => Put_Line("No existen Modelos. Agregue por lo menos uno e intente nuevamente");
+         when listaVacia => Put_Line("No existen servicios. Agregue por lo menos uno e intente nuevamente");
+   end mantPorModelo;
+      
+  procedure datosClientesSinMant(client: in arbolClientes.tipoArbol; serv: in listaServicios.tipoLista) is
+     	muestro:boolean;
+	total:integer;
+	sigo:boolean;
+	colaClientes:tipoColaClientes;
+	dni:tipoClaveClientes;
+        datosCliente:tipoInfoClientes;
+  begin 
+         crear(colaClientes);
+         muestro:= true;
+	 total:= 0;	
+         inOrder(client, colaClientes);                   
+         mostrarEncabezadoClientSinMant;
+         while no(esVacia(colaClientes)) loop
+            frente(colaClientes, dni);
+            recuPrim(serv, codigoServicio);
+            sigo:=true;
+            while sigo loop
+               begin
+                  recuClave(serv, codigoServicio, datosServicio);
+                  muestro:= muestro and (dni = datosServicio.dniCliente);
+                  recuSig(serv, codigoServicio, codigoServicio);
+               exception
+                  when claveEsUltima => sigo:=False; 
+               end; 
+            end loop; 
+            If muestro then 
+               buscar(client, dni, datosCliente);
+               mostrarDatosCliente(dni, datosCliente);
+               total :=total + 1;
+            end if;
+            desencolar(colaClientes);
+         end loop;
+         Put_Line("TOTAL: ", total);
+  end datosClientesSinMant;
+ 
+      
+  function menuVehiculos return integer is 
+  
+  begin
+         Put_Line("Seleccione una opcion");
+         Put_Line("1 - Agregar un Vehículo");
+         Put_Line("2 - Modificar un Vehículo");
+         Put_Line("3 - Quitar un Vehículo");
+         Put_Line("4 - Salir");
+         menuVehiculos:=enteroEnRango("Ingrese su opcion",1,4);
+  end menuVehiculos;
+      
+         
+  function menuClientes return integer is        
+  begin 
+         Put_Line("Seleccione una Opcion");
+         Put_Line("1 - Agregar Cliente");
+         Put_Line("2 - Modificar Cliente");
+         Put_Line("3 - Quitar Cliente");
+         Put_Line("4 - Salir") ;
+         menuClientes:=enteroEnRango("Ingrese su opcion",1,4);
+  end menuClientes;
+  
+   function menuServicios return integer is
+   begin 
+      Put_Line("Seleccione una Opcion");
+      Put_Line("1 - Agregar Servicios");
+      Put_Line("2 - Modificar Servicios");
+      Put_Line("3 - Quitar Servicios");
+      Put_Line("4 - Salir");
+      menuServicios:=enteroEnRango("Ingrese su opción",1,4);
+   end menuServicios;
+      
+    
+   function menuConsultas return integer is
+   begin
+      Put_Line("Seleccione una Opcion");
+      Put_Line("1 - Consultar mantenimientos por cliente");
+      Put_Line("2 - Consultar mantenimientos por modelos");
+      Put_Line("3 - Consultar datos de clientes sin mantenimientos");
+      Put_Line("4 - Salir") ;
+      menuConsultas:=enteroEnRango("Ingrese su opción",1,4);
+   end menuConsultas;
+      
+      
    --nivel 1
    
    function menuGeneral return integer is
@@ -352,7 +509,10 @@ procedure tpfinal is
       
    end ABMServicios; 
    
-   procedure ABMVehiculos (vehiculos: in out arbolVehiculos.tipoArbol; serv: in out listaServicios.tipoLista;model: in out listaModelos.tipoLista; client: in out arbolClientes.tipoArbol) is
+   procedure ABMVehiculos (vehiculos: in out arbolVehiculos.tipoArbol;
+                           serv: in out listaServicios.tipoLista;
+                           model: in out listaModelos.tipoLista;
+                           client: in out arbolClientes.tipoArbol) is
    opc:integer;
    begin
       loop
