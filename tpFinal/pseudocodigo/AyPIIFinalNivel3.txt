@@ -221,7 +221,7 @@ EXCEP: - }
 Var
 	sigo:logico
 	codigoServicio:tipoClaveServicios
-	patente:tipoClaveVehiculo
+	patente:tipoClaveVehiculos
 	datosVehiculo:tipoInfoVehiculo
 	colaVehiculos:tipoColaVehiculos
 	siguiente:tipoClaveMantenimientos
