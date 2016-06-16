@@ -39,9 +39,9 @@ Inicio
 				
 				si (datosServicio.dniCliente = viejoDni) entonces
 					datosServicio.dniCliente <- dni 				{SC}
+					modificar(serv, codigoServicio, datosServicio) 	{ADT LO}
 				finSi
 
-				modificar(serv, codigoServicio, datosServicio) {ADT LO}
 
 				recuSig(serv, codigoServicio, codigoServicio) {ADT LO}
 			Excepciones 
@@ -49,11 +49,9 @@ Inicio
 			Fin
 		finMientras
 	finSi
-Excepciones
-	listaLlena => lanzar errorEnModificarCliente
 Fin
 
-procedimiento limpiarVehiculo(E/S vehiculos:tipoListaVahiculos ; E patente:tipoClaveVehiculos)
+procedimiento limpiarVehiculo(E/S vehiculos:tipoArbolVahiculos ; E patente:tipoClaveVehiculos)
 {Qué Hace: Vacía las estructuras de datos pertenecientes a un vehículo
 PRE: vehiculos = A ; patente = P
 POST: vehiculos = A1 ; A1 en A con las estructuras pertenecientes a P vacías

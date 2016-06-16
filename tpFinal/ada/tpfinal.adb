@@ -16,6 +16,60 @@ procedure tpfinal is
    noHayClientes, cancelarIngreso, noHayServicios, noHayEtapas, noHayModelos:Exception;
    noHayVehiculos, errorAlAgregarServicio:exception;
    
+   
+   --nivel 3
+   
+   procedure menuModifServicio is
+   begin
+      Put_Line("Modificar Servicio");
+      Put_Line("1 - Cambiar Cliente");
+      Put_Line("2 - Cambiar vehiculo (dominio)");
+      Put_Line("3 - Cambiar etapa de mantenimiento");
+      Put_Line("4 - Cambiar Fecha");
+      Put_Line("5 - Cambiar Precio final");
+      Put_Line("6 - Cambiar kilometraje");
+      Put_Line("7 - Volver al menu anterior");
+   end;
+   
+   procedure actualizarSC(serv: in out listaServicios.tipoLista; viejoDni,dni: in tipoClaveClientes) is
+      datosServicio:tipoInfoServicios;
+      codigoServicio:tipoClaveServicios;
+      sigo:Boolean;
+      
+   begin
+      if (not(listaServicios.esVacia(serv))) then
+         sigo := True;
+         listaServicios.recuPrim(serv,codigoServicio);
+         
+         while sigo loop
+            begin
+               listaServicios.recuClave(serv,codigoServicio,datosServicio);
+               
+               if (datosServicio.dniCliente = viejoDni) then
+                  datosServicio.dniCliente := dni;
+                  listaServicios.modificar(serv, codigoServicio,datosServicio);
+               end if;
+               
+               listaServicios.recuSig(serv,codigoServicio,codigoServicio);
+            exception
+               when listaServicios.claveEsUltima => sigo := False;
+            end;
+         end loop;
+      end if;
+   end;
+   
+   procedure limpiarVehiculo(vehiculos: in out arbolVehiculos.tipoArbol ; patente: in tipoClaveVehiculos) is 
+      datosVehiculo:tipoInfoVehiculos;
+   begin
+      arbolVehiculos.buscar(vehiculos,patente,datosVehiculo);
+      
+      listaMantenimientos.vaciar(datosVehiculo.manten);
+      
+      arbolVehiculos.modificar(vehiculos,patente,datosVehiculo);
+   end;
+   
+   
+   
    --nivel 2
    
    function obtenerCliente(client:in arbolClientes.tipoArbol) return integer is
@@ -303,28 +357,28 @@ procedure tpfinal is
       datosCliente:tipoInfoClientes;
    begin
       total:=0;
-      dni:=obtenerCliente;
-      buscar(client,dni,datosCliente);
+      dni:=obtenerCliente(client);
+      arbolClientes.buscar(client,dni,datosCliente);
       sigo:=True;
-      recuPrim(serv,codigoServicios);
+      listaServicios.recuPrim(serv,codigoServicios);
       mostrarCabeceraMantenPorCliente(datosCliente.nombre);
       while sigo loop 
          begin 
-            recuClave(serv,codigoServicios,datosServicios);
-            if (datosServicio.dniCliente = dni)	then
+            listaServicios.recuClave(serv,codigoServicios,datosServicios);
+            if (datosServicios.dniCliente = dni) then
                mostrarDatosServicios(datosServicios,codigoServicios);
                total:=total+1;
             end if;
-            recuSig(serv,codigoServicios,codigoServicios);
+            listaServicios.recuSig(serv,codigoServicios,codigoServicios);
          exception
-            when claveEsUltima=> sigo:=False;
+            when listaServicios.claveEsUltima => sigo:=False;
          end;
       end loop; 
-      Put_Line("TOTAL: ", total);
+      Put_Line("TOTAL: " &Integer'image(total));
    exception
       when cancelarIngreso=> null;
       when noHayClientes=> Put_Line("No existen clientes. Agregue por lo menos uno para poder realizar esta consulta");
-      when listaVacia=> Put_Line("No existen servicios realizados. Agregue por lo menos uno para poder realizar esta consulta");
+      when listaServicios.listaVacia=> Put_Line("No existen servicios realizados. Agregue por lo menos uno para poder realizar esta consulta");
    end mantenPorCliente; 
    
    
@@ -332,7 +386,7 @@ procedure tpfinal is
                             serv: in listaServicios.tipoLista;
                             vehiculos: in arbolVehiculos.tipoArbol) is
    	total:integer;
-	sigo:boolen;
+	sigo:Boolean;
 	codigoModelo:tipoClaveModelos;
 	codigoServicio:tipoClaveServicios;
 	datosServicio:tipoInfoServicios;
@@ -340,68 +394,68 @@ procedure tpfinal is
         datosModelo:tipoInfoModelos;
    begin
       codigoModelo:=obtenerModelo;
-      recuPrim(ser,codigoServicio);
+      listaServicios.recuPrim(serv,codigoServicio);
       sigo:=true;
       total:=0;
-      recuClave(model,codigoModelo,datosModelo);
+      listaModelos.recuClave(model,codigoModelo,datosModelo);
       mostrarEncabezadoMantModelo(datosModelo.nombre);
          while sigo loop
             begin
                --recupero los datos del servicio
-               recuClave(serv, codigoServicio, datosServicio);
+               listaServicios.recuClave(serv, codigoServicio, datosServicio);
                --busco en el arbol de vehiculos
-               buscar(vehiculos, datosServicio.dominio, datosVehiculo);
+               arbolVehiculos.buscar(vehiculos, datosServicio.dominio, datosVehiculo);
                --si el modelo coincide, muestro y contabilizo
                if (datosVehiculo.modelo = codigoModelo) then
                   mostrarDatosServicioyDNI(datosServicio);
                   total:= total + 1;
                end if;
             
-               recuSig(serv, codigoServicio, codigoServicio);
+               listaServicios.recuSig(serv, codigoServicio, codigoServicio);
             exception
-               when claveEsUltima=> sigo:=false;
+               when listaServicios.claveEsUltima => sigo:=false;
             end;   
          end loop;
-         Put_Line("TOTAL: ", total);
+         Put_Line("TOTAL: " & Integer'Image(total));
    exception
          when noHayModelos => Put_Line("No existen Modelos. Agregue por lo menos uno e intente nuevamente");
-         when listaVacia => Put_Line("No existen servicios. Agregue por lo menos uno e intente nuevamente");
+         when listaServicios.listaVacia => Put_Line("No existen servicios. Agregue por lo menos uno e intente nuevamente");
    end mantPorModelo;
       
   procedure datosClientesSinMant(client: in arbolClientes.tipoArbol; serv: in listaServicios.tipoLista) is
      	muestro:boolean;
 	total:integer;
 	sigo:boolean;
-	colaClientes:tipoColaClientes;
+	colaClientes:arbolClientes.ColaRecorridos.tipoCola;
 	dni:tipoClaveClientes;
         datosCliente:tipoInfoClientes;
   begin 
-         crear(colaClientes);
+         arbolClientes.ColaRecorridos.crear(colaClientes);
          muestro:= true;
 	 total:= 0;	
-         inOrder(client, colaClientes);                   
+         arbolClientes.inOrder(client, colaClientes);                   
          mostrarEncabezadoClientSinMant;
-         while no(esVacia(colaClientes)) loop
-            frente(colaClientes, dni);
-            recuPrim(serv, codigoServicio);
+         while no(arbolClientes.ColaRecorridos.esVacia(colaClientes)) loop
+            arbolClientes.ColaRecorridos.frente(colaClientes, dni);
+            listaServicios.recuPrim(serv, codigoServicio);
             sigo:=true;
             while sigo loop
                begin
-                  recuClave(serv, codigoServicio, datosServicio);
-                  muestro:= muestro and (dni = datosServicio.dniCliente);
-                  recuSig(serv, codigoServicio, codigoServicio);
+                  listaServicios.recuClave(serv, codigoServicio, datosServicio);
+                  muestro := muestro and (dni = datosServicio.dniCliente);
+                  listaServicios.recuSig(serv, codigoServicio, codigoServicio);
                exception
-                  when claveEsUltima => sigo:=False; 
+                  when listaServicios.claveEsUltima => sigo:=False; 
                end; 
             end loop; 
             If muestro then 
-               buscar(client, dni, datosCliente);
+               arbolClientes.buscar(client, dni, datosCliente);
                mostrarDatosCliente(dni, datosCliente);
                total :=total + 1;
             end if;
-            desencolar(colaClientes);
+            arbolClientes.ColaRecorridos.desencolar(colaClientes);
          end loop;
-         Put_Line("TOTAL: ", total);
+         Put_Line("TOTAL: " & Integer'Image(total));
   end datosClientesSinMant;
  
       
@@ -413,7 +467,7 @@ procedure tpfinal is
          Put_Line("2 - Modificar un Vehículo");
          Put_Line("3 - Quitar un Vehículo");
          Put_Line("4 - Salir");
-         menuVehiculos:=enteroEnRango("Ingrese su opcion",1,4);
+         return enteroEnRango("Ingrese su opcion",1,4);
   end menuVehiculos;
       
          
@@ -424,7 +478,7 @@ procedure tpfinal is
          Put_Line("2 - Modificar Cliente");
          Put_Line("3 - Quitar Cliente");
          Put_Line("4 - Salir") ;
-         menuClientes:=enteroEnRango("Ingrese su opcion",1,4);
+         return enteroEnRango("Ingrese su opcion",1,4);
   end menuClientes;
   
    function menuServicios return integer is
@@ -434,7 +488,7 @@ procedure tpfinal is
       Put_Line("2 - Modificar Servicios");
       Put_Line("3 - Quitar Servicios");
       Put_Line("4 - Salir");
-      menuServicios:=enteroEnRango("Ingrese su opción",1,4);
+      return enteroEnRango("Ingrese su opción",1,4);
    end menuServicios;
       
     
@@ -445,7 +499,7 @@ procedure tpfinal is
       Put_Line("2 - Consultar mantenimientos por modelos");
       Put_Line("3 - Consultar datos de clientes sin mantenimientos");
       Put_Line("4 - Salir") ;
-      menuConsultas:=enteroEnRango("Ingrese su opción",1,4);
+      return enteroEnRango("Ingrese su opción",1,4);
    end menuConsultas;
       
       
@@ -538,7 +592,7 @@ procedure tpfinal is
          opc := menuConsultas;
          
          case opc is
-            when 1 => mantenPorCliente(clien, serv);
+            when 1 => mantenPorCliente(client, serv);
             when 2 => mantPorModelo(model, serv, vehiculos);
             when 3 => datosClientesSinMant(client,serv);
          end case;

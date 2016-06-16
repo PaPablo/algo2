@@ -337,7 +337,7 @@ Inicio
 				6: 	obtenerKmReal(model, vehiculos, datosServicio.dominio, datosServicio.etapa)				{nivel 3}
 			finSegun
 		Excepciones
-			cancelaIngreso => nada
+			cancelarIngreso => nada
 		Fin
 	hasta (opc = 7)
 
@@ -429,7 +429,7 @@ Incio
 	mientras sigo hacer
 		Inicio
 			recuClave(serv, codigoServicio, datosServicio)					{ADT LO}
-			si (datosServicio.dniCliente = dni)	entonces			
+			si (datosServicio.dniCliente = dni)				
 				mostrarDatosServicio(datosServicio,codigoServicio)			{nivel 3]
 				total <- total +1 											{SC}
 			finSi
@@ -460,7 +460,6 @@ Var
 	codigoServicio:tipoClaveServicios
 	datosServicio:tipoInfoServicios
 	datosVehiculo:tipoInfoVehiculos
-	datosModelos:tipoInfoModelos
 Inicio
 	codigoModelo <- obtenerModelo(model)	{nivel 3}
 
