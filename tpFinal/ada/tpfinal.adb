@@ -31,6 +31,7 @@ procedure tpfinal is
    function obtenerEtapa(calendario: in listaCalendario.tipoLista;
                          msj: in String) return Integer is 
       etapa: tipoClaveCalendario;
+      precio:tipoInfoCalendario;
       ok:Boolean; 
    
    begin
@@ -39,8 +40,8 @@ procedure tpfinal is
          raise noHayEtapas;
       else
          loop 
-            Put_Line(msj, "(0 para cancelar y volver al menu anterior)");
-            Get_Line(etapa);
+            Put_Line(msj & "(0 para cancelar y volver al menu anterior)");
+            etapa:= numeroEnt("ingrese etapa");
             If (etapa=0) then
                raise cancelarIngreso;
             else
@@ -365,7 +366,7 @@ procedure tpfinal is
       
       datosServicio.dniCliente := obtenerCliente(client);
       datosServicio.dominio := obtenerVehiculo(datosServicio.dniCliente, vehiculos);
-      datosServicio.etapa := obtenerEtapa(model, vehiculos, datosServicio.dominio);
+      datosServicio.etapa := obtenerEtapaValida(model, vehiculos, datosServicio.dominio);
       datosServicio.kmReal := obtenerKmReal(model,vehiculos, datosServicio.dominio, datosServicio.etapa);
       obtenerFecha(datosServicio.fecha);
       datosServicio.precioFinal := obtenerPrecioFinal(model, datosServicio.etapa);
