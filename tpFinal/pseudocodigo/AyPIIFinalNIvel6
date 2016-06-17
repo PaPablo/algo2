@@ -1,6 +1,6 @@
 Nivel 6
 
-Funcion menuModiCal()
+Funcion menuModiCal():entero
 {que hace: muestra las opcienes para modificar el calendario
 pre:-
 pos: menuModiCal = O ; O es una opcion valida 
@@ -16,7 +16,7 @@ Inicio
 FinFuncion
 
 
-Funcion obtenerEtapa(E calendario:tipoListaCalendario, E msj:cadena):entero 
+Funcion obtenerEtapa(E calendario:tipoListaCalendario, E msj:cadena):tipoClaveCalendario
 {que hace: valida que la etapa que se desea modificar exista
 pre: calendario=C
 pos: obtenerEtapa=N y N>0

@@ -117,6 +117,27 @@ package body utiles is
       return resp;
    end enteroEnRango;
 
+   -- Que hace: Muestra un mensaje al usuario y el entero mayor a cero ingresado.
+   -- Precondiciones: m=M
+   -- Poscondiciones: realEnRango = E y E > 0
+   function enteroMayorIgualACero(mensaje: in string) return integer is
+      num:integer;
+   begin
+      loop
+         begin
+            Put_Line(mensaje);
+            get(num);
+            exit when num > 0;
+         exception
+            when Data_Error =>
+               Skip_Line;
+         end;
+      end loop;
+      Skip_Line;
+      return num;
+   end enteroMayorIgualACero;
+
+
 
    -- Que hace: Muestra un mensaje al usuario y devuelve el real ingresado.
    -- Precondiciones: m=M, rangoInf= RI, rangoSup= RS

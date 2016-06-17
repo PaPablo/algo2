@@ -113,7 +113,7 @@ Inicio
 
 		//elimina de los servicios todos aquellos que tengan ese dni como dniCliente
 		bajaSC(serv, dni)													{nivel 3}
-		bajaVC(vehiculos, dni)	{nivel 3}
+		bajaVC(vehiculos, dni)												{nivel 3}
 	finSi
 
 Excepciones
@@ -228,7 +228,7 @@ Excepciones
 	cancelarIngreso => nada
 Fin
 
-procedimiento quitarVehiculo(E/S client:tipoArbolClientes ; E dni:tipoClaveClientes ; E/S serv:tipoListaServicios)
+procedimiento quitarVehiculo(E/S vehiculos:tipoArbolVehiculos ; E dni:tipoClaveClientes ; E/S serv:tipoListaServicios)
 {Que Hace: elimina un vehiculo de un cliente
 PRE: client = C ; dni = K ; K pertenece a C ; serv = S
 POST:	client = C1 ; C1 tiene un vehiculo menos segun haya deseado el usuario
@@ -272,7 +272,7 @@ Inicio
 	//obtener cliente
 	datosServicio.dniCliente <- obtenerCliente(client) 								{nivel 2}
 
-	datosServicio.dominio <- obtenerVehiculo(datosServicio.dniCliente, vehiculos)	{nivel 3}
+	datosServicio.dominio <- obtenerVehiculoCliente(vehiculos, datosServicio.dniCliente)	{nivel 3}
 
 	//obtener etapa de mantenimiento, verificando que haya
 	datosServicio.etapa <- obtenerEtapa(model, vehiculos, datosServicio.dominio)	{nivel 3}
@@ -284,7 +284,7 @@ Inicio
 	 obtenerFecha(datosServicio.fecha)				{nivel 3}
 
 	//obtener precio final del mismo, verificando que no sea menor al establecido en el calendario
-	datosServicio.precioFinal <- obtenerPrecioFinal(model, datosServicio.etapa)
+	datosServicio.precioFinal <- obtenerPrecioFinal(model, vehiculos, datosServicio)
 
 	insertar(serv, codigoServicio, datosServicio)									{ADT LO}
 
@@ -330,7 +330,7 @@ Inicio
 			finSegun
 			segun opc hacer
 				1:  datosServicio.dniCliente <- obtenerCliente(client)										{nivel 2}
-				2:  datosServicio.dominio <- obtenerVehiculo(vehiculos, datosServicio.dniCliente) 			{nivel 3}
+				2:  datosServicio.dominio <- obtenerVehiculoCliente(vehiculos, datosServicio.dniCliente) 			{nivel 3}
 				3:	obtenerEtapaValida(model, vehiculos, datosServicio.dominio, etapa) 						{nivel 3}
 				4:	obtenerFecha("Fecha del servicio", datosServicio.fecha)									{nivel 3}
 				5:	obtenerPrecioFinal(model, datosServicio.etapa, datosServicio.precioFinal)				{nivel 3}
@@ -547,7 +547,7 @@ Excepciones
 Fin
 
 
-funcion menuVehiculos()
+funcion menuVehiculos():entero
 {Qué Hace: muestra el menu con las opciones correspondientes al ABM de vehiculos
 PRE: -
 POST: menuVehiculos = O ; O es una opción válida
@@ -564,7 +564,7 @@ Inicio
 Fin
 
 
-funcion menuClientes()
+funcion menuClientes():entero
 {Qué Hace: muestra el menu con las opciones correspondientes al ABM de clientes
 PRE: -
 POST: menuClientes = O ; O es una opcion valida
@@ -580,7 +580,7 @@ Inicio
 	menuClientes <- enteroEnRango("Ingrese su opcion",1,4)	{SC}
 Fin
 
-funcion menuServicios()
+funcion menuServicios():entero
 {Qué Hace: muestra el menu con las opciones correspondientes al ABM de clientes
 PRE: -
 POST: menuServicios = O ; O es una opción valida
@@ -596,7 +596,7 @@ Inicio
 	menuServicios <- enteroEnRango("Ingrese su opción",1,4)	{SC}
 Fin 
 
-funcion menuConsultas()
+funcion menuConsultas():entero
 {Qué Hace: muestra el menu con las opciones correspondientes al ABM de clientes
 PRE: -
 POST: menuConsultas = O ; O es una opción valida

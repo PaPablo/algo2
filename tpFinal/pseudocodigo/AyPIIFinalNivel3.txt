@@ -111,7 +111,7 @@ Excepciones
 
 Fin
 
-funcion generarCodigoModelo(E model:tipoListaModelos): entero
+funcion generarCodigoModelo(E model:tipoListaModelos): tipoClaveModelos
 {Qué Hace: genera el codigo de modelo correspondiente a un nuevo modelo
 PRE: model = M
 POST:	generarCodigoModelo = CM ; CM es un codigo de modelo valido
@@ -127,7 +127,7 @@ Inicio
 	finSi	
 Fin
 
-funcion obtenerModelo(E model:tipoListaModelos):entero
+funcion obtenerModelo(E model:tipoListaModelos):tipoClaveModelos
 {Qué Hace: obtiene un codigo válido de modelo
 PRE: model = M
 POST: obtenerModelo=N y N es un modelo valido
@@ -227,19 +227,19 @@ Var
 	siguiente:tipoClaveMantenimientos
 	mantenimiento:tipoClaveMantenimientos
 Inicio
-	crear(colaVehiculos)
-	inOrder(vehiculos, colaVehiculos)
+	crear(colaVehiculos)	         	{ADT Cola}												
+	inOrder(vehiculos, colaVehiculos)	{ADT Cola}
 
-	mientras no(esVacia(colaVehiculos)) hacer
-		frente(colaVehiculos, patente)
-		desencolar(colaVehiculos)
+	mientras no(esVacia(colaVehiculos)) hacer	{ADT Cola}
+		frente(colaVehiculos, patente)			{ADT Cola}
+		desencolar(colaVehiculos)				{ADT Cola}
 
-		buscar(vehiculos, patente, datosVehiculo)
+		buscar(vehiculos, patente, datosVehiculo)	{ADT ABB}
 
-		recuPrim(datosVehiculo.manten, mantenimiento)
+		recuPrim(datosVehiculo.manten, mantenimiento)	{ADT LO}
 		
 		Inicio
-			recuSig(datosVehiculo.manten, siguiente)
+			recuSig(datosVehiculo.manten, siguiente)	{ADT LO}
 		Excepciones
 			claveEsUltima => siguiene <- mantenimiento
 		Fin
@@ -249,18 +249,18 @@ Inicio
 		mientras sigo hacer
 			Inicio
 				Inicio
-					recuClave(serv, mantenimiento, datosServicio)
-					recuSig(datosVehiculo.manten, mantenimeinto, mantenimiento)		
+					recuClave(serv, mantenimiento, datosServicio)					{ADT LO}
+					recuSig(datosVehiculo.manten, mantenimeinto, mantenimiento)		{ADT LO}	
 				Excepciones
 					claveNoExiste => 
 						Inicio
-							suprimir(datosVehiculo.manten, mantenimiento)
+							suprimir(datosVehiculo.manten, mantenimiento)			{ADT LO}
 							mantenimiento <- siguiente
 						Fin
 				Fin
 
 				Inicio
-					recusig(datosVehiculo.manten, siguiente, siguiente)
+					recusig(datosVehiculo.manten, siguiente, siguiente)				{ADT LO}
 				Excepciones
 					claveEsUltima => nada
 				Fin
@@ -271,6 +271,33 @@ Inicio
 		finMientras
 	finMientras
 Fin
+
+procedimiento actualizarVC(E/S vehiculos:tipoArbolVehiculos ; E viejoDni,dni:tipoClaveClientes)
+{Qué hace: Actualiza los vehiculos con respecto a un cambio en el dni de un cliente
+PRE: vehiculos = A ; viejoDni = D ; dni = D1
+POST: vehiculos = A1; A1 en A salvo los clientes en A con dni igual a D, que ahora tienen dni igual a D1
+EXCEP: - }
+Var
+	colaVehiculos:tipoColaVehiculos
+	datosVehiculo:tipoInfoVehiculos
+	patente:tipoClaveVehiculos
+Inicio
+	crear(colaVehiculos)		{ADT Cola}
+	inOrder(vehiculos, colaVehiculos)
+
+	mientras(no(esVacia(colaVehiculos))) hacer	{ADT Cola}
+		frente(colaVehiculos, patente) 					{ADT Cola}
+		desencolar(colaVehiculos)						{ADT Cola}
+
+		buscar(vehiculos, patente, datosVehiculo)
+
+		si (datosVehiculo.dueño = viejoDni) ent
+			datosVehiculo.dueño <- dni
+			modificar(vehiculos, patente, datosVehiculo)
+		finSi
+	finMientras
+Fin
+
 
 
 procedimiento limpiarModelo(E/S model:tipoListaModelos, E codigoModelo:tipoClaveModelos)
@@ -293,7 +320,7 @@ funcion obtenerPatente():cadena
 {Que Hace:
 PRE: - 
 POST:	obtenerCadena = P ;P es una patente valida
-EXCEP:	-	}
+EXCEP:	cancelarIngreso	}
 Var
 	letras:cadena
 	numeros:entero
@@ -302,6 +329,9 @@ Inicio
 	repetir
 		mostrar("Ingrese letras")			{SC}
 		ingresar(letras)					{SC}
+		si(letras = "0") entonces
+			lanzar cancelarIngreso
+		finSi
 	hasta ((letras <= "zzz") y (letras <= "ZZZ")) o ((letras >= "aaa") y (letras >= "AAA"))
 
 	repetir
@@ -314,31 +344,53 @@ Excepciones
 
 Fin
 
-funcion obtenerVehiculo(E vehiculos:tipoArbolVehiculos)
+funcion obtenerVehiculo(E vehiculos:tipoArbolVehiculos):tipoClaveVehiculos
 {Que Hace: devuelve un vehiculo valido de una lista de vehiculos
 PRE: vehiculos = L
 POST: obtenerVehiculo = A ; A pertence a  L
-EXCEP: noHayVehiculos}
+EXCEP: noHayVehiculos - cancelarIngreso}
 Var
 	ok:logico
 	patente:tipoClaveVehiculos
 	datosVehiculo:tipoInfoVehiculos
 Inicio
 	ok <- F
-	repetir
-		patente <- obtenerPatente() {nivel 3}
-		Inicio
-			buscar(vehiculos, patente, datosVehiculo) 					{ADT ABB}	
-			ok <- V
-		Excepciones
-			listaVacia => lanzar noHayVehiculos								{SC}
-			claveNoExiste => mostrar("Vehiculo Inexistente")		{SC}
-		Fin
-	hasta ok
+	si(esVacio(vehiculos)) entonces
+		lanzar noHayVehiculos
+	siNo
+		repetir
+			patente <- obtenerPatente() {nivel 3}
+			Inicio
+				buscar(vehiculos, patente, datosVehiculo) 					{ADT ABB}	
+				ok <- V
+			Excepciones
+				claveNoExiste => mostrar("Vehiculo Inexistente")		{SC}
+			Fin
+		hasta ok
+	finSi
 
 	obtenerVehiculo <- patente 												{SC}
 Excepciones
 Fin
+
+funcion obtenerVehiculoCliente(E vehiculo:tipoArbolVehiculos ; E dni:tipoClaveClientes):tipoClaveVehiculos
+{Que hace: devuelve un vehiculo perteneciente a un cliente en particular
+PRE: Vehiculos = A; dni = D
+POST: obtenerVehiculoCliente = O ; O pertenece a A y D es dueño de O
+EXCEP: - }
+Var
+	patente:tipoClaveVehiculos
+	datosVehiculo:tipoInfoVehiculos
+Inicio
+
+	repetir
+		patente <- obtenerVehiculo(vehiculos)	{nivel 3}
+		buscar(vehiculos, patente, datosVehiculo)
+	hasta datosVehiculo.dueño = dni
+
+	obtenerVehiculoCliente <- patente
+Fin
+
 
 procedimiento bajaSV(E/S serv:tipoListaServicios; E patente:tipoClaveVehiculos)
 {Que Hace: quita los servicios pertenecientes a vehiculos inexistentes
@@ -391,7 +443,32 @@ Inicio
 Excepciones
 Fin 
 
-funcion generarCodigoServicio(E serv:tipoListaServicios)
+
+procedimiento bajaVC(E/S vehiculos:tipoArbolVehiculos ; E dni:tipoClaveClientes)
+{Qué Hace: elimina todos lo vehiculos pertenecientes a un mismo cliente
+PRE: vehiculos = A ; dni = D
+POST: vehiculos = A1 ; A1 en A menos los vehiculos que pertenecían a D
+EXCEP: - }
+Var
+	colaVehiculos:tipoColaVehiculos
+	patente:tipoClaveVehiculos
+	datosVehiculo:tipoInfoVehiculos
+Inicio
+	crear(colaVehiculos)							{ADT Cola}
+	mientras (no(esVacia(colaVehiculos))) hacer		{ADT Cola}
+		frente(colaVehiculos, patente)				{ADT Cola}
+		desencolar(colaVehiculos)					{ADT Cola}
+
+		buscar(vehiculos, patente, datosVehiculo)	{ADT ABB}
+
+		si (datosVehiculo.dueño = dni) entonces		{SC}
+			suprimir(vehiculos, patente)			{ADT ABB}
+		finSi
+	finMientras
+Fin
+
+
+funcion generarCodigoServicio(E serv:tipoListaServicios):tipoClaveServicios
 {Que Hace: devuelve un nuevo codigo de servicio valido
 PRE: serv = S
 POST: generarCodigoServicio = K ; K es un codigo valido en S
@@ -413,7 +490,7 @@ Excepciones
 Fin
 
 
-funcion obtenerEtapaValida(E model:tipoListaModelos ; E vehiculos:tipoArbolVehiculos ; E dominio:tipoClaveVehiculos)
+funcion obtenerEtapaValida(E model:tipoListaModelos ; E vehiculos:tipoArbolVehiculos ; E dominio:tipoClaveVehiculos):tipoClaveCalendario
 {Que Hace: devuelve una etapa del calendario de mantenimientos valida correspondiente a un modelo
 PRE: model = M ; vehiculos = A ; dominio = D ; D pertenece a A
 POST: obtenerEtapaValida = E ; E es una etapa valida al vehiculo de dominio D, perteneciente a A con modelo en M
@@ -437,7 +514,7 @@ Inicio
 			recuClave(datosModelo.calendario, etapa, datosEtapa)
 			ok <- V
 		Excepciones
-			claveNoExiste => ("Etapa invalida")
+			claveNoExiste => mostrar("Etapa invalida")
 		Fin
 	hasta ok
 
@@ -445,7 +522,7 @@ Inicio
 
 Fin
 
-funcion obtenerKmReal(E model:tipoListaModelo ; E vehiculos:tipoListaVehiculos ; E dominio:tipoClaveVehiculos; E etapa:tipoClaveCalendario)
+funcion obtenerKmReal(E model:tipoListaModelo ; E vehiculos:tipoArbolVehiculos ; E dominio:tipoClaveVehiculos; E etapa:tipoClaveCalendario):entero
 {Que Hace: obtiene un kiloemtraje real para poder realizar un mantenimiento 
 PRE: model = M ; vehiculos = A ; dominio = D ; etapa = T;  D pertenece a A, y el modelo del auto con dominio D pertenece a M y T es una etapa de mantenimiento valida para este
 POST: obtnerKmReal = K ; K esta entre T y la proxima etapa para ese modelo
@@ -458,13 +535,12 @@ Var
 	datosModelo:tipoInfoModelos
 	datosVehiculo:tipoInfoVehiculos
 Inicio
-	recuClave(vehiculos, dominio, datosVehiculo)						{ADT LO}
+	buscar(vehiculos, dominio, datosVehiculo)							{ADT ABB}
 	recuClave(model, datosVehiculo.modelo, datosModelo)					{ADT LO}
 
 	ok <- F
 	repetir
-		mostrar("Ingrese kilomentraje del vehiculo")	{SC}
-		ingresar(km)									{SC}
+		km := enteroMayorIgualACero("Ingrese Kilometraje")
 
 		Inicio
 			recuClave(datosModelo.calendario, etapa, datosCalendario)	{ADT LO}
@@ -483,7 +559,7 @@ Inicio
 Fin
 
 
-procedimiento altaSV(E/S vehiculos:tipoArbolVehiculos; E codigoServicio:tipoClaveServicio; E datosServicio:tipoInfoServicios)
+procedimiento altaSV(E/S vehiculos:tipoArbolVehiculos; E codigoServicio:tipoClaveServicios; E datosServicio:tipoInfoServicios)
 {Que Hace: da de alta un servicio en la lista de mantenimientos de un vehiculos
 PRE: client = C; codigoServicio = K ; datosServicio = S ; S es los datos del servicio K y el vehiculos al cual sele realizo el servicio K es de un cliente que esta en C
 POST: client = C1 ; C1 en C mas el servicio con codigo K hecho a un vehiculo perteneciente a un cliente
@@ -530,7 +606,7 @@ Fin
 
 
 
-Procedimiento mostrarCabeceraMantenPorCliente(E: nomCli:cadena)
+Procedimiento mostrarCabeceraMantenPorCliente(E nomCli:cadena)
 {que hace: muestra la cabecera de los mantenimientos de un cliente
 pre: nomCli=N y N no es vacio
 pos: -
@@ -552,15 +628,15 @@ Inicio
 	mostrar(codigoServicio, "   " , datosServicio.Dominio, "  ", datosServicio.etapa, "   ", datosServicio.KmReal, "  ", datosServicio.fecha,"   ", datosServicio.precioFinal)	{SD}
 FinProcedimiento
 
-Procedimiento mostrarEncabezadoMantModelo (E nomMod:cadena, E dniCliente:entero)
+Procedimiento mostrarEncabezadoMantModelo (E nomMod:cadena ;  E dniCliente:entero)
 {que hace: muestra el encabezado de los mantenimientos por modelo
 pre: nomMod=N y N tiene un nombre de modelo valido
 pos: -
 exp: -}
 
 Inicio
-	mostrar("Mantenimientos realidos por el modelo", nomMod, "Al cliente:",dniCliente){SD}
-	mostrar("Codigo servicio 	Dominio		etapa 	Km Real 	Fecha de Mantenimiento 		Precio Final")		{SD}
+	mostrar("Mantenimientos realidos por el modelo", nomMod){SD}
+	mostrar("Codigo servicio 	Dni Dueño 	Dominio		etapa 	Km Real 	Fecha de Mantenimiento 		Precio Final")		{SD}
 FinProcedimiento
 
 Procedimiento mostrarEncabezadoClientSinMant()
@@ -574,7 +650,7 @@ Inicio
 	mostrar("DNI 	Nombre 	  Telefono 	 E-Mail ") 													{SD}
 FinProcedimiento
 
-Procedimiento mostrarDatosCliente(E dni:entero ; E datosCliente:tipoInfoClientes,)
+Procedimiento mostrarDatosCliente(E dni:entero ; E datosCliente:tipoInfoClientes)
 que hace: muestra los datos de los clientes que no han realizado mantenimientos
 pre: datosCliente=C y C tiene datos validos
 pos: 
@@ -584,7 +660,7 @@ Inicio
 	mostrar(dni,"  ", datosCliente.nombre,"  ", datosCliente.Telefono, "  ", datosCliente.email)	{SD}
 FinProcedimiento
 
-Funcion obtenerServicio(E serv:tipoListaServicios): entero
+Funcion obtenerServicio(E serv:tipoListaServicios)tipoClaveServicios
 {que hace: obtiene un codigo valido de servicio
 pre: servicio=S 
 pos: obtenerServicio=OS y OS es un codigo valido
@@ -618,7 +694,7 @@ Inicio
 	obtenerServicio <- claServ 													{SD}
 FinFuncion
 
-funcion obtenerPrecioFinal (E model:tipoListaModelos; E etapa:tipoClaveCalendario):entero
+funcion obtenerPrecioFinal (E model:tipoListaModelos; E vehiculos:tipoArbolVehiculos ; E datosServicio:tipoInfoServicios):entero
 {que hace: obtiene un precio final valido respecto a la etapa de calendario
 pre: model:M y etapa=E 
 pos: precio=P y P es un precio valido
@@ -646,9 +722,6 @@ procedimiento obtenerFecha(S fecha:tipoFecha)
 {Que hace: obtiene la fecha en la que se realizo el servicio
 pre: -
 pos: obtenerFecha=N y N es una fecha valida}
-
-var
-	fecha:tipoFecha
 Inicio
 	Repetir
 		mostrar("Ingrese Fecha")				{SC}
@@ -671,8 +744,7 @@ Var
 
 Inicio
 	repetir
-		menuModifModelo()	{nivel 4}
-		ingresar(opc)		{SC}
+		opc <- menuModifModelo()	{nivel 4}
 		segun (opc) hacer
 			1: datosModelo.nombre <- textoNoVacio("Ingrese Nombre de Modelo")	{SC}
 			2: ABMCalendario(datosModelo.calendario)							{nivel 4}
@@ -692,18 +764,18 @@ Var
 
 Inicio
 	repetir
-		menuModifClient()	{nivel 4}
-		ingresar(opc)		{SC}				
+		opc <- menuModifClient()	{nivel 4}
+							
 		segun opc hacer
 			1:dni <- EnteroMayorACero("Ingrese DNI")							{SD}
 			2:datosCliente.nombre <- textoNoVacio("Ingrese Nombre")				{SC}
 			3:datosCliente.telefono <- EnteroMayorACero("Numero de telefono")	{SC}
-			4:datosClientecliente.email <- obtenerEmail()						{nivel 4}
+			4:datosClientecliente.email <- obtenerEmail("Ingrese E-Mail")						{nivel 4}
 		finSegun
 	hasta (opc = 5)
 Fin
 
-Procedimiento modifVechiculo(E/S datosVehiculos:tipoInfoVehiculos)
+Procedimiento modifVechiculo(E/S datosVehiculo:tipoInfoVehiculos)
 {Que hace: modifica los datos del vehiculo seleccionado por el usuario
 pre: datosClientes=V
 pos: datosClientes=V1
@@ -715,8 +787,7 @@ Var
 Inicio
 
 	repetir
-		menuModifVehiculo()						{nivel 4}
-		ingresar(opc)							{SC}
+		opc <- menuModifVehiculo()				{nivel 4}
 
 		segun (opc) hacer
 			1: datosVehiculo.modelo <- obtenerModelo(model)										{nivel 3}

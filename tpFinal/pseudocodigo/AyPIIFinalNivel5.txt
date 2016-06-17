@@ -1,7 +1,7 @@
 Nivel 5
 
 
-funcion menuCalendario()
+funcion menuCalendario():entero
 {que hace: muestra las opciones para el ABM de calendario
 pre:-
 pos: menuCalendario = O ; O es una opcion valida

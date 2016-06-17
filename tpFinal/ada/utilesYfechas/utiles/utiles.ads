@@ -25,6 +25,11 @@ package utiles is
    -- Poscondiciones: enteroEnRango = N y RI <= N <= RS.
    function enteroEnRango(mensaje:string; rangoInf, rangoSup: integer) return integer;
 
+   -- Que hace: Muestra un mensaje al usuario y el entero mayor a cero ingresado.
+   -- Precondiciones: m=M
+   -- Poscondiciones: realEnRango = E y E > 0
+   function enteroMayorIgualACero(mensaje: in string) return integer;
+
    -- Que hace: Muestra un mensaje al usuario y devuelve el real ingresado.
    -- Precondiciones: m=M, rangoInf= RI, rangoSup= RS
    -- Poscondiciones: realEnRango = R y RI <= R <= RS.
