@@ -50,14 +50,18 @@ Var
 
 Inicio
 	etapa<-obtenerEtapa(calendario, "Ingrese la etapa de mantenimiento que desea modificar") {nivel5}
+	recuClave(calendario, etapa,precio)
+	suprimir(calendario, etapa)
 	Repetir
 		opc<-menuModiCal() {nivel 6}
 		segun (opc) hacer
-			1: etapa<-obtenerEtapa(calendario,"Ingrese la nueva etapa de mantenimiento"){nivel 6}
+			1: etapa<-enteroMayorACero("Ingrese la nueva etapa de mantenimiento"){nivel 6}
 			2: precio<-enteroMayoraCero("Ingrese nuevo precio de mantenimiento") {SD}
 		FinSegun
 	Hasta (opc=3)
+	insertar(calendario, etapa, )
 Excepciones
+	listaLlena => mostrar("No se pudo modificar la etapa. Intente nuevamente más tarde")
 	noHayEtapas => mostrar("No hay etapas de mantenimiento. Agregue una e intente nuevamente")
 FinProcedimiento
 

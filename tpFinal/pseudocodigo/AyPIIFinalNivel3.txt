@@ -210,7 +210,7 @@ Inicio
 	finMientras
 
 Excepciones
-
+	listaVacia => nada
 Fin
 
 procedimiento actualizarVS(E/S vehiculos:tipoArbolVehiculos, E serv:tipoListaServicios)
@@ -236,39 +236,44 @@ Inicio
 
 		buscar(vehiculos, patente, datosVehiculo)	{ADT ABB}
 
-		recuPrim(datosVehiculo.manten, mantenimiento)	{ADT LO}
-		
 		Inicio
-			recuSig(datosVehiculo.manten, siguiente)	{ADT LO}
-		Excepciones
-			claveEsUltima => siguiene <- mantenimiento
-		Fin
-		
-		sigo <- V
-
-		mientras sigo hacer
+			
+			recuPrim(datosVehiculo.manten, mantenimiento)	{ADT LO}
+			
 			Inicio
-				Inicio
-					recuClave(serv, mantenimiento, datosServicio)					{ADT LO}
-					recuSig(datosVehiculo.manten, mantenimeinto, mantenimiento)		{ADT LO}	
-				Excepciones
-					claveNoExiste => 
-						Inicio
-							suprimir(datosVehiculo.manten, mantenimiento)			{ADT LO}
-							mantenimiento <- siguiente
-						Fin
-				Fin
-
-				Inicio
-					recusig(datosVehiculo.manten, siguiente, siguiente)				{ADT LO}
-				Excepciones
-					claveEsUltima => nada
-				Fin
-
+				recuSig(datosVehiculo.manten, siguiente)	{ADT LO}
 			Excepciones
-				claveEsUltima, claveNoExiste => sigo <- F
+				claveEsUltima => siguiene <- mantenimiento
 			Fin
-		finMientras
+			
+			sigo <- V
+
+			mientras sigo hacer
+				Inicio
+					Inicio
+						recuClave(serv, mantenimiento, datosServicio)					{ADT LO}
+						recuSig(datosVehiculo.manten, mantenimeinto, mantenimiento)		{ADT LO}	
+					Excepciones
+						claveNoExiste => 
+							Inicio
+								suprimir(datosVehiculo.manten, mantenimiento)			{ADT LO}
+								mantenimiento <- siguiente
+							Fin
+					Fin
+
+					Inicio
+						recusig(datosVehiculo.manten, siguiente, siguiente)				{ADT LO}
+					Excepciones
+						claveEsUltima => nada
+					Fin
+
+				Excepciones
+					claveEsUltima, claveNoExiste => sigo <- F
+				Fin
+			finMientras
+		Excepciones
+			listaVacia => nada
+		Fin
 	finMientras
 Fin
 
@@ -441,6 +446,7 @@ Inicio
 	finMientras
 
 Excepciones
+	listaVacia => nada
 Fin 
 
 
@@ -455,6 +461,7 @@ Var
 	datosVehiculo:tipoInfoVehiculos
 Inicio
 	crear(colaVehiculos)							{ADT Cola}
+	inOrder(vehiculos, colaVehiculos)				{ADT ABB}
 	mientras (no(esVacia(colaVehiculos))) hacer		{ADT Cola}
 		frente(colaVehiculos, patente)				{ADT Cola}
 		desencolar(colaVehiculos)					{ADT Cola}
@@ -494,7 +501,7 @@ funcion obtenerEtapaValida(E model:tipoListaModelos ; E vehiculos:tipoArbolVehic
 {Que Hace: devuelve una etapa del calendario de mantenimientos valida correspondiente a un modelo
 PRE: model = M ; vehiculos = A ; dominio = D ; D pertenece a A
 POST: obtenerEtapaValida = E ; E es una etapa valida al vehiculo de dominio D, perteneciente a A con modelo en M
-EXCEP: }
+EXCEP: noHayEtapas - cancelarIngreso}
 Var
 	datosModelo:tipoInfoModelos
 	ok:logico
@@ -507,15 +514,24 @@ Inicio
 	repetir
 		mostrar("Ingrese etapa de mantenimiento")
 		ingresar(etapa)
-		buscar(vehiculos, patente, datosVehiculo)
-		recuClave(model, datosVehiculo.modelo, datosModelo)
+		si etapa = 0 entonces
+			lanzarCancelarIngreso
+		siNo
+			buscar(vehiculos, patente, datosVehiculo)
+			recuClave(model, datosVehiculo.modelo, datosModelo)
 
-		Inicio
-			recuClave(datosModelo.calendario, etapa, datosEtapa)
-			ok <- V
-		Excepciones
-			claveNoExiste => mostrar("Etapa invalida")
-		Fin
+			si(esVacia(datosModelo.calendario)) entonces
+				lanzar noHayEtapas
+			siNo
+				Inicio
+					recuClave(datosModelo.calendario, etapa, datosEtapa)
+					ok <- V
+				Excepciones
+					claveNoExiste => mostrar("Etapa invalida")
+				Fin
+			finSi
+
+		finSi
 	hasta ok
 
 	obtenerEtapaValida <- etapa
@@ -541,18 +557,20 @@ Inicio
 	ok <- F
 	repetir
 		km := enteroMayorIgualACero("Ingrese Kilometraje")
-
-		Inicio
-			recuClave(datosModelo.calendario, etapa, datosCalendario)	{ADT LO}
-			recuSig(datosModelo.calendario, etapa, etapaSiguiente)		{ADT LO}
-			si ((km >= etapa) y (km <= etapaSiguiente)) entonces
-				ok <- V 												{SC}
-			siNo
-				mostrar("Kilometraje Invalido")							{SC}
-			finSi
-		Excepciones	
-			claveEsUltima => ok <- V 									{SC}
-		Fin
+		si (km >= etapa) entonces
+			Inicio
+				recuSig(datosModelo.calendario, etapa, etapaSiguiente)		{ADT LO}
+				si (km <= etapaSiguiente) entonces
+					ok <- V 												{SC}
+				siNo
+					mostrar("Kilometraje Invalido")							{SC}
+				finSi
+			Excepciones	
+				claveEsUltima => ok <- V 									{SC}
+			Fin
+		siNo
+			mostrar("Kilometraje Invalido")
+		finSi
 	hasta ok
 
 	obtenerKmReal <- km   {SC}
@@ -725,12 +743,9 @@ pos: obtenerFecha=N y N es una fecha valida}
 Inicio
 	Repetir
 		mostrar("Ingrese Fecha")				{SC}
-		mostrar("Dia")				{SC}
-		ingresar(fecha.dia)			{SC}
-		mostrar("Mes")				{SC}
-		ingresar(fecha.mes)			{SC}
-		mostrar("Año")				{SC}
-		ingresar(fecha.año)			{SC}
+		fecha.dia <- enteroEnRango("Dia",1,31)	{SC}
+		fecha.mes <- enteroEnRango("Mes",1,12)	{SC}
+		fecha.anio <- enteroMayorACero("Año")	{SC}
 	Hasta esFechaCorrecta(fecha)	{SC}
 Fin
 

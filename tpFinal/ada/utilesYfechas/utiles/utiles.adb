@@ -113,13 +113,13 @@ package body utiles is
                skip_line;
          end;
       end loop;
-      skip_line;
+      Skip_Line;
       return resp;
    end enteroEnRango;
 
    -- Que hace: Muestra un mensaje al usuario y el entero mayor a cero ingresado.
    -- Precondiciones: m=M
-   -- Poscondiciones: realEnRango = E y E > 0
+   -- Poscondiciones: realEnRango = E y E >= 0
    function enteroMayorIgualACero(mensaje: in string) return integer is
       num:integer;
    begin
@@ -127,7 +127,7 @@ package body utiles is
          begin
             Put_Line(mensaje);
             get(num);
-            exit when num > 0;
+            exit when num >= 0;
          exception
             when Data_Error =>
                Skip_Line;
@@ -164,26 +164,20 @@ package body utiles is
    -- Precondiciones: m=M
    -- Poscondiciones: textoNoVacio = S y longitud(S) > 0.
    function textoNoVacio(mensaje: in string) return string is
-      rta:String := "";
+      rta:Unbounded_String;
    begin
 
       loop
          begin
             Put_Line(mensaje);
-            get (rta);
+            Get_Line(rta);
 
             exit when (rta /= "");
-         exception
-            when Data_Error =>
-               begin
-                  Put_Line ("Entrada Invalida. Intente nuevamente.");
-                  Skip_Line;
-               end;
          end;
       end loop;
-      Skip_Line;
 
-      return rta;
+
+      return To_String(rta);
    end textoNoVacio;
 
    -- Que hace: Limpia la pantalla.

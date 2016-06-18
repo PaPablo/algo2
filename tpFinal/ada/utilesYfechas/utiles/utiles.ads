@@ -27,7 +27,7 @@ package utiles is
 
    -- Que hace: Muestra un mensaje al usuario y el entero mayor a cero ingresado.
    -- Precondiciones: m=M
-   -- Poscondiciones: realEnRango = E y E > 0
+   -- Poscondiciones: realEnRango = E y E >= 0
    function enteroMayorIgualACero(mensaje: in string) return integer;
 
    -- Que hace: Muestra un mensaje al usuario y devuelve el real ingresado.
