@@ -52,7 +52,7 @@ Inicio
 			ok <- ok y (cad[i] = @) 						{SC}
 		finDesde
 	hasta ok 
-
+	obtenerEmail<-email
 Fin
 
 funcion menuModifClient()
