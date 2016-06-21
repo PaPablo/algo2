@@ -48,10 +48,8 @@ Var
 	datosCliente:tipoInfoClientes
 	dni:tipoClaveClientes
 Inicio
-	dni <- enteroMayorIgualACero("Ingrese DNI de cliente (0 para cancelar)")	{SC}
-	si dni = 0 entonces
-		lanzar cancelarIngreso
-	finSi
+	
+	dni <- enteroMayorACero("Ingrese DNI de cliente")	{SC}
 
 	Inicio
 		buscar(client, dni, datosCliente) {ADT ABB}
@@ -69,7 +67,6 @@ Inicio
 			Fin
 	Fin
 Excepciones
-	cancelarIngreso => nada
 	arbolLleno => mostrar("No se puede agregar un cliente, intente nuevamente más tarde")
 Fin
 
@@ -84,24 +81,16 @@ Var
 	datosCliente:tipoInfoClientes
 Inicio
 
-	viejoDni <- obtenerCliente(client)		{nivel 2} 
-	buscar(client, viejoDni, datosCliente)	{ADT ABB}
-	dni <- viejoDni 						{SC}
-	modifCliente(datosCliente)				{nivel 3}	
-
+	viejoDni <- obtenerCliente(client)	{nivel 2} 
+	dni <- viejoDni
+	modifCliente(datosCliente)		{nivel 3}	
+	modificar(client, dni, datosCliente)			{ADT ABB}	
 	si (dni <> viejoDni) entonces 					{SD}
-		insertar(client, dni, datosCliente)			{ADT ABB}
-		suprimir(client, viejoDni)					{ADT ABB}
 		actualizarSC(serv, viejoDni, dni)			{nivel 3}
-		actualizarVC(vehiculos, viejoDni, dni)		{nivel 3}
-	siNo
-		modificar(client, viejoDni, datosCliente)
 	finSi
 
-
-	
+	actualizarVC(vehiculos, dni)					{nivel 3}
 Excepciones
-	arbolLleno => mostrar("No se puede modificar el cliente. Intente nuevamente más tarde")
 	noHayClientes => mostrar("No hay clientes agregados. Agregue un cliente e intente nuevamente")
 	cancelarIngreso => nada
 Fin
@@ -239,7 +228,7 @@ Excepciones
 	cancelarIngreso => nada
 Fin
 
-procedimiento quitarVehiculo(E/S vehiculos:tipoArbolVehiculos ; E dni:tipoClaveClientes ; E/S serv:tipoListaServicios)
+procedimiento quitarVehiculo(E/S vehiculos:tipoArbolVehiculos ; E/S serv:tipoListaServicios)
 {Que Hace: elimina un vehiculo de un cliente
 PRE: client = C ; dni = K ; K pertenece a C ; serv = S
 POST:	client = C1 ; C1 tiene un vehiculo menos segun haya deseado el usuario
@@ -251,7 +240,7 @@ Var
 Inicio
 	
 	//recuperamos el vehiculo
-	patente <- obtenerVehiculo(datosCliente.vehiculos)		{nivel 3}
+	patente <- obtenerVehiculo(vehiculos)		{nivel 3}
 	limpiarVehiculo(vehiculos, patente)						{nivel 3}
 	
 	//eliminamos dicho vehiculo

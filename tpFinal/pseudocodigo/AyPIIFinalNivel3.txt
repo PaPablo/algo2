@@ -55,8 +55,7 @@ procedimiento limpiarVehiculo(E/S vehiculos:tipoArbolVahiculos ; E patente:tipoC
 {Qué Hace: Vacía las estructuras de datos pertenecientes a un vehículo
 PRE: vehiculos = A ; patente = P
 POST: vehiculos = A1 ; A1 en A con las estructuras pertenecientes a P vacías
-EXCEP:
-}
+EXCEP: - }
 Var
 	datosVehiculo:tipoInfoVehiculos
 Inicio
@@ -322,7 +321,7 @@ Excepciones
 Fin
 
 funcion obtenerPatente():cadena
-{Que Hace:
+{Que Hace:Devuelve una patente valida
 PRE: - 
 POST:	obtenerCadena = P ;P es una patente valida
 EXCEP:	cancelarIngreso	}
@@ -515,16 +514,16 @@ Inicio
 		mostrar("Ingrese etapa de mantenimiento")
 		ingresar(etapa)
 		si etapa = 0 entonces
-			lanzarCancelarIngreso
+			lanzarCancelarIngreso	
 		siNo
-			buscar(vehiculos, patente, datosVehiculo)
-			recuClave(model, datosVehiculo.modelo, datosModelo)
+			buscar(vehiculos, patente, datosVehiculo)			{ADT ABB}
+			recuClave(model, datosVehiculo.modelo, datosModelo)	{ADT LO}
 
 			si(esVacia(datosModelo.calendario)) entonces
 				lanzar noHayEtapas
 			siNo
 				Inicio
-					recuClave(datosModelo.calendario, etapa, datosEtapa)
+					recuClave(datosModelo.calendario, etapa, datosEtapa)	{ADT LO}
 					ok <- V
 				Excepciones
 					claveNoExiste => mostrar("Etapa invalida")
@@ -669,10 +668,10 @@ Inicio
 FinProcedimiento
 
 Procedimiento mostrarDatosCliente(E dni:entero ; E datosCliente:tipoInfoClientes)
-que hace: muestra los datos de los clientes que no han realizado mantenimientos
+{que hace: muestra los datos de los clientes que no han realizado mantenimientos
 pre: datosCliente=C y C tiene datos validos
 pos: 
-exp:
+exp: - }
 
 Inicio
 	mostrar(dni,"  ", datosCliente.nombre,"  ", datosCliente.Telefono, "  ", datosCliente.email)	{SD}
